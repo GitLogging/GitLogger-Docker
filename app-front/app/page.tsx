@@ -42,21 +42,24 @@ export async function RepoListingTable() {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Path</th>
                     <th>Owner</th>
-                    <th>LatestCommit</th>
-                    <th>CommitCount</th>
+                    <th>Commit Count</th>
+                    <th>Newest Commit Date</th>
+                    <th>Newest Commit Relative</th>
+                    <th>Path</th>
+                    <th>Remote</th>
                 </tr>
             </thead>
             <tbody>
                 {clonedRepos.RepoList.map((repo: any) => (
-                    // <tr key={repo.id}>
                     <tr key={repo.Path}>
                         <td>{repo.Name}</td>
-                        <td>{repo.Path}</td>
                         <td>{repo.Owner}</td>
-                        <td>{repo.LatestCommit}</td>
                         <td>{repo.CommitCount}</td>
+                        <td>{repo.NewestCommitDate}</td>
+                        <td>{repo.NewestCommitRelative}</td>
+                        <td>{repo.Path}</td>
+                        <td>{repo.Remote}</td>
                     </tr>
                 ))}
             </tbody>
@@ -71,8 +74,8 @@ export default function Home() {
 
             {/* <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start"> */}
             {/* <main className="flex flex-1 w-full max-w-3xl flex-col"> */}
-            {/* <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-8"> */}
-            <main className="flex flex-1 w-full max-w-3xl flex-col items-center dark:bg-black">
+            <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-8">
+                {/* <main className="flex flex-1 w-full max-w-3xl flex-col items-center dark:bg-black"> */}
 
                 <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
                     <h2 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
