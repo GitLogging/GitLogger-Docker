@@ -3,7 +3,12 @@ import Button from "react-bootstrap/Button"
 import Stack from "react-bootstrap/Stack"
 import Table from "react-bootstrap/Table"
 
-export function ExampleTable() {
+async function ExampleTable() {
+    const data = await fetch(`http://127.0.0.1:3001/repo/list`)
+    const clonedRepos = await data.json()
+    console.log(clonedRepos)
+
+
     return (
         <Table striped bordered hover>
             <thead>
@@ -25,6 +30,40 @@ export function ExampleTable() {
         </Table>
     )
 }
+
+
+export async function RepoListingTable() {
+    const data = await fetch(`http://127.0.0.1:3001/repo/list`)
+    const clonedRepos = await data.json()
+    console.log(clonedRepos)
+
+    return (
+        <Table striped bordered hover>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Path</th>
+                    <th>Owner</th>
+                    <th>LatestCommit</th>
+                    <th>CommitCount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {clonedRepos.RepoList.map((repo: any) => (
+                    // <tr key={repo.id}>
+                    <tr key={repo.Path}>
+                        <td>{repo.Name}</td>
+                        <td>{repo.Path}</td>
+                        <td>{repo.Owner}</td>
+                        <td>{repo.LatestCommit}</td>
+                        <td>{repo.CommitCount}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </Table>
+    )
+}
+
 
 export default function Home() {
     return (
@@ -55,7 +94,13 @@ export default function Home() {
                     </Stack>
                 </div>
 
-                <h2>Repo List</h2>
+                <h2>Cloned Repos</h2>
+
+                <div>
+                    {RepoListingTable()}
+                </div>
+
+                <h2>Example Repo List</h2>
                 <div>
                     {ExampleTable()}
                 </div>
