@@ -7,6 +7,8 @@
     "settings": {
         "[typescript][typescriptreact][javascript][javascriptreact]": {
             "editor.fontSize": 16,
+            "editor.formatOnSave": true,
+            "editor.formatOnSaveMode": "modificationsIfAvailable"
         },
     }
 }
