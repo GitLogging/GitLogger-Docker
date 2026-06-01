@@ -1,19 +1,49 @@
 import Image from "next/image"
 import Button from "react-bootstrap/Button"
 import Stack from "react-bootstrap/Stack"
+import Table from "react-bootstrap/Table"
+
+export function ExampleTable() {
+    return (
+        <Table striped bordered hover>
+            <thead>
+                <tr>
+                    <th>Owner</th>
+                    <th>RepoUrl</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ugit</td>
+                    <td>https://github.com/ugit/repo</td>
+                </tr>
+                <tr>
+                    <td>ripgrep</td>
+                    <td>https://github.com/BurntSushi/ripgrep</td>
+                </tr>
+            </tbody>
+        </Table>
+    )
+}
 
 export default function Home() {
     return (
         <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-            <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+
+            {/* <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start"> */}
+            {/* <main className="flex flex-1 w-full max-w-3xl flex-col"> */}
+            {/* <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-8"> */}
+            <main className="flex flex-1 w-full max-w-3xl flex-col items-center dark:bg-black">
+
                 <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-                    <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+                    <h2 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
                         <a href="https://gitlogger.com/">GitLogger</a> <b>Docker App</b>
-                    </h1>
+                    </h2>
                     <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
                         Get started by cloning your repository
                     </p>
                 </div>
+
                 <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
                     <Stack direction="horizontal" gap={2}>
                         <Button as="a" variant="primary">
@@ -24,7 +54,14 @@ export default function Home() {
                         </Button>
                     </Stack>
                 </div>
+
+                <h2>Repo List</h2>
+                <div>
+                    {ExampleTable()}
+                </div>
             </main>
+
+
         </div>
     )
 }
