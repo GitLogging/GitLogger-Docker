@@ -1,8 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "." // 2026-06-01
-		}
+    "folders": [
+        {
+            "path": "." // 2026-06-01
+        }
     ],
-    "settings": {}
+    "settings": {
+        "[typescript][typescriptreact][javascript][javascriptreact]": {
+            "editor.fontSize": 16,
+        },
+    }
 }
