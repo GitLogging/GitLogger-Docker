@@ -31,3 +31,7 @@ These scripts refer to the different stages of developing an application:
 - `biome format --write`: Formats the code using Biome.
 
 Turbopack is now the default bundler. To use Webpack run next dev --webpack or next build --webpack. See the Turbopack docs for configuration details.
+
+## Customize `Bootstrap` `Sass` variables
+
+- [customizing bootstrap css variables](https://react-bootstrap.github.io/docs/getting-started/introduction/#sass)
