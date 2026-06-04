@@ -92,13 +92,10 @@ export default function Home() {
                     <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
                         Get started by cloning your repository
                     </p>
-                </div>
-
-                <h2>to clone</h2>
-                <div>
                     {CloneRepoUrlForm()}
                 </div>
 
+                {RepoListingTable()}
                 <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
                     <Stack direction="horizontal" gap={2}>
                         <Button as="a" variant="primary">
@@ -110,11 +107,9 @@ export default function Home() {
                     </Stack>
                 </div>
 
-                <h2>Cloned Repos</h2>
 
-                <div>
-                    {RepoListingTable()}
-                </div>
+
+
 
             </main>
 
