@@ -1,16 +1,18 @@
 "use client"
 import Image from "next/image"
-import Button from "react-bootstrap/Button"
 import Stack from "react-bootstrap/Stack"
 import Table from "react-bootstrap/Table"
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
+// import Tab from 'react-bootstrap/Tab'
+// import Tabs from 'react-bootstrap/Tabs'
 import { use } from "react"
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 
 export async function RepoListingTable() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
     const clonedRepos = await data.json()
-    console.log(clonedRepos)
+    console.log(`clonedRepos:`, clonedRepos)
 
     return (
         <Table striped bordered hover>
@@ -42,26 +44,37 @@ export async function RepoListingTable() {
     )
 }
 
-function MainNavBar() {
+export async function CloneRepoUrlForm() {
+    const defaultCloneUrl = `https://github.com/sharkdp/fd.git`
+
+    async function handleClick() {
+        const hostPort = 3001
+        const queryUrl = `http://127.0.0.1:${hostPort}/repo/clone?=url=${defaultCloneUrl}`
+        console.log(`clone`, { hostPort, queryUrl })
+        // const data = await fetch(queryUrl)
+        // const dataJson = data.json()
+
+        // console.log(`click: `, { defaultUrl: defaultUrl })
+        // const queryUrl = `http://127.0.0.1:${port}/repo/clone?url=https://github.com/BurntSushi/ripgrep.git"`
+        // const data = await fetch(`http://127.0.0.1:3001/repo/list`)
+    }
     return (
-        <Tabs
-            defaultActiveKey="profile"
-            id="uncontrolled-tab-example"
-            className="mb-3"
-        >
-            <Tab eventKey="home" title="List">
-                ... List repos
-            </Tab>
-            <Tab eventKey="profile" title="Clone">
-                clone repos ...
-            </Tab>
-            <Tab eventKey="contact" title="Contact" disabled>
-                disabled tab
-            </Tab>
-        </Tabs>
+        <>
+            <InputGroup className="mb-3">
+                <Form.Control
+                    placeholder="Git Repository URL"
+                    aria-label="Git Repository URL"
+                    aria-describedby="git-repo-clone-button"
+                    defaultValue={defaultCloneUrl}
+                    onSubmit={handleClick}
+                />
+                <Button variant="outline-secondary" id="git-repo-clone-button" onClick={handleClick}>
+                    Clone
+                </Button>
+            </InputGroup>
+        </>
     )
 }
-
 
 export default function Home() {
     return (
@@ -81,6 +94,11 @@ export default function Home() {
                     </p>
                 </div>
 
+                <h2>to clone</h2>
+                <div>
+                    {CloneRepoUrlForm()}
+                </div>
+
                 <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
                     <Stack direction="horizontal" gap={2}>
                         <Button as="a" variant="primary">
@@ -91,8 +109,7 @@ export default function Home() {
                         </Button>
                     </Stack>
                 </div>
-                <h2>other</h2>
-                {MainNavBar()}
+
                 <h2>Cloned Repos</h2>
 
                 <div>
