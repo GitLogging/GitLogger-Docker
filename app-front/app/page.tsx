@@ -1,36 +1,11 @@
+"use client"
 import Image from "next/image"
 import Button from "react-bootstrap/Button"
 import Stack from "react-bootstrap/Stack"
 import Table from "react-bootstrap/Table"
-
-async function ExampleTable() {
-    const data = await fetch(`http://127.0.0.1:3001/repo/list`)
-    const clonedRepos = await data.json()
-    console.log(clonedRepos)
-
-
-    return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Owner</th>
-                    <th>RepoUrl</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ugit</td>
-                    <td>https://github.com/ugit/repo</td>
-                </tr>
-                <tr>
-                    <td>ripgrep</td>
-                    <td>https://github.com/BurntSushi/ripgrep</td>
-                </tr>
-            </tbody>
-        </Table>
-    )
-}
-
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
+import { use } from "react"
 
 export async function RepoListingTable() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
@@ -67,6 +42,26 @@ export async function RepoListingTable() {
     )
 }
 
+function MainNavBar() {
+    return (
+        <Tabs
+            defaultActiveKey="profile"
+            id="uncontrolled-tab-example"
+            className="mb-3"
+        >
+            <Tab eventKey="home" title="List">
+                ... List repos
+            </Tab>
+            <Tab eventKey="profile" title="Clone">
+                clone repos ...
+            </Tab>
+            <Tab eventKey="contact" title="Contact" disabled>
+                disabled tab
+            </Tab>
+        </Tabs>
+    )
+}
+
 
 export default function Home() {
     return (
@@ -96,17 +91,14 @@ export default function Home() {
                         </Button>
                     </Stack>
                 </div>
-
+                <h2>other</h2>
+                {MainNavBar()}
                 <h2>Cloned Repos</h2>
 
                 <div>
                     {RepoListingTable()}
                 </div>
 
-                <h2>Example Repo List</h2>
-                <div>
-                    {ExampleTable()}
-                </div>
             </main>
 
 
