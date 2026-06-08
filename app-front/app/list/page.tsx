@@ -3,6 +3,13 @@ import Table from "react-bootstrap/Table"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
+import { PageHeaderContent } from "@/app/components/PageHeaderContent"
+
+// import Nav from 'react-bootstrap/Nav'
+// import NavBar from 'react-bootstrap/NavBar'
+import { Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDropdown, NavDropdownProps } from "react-bootstrap"
+
+
 
 export async function RepoListingTable() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
@@ -39,6 +46,22 @@ export async function RepoListingTable() {
     )
 }
 
+export async function PageNavBar() {
+    return (
+        <Navbar expand="lg" className="bg-body-tertiary">
+            <Navbar.Brand href="/">GitLogger</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link href="/list">My Repos</Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    )
+}
+
+
 export async function CloneRepoUrlForm() {
     const defaultCloneUrl = `https://github.com/sharkdp/fd.git`
 
@@ -49,6 +72,7 @@ export async function CloneRepoUrlForm() {
     }
     return (
         <>
+            {PageNavBar()}
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="Git Repository URL"
@@ -67,15 +91,18 @@ export async function CloneRepoUrlForm() {
 
 export default function ListPage() {
     return (
-        <article>
-            <section>
-                <h1>Clone Repository</h1>
-                {CloneRepoUrlForm()}
-            </section>
-            <section>
-                <h1>Repo Listing</h1>
-                {RepoListingTable()}
-            </section>
-        </article>
+        <>
+            {PageHeaderContent()}
+            <article>
+                <section>
+                    <h1>Clone Repository</h1>
+                    {CloneRepoUrlForm()}
+                </section>
+                <section>
+                    <h1>Repo Listing</h1>
+                    {RepoListingTable()}
+                </section>
+            </article>
+        </>
     )
 }

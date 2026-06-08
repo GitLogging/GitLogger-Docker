@@ -3,18 +3,12 @@ import Image from "next/image"
 import Stack from "react-bootstrap/Stack"
 import { use } from "react"
 import Button from 'react-bootstrap/Button'
+import { PageHeaderContent } from "./components/PageHeaderContent"
 
-export async function RawOriginalHtml() {
+export async function OriginalGitloggerSite() {
     return (
         <article>
-            <section className="hero">
-                <h1>
-                    <a href="https://gitlogger.com/">GitLogger</a>: Watch Your Git
-                </h1>
-                <p className="hero-sub">GitLogger is a simple service that helps you understand your codebase — one commit at a time.</p>
-                <a href="getting-started.html" className="cta-btn">Get Started</a>
-            </section>
-
+            {PageHeaderContent()}
             <section className="callout">
                 <div className="callout-img">
                     {/* <img src="./img/screenshot/busymonth-by-repo-commits.png" alt="Busiest month by repo commits chart"> */}
@@ -106,7 +100,7 @@ export async function RawOriginalHtml() {
                 </ul>
             </section>
 
-            <section className="pricing" id="pricing">
+            {/* <section className="pricing" id="pricing">
                 <div className="pricing-inner">
                     <h2>Simple, Honest Pricing</h2>
                     <p className="pricing-amount">$1 <span>/ repo / month</span></p>
@@ -114,17 +108,27 @@ export async function RawOriginalHtml() {
                         metrics for every repository you care about.</p>
                     <a href="getting-started.html" className="cta-btn">Start Watching Your Git</a>
                 </div>
-            </section>
+            </section> */}
         </article>
     )
 }
 
 export default function Home() {
+    // div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    //                     <Stack direction="horizontal" gap={2}>
+    //                         <Button as="a" href="/list" variant="primary">
+    //                             Clone Repo
+    //                         </Button>
+    //                         <Button as="a" href="/list" variant="success">
+    //                             List Repos
+    //                         </Button>
+    //                     </Stack>
+    //                 </div>
     return (
         <>
-            {RawOriginalHtml()}
+            {OriginalGitloggerSite()}
 
-            <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+            {/* <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
                 <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-8">
                     <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
                         <h2 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
@@ -134,19 +138,8 @@ export default function Home() {
                             Get started by cloning your repository
                         </p>
                     </div>
-
-                    <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-                        <Stack direction="horizontal" gap={2}>
-                            <Button as="a" href="/list" variant="primary">
-                                Clone Repo
-                            </Button>
-                            <Button as="a" href="/list" variant="success">
-                                List Repos
-                            </Button>
-                        </Stack>
-                    </div>
                 </main>
-            </div>
+            </div> */}
         </>
     )
 }
