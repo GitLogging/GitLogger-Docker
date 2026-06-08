@@ -46,22 +46,6 @@ export async function RepoListingTable() {
     )
 }
 
-export async function PageNavBar() {
-    return (
-        <Navbar expand="lg" className="bg-body-tertiary">
-            <Navbar.Brand href="/">GitLogger</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/list">My Repos</Nav.Link>
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-    )
-}
-
-
 export async function CloneRepoUrlForm() {
     const defaultCloneUrl = `https://github.com/sharkdp/fd.git`
 
@@ -72,7 +56,6 @@ export async function CloneRepoUrlForm() {
     }
     return (
         <>
-            {PageNavBar()}
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="Git Repository URL"
@@ -95,11 +78,11 @@ export default function ListPage() {
             {PageHeaderContent()}
             <article>
                 <section>
-                    <h1>Clone Repository</h1>
+                    <h2>Clone Repository</h2>
                     {CloneRepoUrlForm()}
                 </section>
                 <section>
-                    <h1>Repo Listing</h1>
+                    <h2>Repo Listing</h2>
                     {RepoListingTable()}
                 </section>
             </article>

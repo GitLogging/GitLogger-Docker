@@ -8,12 +8,13 @@ export async function PageHeaderContent() {
                 <a href="https://gitlogger.com/">GitLogger</a>: Watch Your Git
             </h1>
             <p className="hero-sub">GitLogger is a simple service that helps you understand your codebase — one commit at a time.</p>
-            <a href="/list" className="cta-btn">Your Git Repos</a>
-            <nav className="dhero-nav">
-                <ul><li><a href="#features">Features</a></li></ul>
-                <ul><li><a href="#pricing">Pricing</a></li></ul>
-
-
+            <nav>
+                <div className="nav-inner">
+                    <ul className="nav-menu">
+                        <li><a href="/list">My Repos</a></li>
+                        <li><a href="/">About GitLogger</a></li>
+                    </ul>
+                </div>
             </nav>
         </section>
     )
