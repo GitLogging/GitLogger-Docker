@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 import Table from "react-bootstrap/Table"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -46,32 +47,51 @@ export async function RepoListingTable() {
     )
 }
 
-export async function CloneRepoControl() {
+export function CloneRepoControl() {
     /**
      * @summary Input a git clone url, and call the /repo/clone endpoint
      */
-    const defaultCloneUrl = `https://github.com/sharkdp/fd.git`
+    const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
 
-    async function handleClick() {
-        const hostPort = 3001
-        const queryUrl = `http://127.0.0.1:${hostPort}/repo/clone?=url=${defaultCloneUrl}`
-        console.log(`clone`, { hostPort, queryUrl })
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault() // prevent page reload
+        console.log('Clone url: ', cloneUrl)
+        const port = 3001
+        // const queryUrl = `http://127.0.0.1:${port}/repo/clone?=url=${defaultCloneUrl}`
+        // `http://127.0.0.1:${hostPort}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
+        const queryUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
+
+        try {
+            const response = await fetch(queryUrl)
+            const data = await response.json()
+            console.log(`CloneRepoControl.Submit response:`, data)
+        }
+        catch (error) {
+            console.error(`CloneRepoControl.Submit: rror cloning repo:`, error)
+        }
+
+        console.log(`clone`, { port: port, queryUrl })
+
     }
     return (
-        <>
+        <form onSubmit={handleSubmit}>
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="Git Repository URL"
                     aria-label="Git Repository URL"
                     aria-describedby="git-repo-clone-button"
-                    defaultValue={defaultCloneUrl}
-                    onSubmit={handleClick}
+                    value={cloneUrl}
+                    onChange={(e) => setCloneUrl(e.target.value)}
                 />
-                <Button variant="outline-secondary" id="git-repo-clone-button" onClick={handleClick}>
+                <Button
+                    variant="outline-secondary"
+                    id="git-repo-clone-button"
+                    type="submit"
+                >
                     Clone
                 </Button>
             </InputGroup>
-        </>
+        </form>
     )
 }
 
