@@ -2,6 +2,21 @@
 
 React test for GitLogger site using react-bootstrap
 
+
+## How to Run
+
+```ps1
+# [1] first run the pwsh web server
+pushd 'H:\data\2026\pwsh\Sketch.📁\GitDocker.📁'
+. ./app/server-run -PortNumber 3001
+
+# [2] run react front end
+pushd 'H:/data/2026/web/Sketch.📁/Other.📁/2026-06-01.ReactTut/app-front'
+pnpm run dev
+# [3] open browser
+Start-Process -FilePath 'http://127.0.0.1:3000'
+```
+
 ## Repo initialized using
 
 ```ps1
