@@ -13,6 +13,7 @@ export async function PageHeaderContent() {
                     <ul className="nav-menu">
                         <li><a href="/list">My Repos</a></li>
                         <li><a href="/">About GitLogger</a></li>
+                        <li><a href="/testing">Test Page</a></li>
                     </ul>
                 </div>
             </nav>
