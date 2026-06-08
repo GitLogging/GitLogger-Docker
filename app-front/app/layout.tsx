@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import 'bootstrap/dist/css/bootstrap.min.css' // Add this line
-import "./globals.css"
-// import "./gitlogger-base.css"
-// import "./gitlogger-4bitcss-iceberg-dark.css"
+// import 'bootstrap/dist/css/bootstrap.min.css' // Add this line
+// import "./globals.css"
+import "./gitlogger-base.css"
+import "./gitlogger-4bitcss-iceberg-dark.css"
 
 
 const geistSans = Geist({
