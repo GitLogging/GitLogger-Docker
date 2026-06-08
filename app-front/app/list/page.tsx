@@ -46,7 +46,10 @@ export async function RepoListingTable() {
     )
 }
 
-export async function CloneRepoUrlForm() {
+export async function CloneRepoControl() {
+    /**
+     * @summary Input a git clone url, and call the /repo/clone endpoint
+     */
     const defaultCloneUrl = `https://github.com/sharkdp/fd.git`
 
     async function handleClick() {
@@ -79,7 +82,7 @@ export default function ListPage() {
             <article>
                 <section>
                     <h2>Clone Repository</h2>
-                    {CloneRepoUrlForm()}
+                    {CloneRepoControl()}
                 </section>
                 <section>
                     <h2>Repo Listing</h2>
