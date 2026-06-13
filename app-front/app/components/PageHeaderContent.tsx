@@ -1,4 +1,4 @@
-export async function PageHeaderContent() {
+export function PageHeaderContent() {
     /**
      * @summary Page header content for the GitLogger app. This section includes the main title, a subtitle, and a call-to-action button
      */

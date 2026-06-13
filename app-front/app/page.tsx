@@ -1,11 +1,19 @@
 "use client"
 import Image from "next/image"
-import Stack from "react-bootstrap/Stack"
+// import Stack from "react-bootstrap/Stack"
 import { use } from "react"
-import Button from 'react-bootstrap/Button'
+// import Button from 'react-bootstrap/Button'
 import { PageHeaderContent } from "./components/PageHeaderContent"
 
-export async function OriginalGitloggerSite() {
+export function OriginalGitloggerSite() {
+    console.log(`skip components`)
+    // return (
+
+    //     <article>
+    //         {PageHeaderContent()}
+    //     </article>
+    // )
+
     return (
         <article>
             {PageHeaderContent()}

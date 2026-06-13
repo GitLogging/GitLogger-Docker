@@ -12,10 +12,12 @@ import { Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDro
 
 
 
-async function RepoListingTableContent() {
-    const data = await fetch(`http://127.0.0.1:3001/repo/list`)
-    const clonedRepos = await data.json()
-    console.log(`clonedRepos:`, clonedRepos)
+function RepoListingTableContent() {
+    // const data = await fetch(`http://127.0.0.1:3001/repo/list`)
+    // const clonedRepos = await data.json()
+    // console.log(`clonedRepos:`, clonedRepos)
+    // const clonedRepos = { RepoList }
+    return null
 
     return (
         <Table striped bordered hover>
@@ -60,6 +62,8 @@ export function CloneRepoControl() {
      * @summary Input a git clone url, and call the /repo/clone endpoint
      */
     const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
+
+    return null;
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault() // prevent page reload
