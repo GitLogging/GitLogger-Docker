@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Table from "react-bootstrap/Table"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -12,7 +12,7 @@ import { Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDro
 
 
 
-export async function RepoListingTable() {
+async function RepoListingTableContent() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
     const clonedRepos = await data.json()
     console.log(`clonedRepos:`, clonedRepos)
@@ -44,6 +44,14 @@ export async function RepoListingTable() {
                 ))}
             </tbody>
         </Table>
+    )
+}
+
+function RepoListingTable() {
+    return (
+        <Suspense fallback={<div>Loading repositories...</div>}>
+            <RepoListingTableContent />
+        </Suspense>
     )
 }
 
