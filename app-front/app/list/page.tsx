@@ -1,17 +1,41 @@
 "use client"
 import { useState, Suspense } from "react"
-import Table from "react-bootstrap/Table"
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
+// import Table from "react-bootstrap/Table"
+import { Table } from "react-bootstrap/Table"
+// import Button from 'react-bootstrap/Button'
+// import Form from 'react-bootstrap/Form'
+// import InputGroup from 'react-bootstrap/InputGroup'
+// import { Table, Button, Form, InputGroup, Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDropdown, NavDropdownProps } from "react-bootstrap"
+// import {
+//   Table,
+//   Button,
+//   Form,
+//   InputGroup,
+//   Nav,
+//   Navbar,
+//   NavLink,
+//   NavDropdown
+// } from "react-bootstrap"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
 // import Nav from 'react-bootstrap/Nav'
 // import NavBar from 'react-bootstrap/NavBar'
-import { Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDropdown, NavDropdownProps } from "react-bootstrap"
 
 
-
+function RepoListPicker() {
+    return (
+        <>
+            <label>
+                Select a Repository
+                <select name="selectedRepository">
+                    <option value="repo1">Repository 1</option>
+                    <option value="repo2">Repository 2</option>
+                    <option value="repo3">Repository 3</option>
+                </select>
+            </label>
+        </>
+    )
+}
 function RepoListingTableContent() {
     // const data = await fetch(`http://127.0.0.1:3001/repo/list`)
     // const clonedRepos = await data.json()
@@ -79,7 +103,7 @@ export function CloneRepoControl() {
             console.log(`CloneRepoControl.Submit response:`, data)
         }
         catch (error) {
-            console.error(`CloneRepoControl.Submit: rror cloning repo:`, error)
+            console.error(`CloneRepoControl.Submit: error cloning repo:`, error)
         }
 
         console.log(`clone`, { port: port, queryUrl })
@@ -112,6 +136,9 @@ export default function ListPage() {
         <>
             {PageHeaderContent()}
             <article>
+                <section>
+                    {RepoListPicker()}
+                </section>
                 <section>
                     <h2>Clone Repository</h2>
                     {CloneRepoControl()}
