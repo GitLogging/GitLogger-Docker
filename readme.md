@@ -50,3 +50,17 @@ Turbopack is now the default bundler. To use Webpack run next dev --webpack or n
 ## Customize `Bootstrap` `Sass` variables
 
 - [customizing bootstrap css variables](https://react-bootstrap.github.io/docs/getting-started/introduction/#sass)
+
+## Running as local debugging mode
+
+```bash
+# process [1] : pwsh server
+pushd 'H:\data\2026\pwsh\Sketch.📁\GitDocker.📁'
+. H:\data\2026\pwsh\Sketch.📁\GitDocker.📁\app\server-run.ps1 -PortNumber 3001
+```
+```bash
+# process [2] : The React front end 
+pushd 'H:\data\2026\web\Sketch.dir\2026-06-01.ReactTut\app-front'
+pnpm run dev
+
+````

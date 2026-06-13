@@ -1,85 +1,9 @@
 "use client"
 import { useState, Suspense } from "react"
-// import Table from "react-bootstrap/Table"
-import { Table } from "react-bootstrap/Table"
-// import Button from 'react-bootstrap/Button'
-// import Form from 'react-bootstrap/Form'
-// import InputGroup from 'react-bootstrap/InputGroup'
-// import { Table, Button, Form, InputGroup, Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDropdown, NavDropdownProps } from "react-bootstrap"
-// import {
-//   Table,
-//   Button,
-//   Form,
-//   InputGroup,
-//   Nav,
-//   Navbar,
-//   NavLink,
-//   NavDropdown
-// } from "react-bootstrap"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-
-// import Nav from 'react-bootstrap/Nav'
-// import NavBar from 'react-bootstrap/NavBar'
-
-
-function RepoListPicker() {
-    return (
-        <>
-            <label>
-                Select a Repository
-                <select name="selectedRepository">
-                    <option value="repo1">Repository 1</option>
-                    <option value="repo2">Repository 2</option>
-                    <option value="repo3">Repository 3</option>
-                </select>
-            </label>
-        </>
-    )
-}
-function RepoListingTableContent() {
-    // const data = await fetch(`http://127.0.0.1:3001/repo/list`)
-    // const clonedRepos = await data.json()
-    // console.log(`clonedRepos:`, clonedRepos)
-    // const clonedRepos = { RepoList }
-    return null
-
-    return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Owner</th>
-                    <th>Commit Count</th>
-                    <th>Newest Commit Date</th>
-                    <th>Newest Commit Relative</th>
-                    <th>Path</th>
-                    <th>Remote</th>
-                </tr>
-            </thead>
-            <tbody>
-                {clonedRepos.RepoList.map((repo: any) => (
-                    <tr key={repo.Path}>
-                        <td>{repo.Name}</td>
-                        <td>{repo.Owner}</td>
-                        <td>{repo.CommitCount}</td>
-                        <td>{repo.NewestCommitDate}</td>
-                        <td>{repo.NewestCommitRelative}</td>
-                        <td>{repo.Path}</td>
-                        <td>{repo.Remote}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </Table>
-    )
-}
-
-function RepoListingTable() {
-    return (
-        <Suspense fallback={<div>Loading repositories...</div>}>
-            <RepoListingTableContent />
-        </Suspense>
-    )
-}
+import { InputGroup, Form, Button } from "react-bootstrap"
+import { RepoListPicker } from "@/app/components/input/RepositoryNamePicker"
+import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
 
 export function CloneRepoControl() {
     /**
@@ -87,7 +11,7 @@ export function CloneRepoControl() {
      */
     const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
 
-    return null;
+    return null
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault() // prevent page reload
@@ -134,7 +58,10 @@ export function CloneRepoControl() {
 export default function ListPage() {
     return (
         <>
-            {PageHeaderContent()}
+            <article>
+
+                {PageHeaderContent()}
+            </article>
             <article>
                 <section>
                     {RepoListPicker()}
@@ -145,7 +72,7 @@ export default function ListPage() {
                 </section>
                 <section>
                     <h2>Repo Listing</h2>
-                    {RepoListingTable()}
+                    {RepoSummaryTable()}
                 </section>
             </article>
         </>
