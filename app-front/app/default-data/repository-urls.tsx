@@ -1,0 +1,21 @@
+export const defaultRepoUrlList: { label?: string; url: string }[] = [
+
+    { label: 'VsCode TMDL', url: 'https://github.com/microsoft/vscode-tmdl' },
+    { label: 'Vertipaq Analzyer', url: 'https://github.com/sql-bi/vertipaq-analyzer' },
+    { label: 'Dotfiles', url: 'https://www.github.com/ninmonkey/dotfiles_git' },
+    { label: 'PSEditor Services', url: 'https://www.github.com/PowerShell/PowerShellEditorServices' },
+    { label: 'PowerShell', url: 'https://www.github.com/powershell/powershell' },
+    { label: 'PSSvg', url: 'https://www.github.com/startautomating/pssvg' },
+    { url: 'https://www.github.com/startautomating/psadapter' },
+    { url: 'https://www.github.com/startautomating/emoji' },
+    { url: 'https://www.github.com/startautomating/obs-powershell' },
+    { label: 'UGit', url: 'https://www.github.com/startautomating/ugit' },
+    { url: 'https://www.github.com/startautomating/helpout' },
+    { url: 'https://www.github.com/startautomating/ezout' },
+    { url: 'https://www.github.com/startautomating/rocker' },
+    { url: 'https://www.github.com/startautomating/roughdraft' },
+    { label: 'PowerQueryLib', url: 'https://www.github.com/ninmonkey/ninmonkey.PowerQueryLib' },
+    { label: 'PSReadLine', url: 'https://www.github.com/powershell/PSReadLine' },
+    { label: 'VS Code', url: 'https://github.com/microsoft/vscode' },
+    { label: 'Windows Terminal', url: 'https://github.com/microsoft/terminal' },
+]

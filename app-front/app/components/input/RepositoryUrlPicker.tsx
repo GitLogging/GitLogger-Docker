@@ -1,73 +1,12 @@
+import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
+import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
+
 interface InputOptionItem {
     /**
      * @summary properties required to build a <datalist>'s <option> elements
      */
     label?: string
     url: string
-}
-
-interface PropertyMapping {
-    /**
-     * Converts keyvalue pairs into a layout that a <InputOptionItem> requires
-     */
-    label?: string
-    value?: string
-}
-
-/**
- * @summary Convert an array of items into <option> elements. Optionally declare property names
- * @description Allows custom property mapping for label and value properties
- * @example
- * BuildInputOptionsFrom(items) // uses default 'label' and 'value' properties
- * BuildInputOptionsFrom(items, { label: 'label', value: 'url' }) // custom mapping
- */
-function BuildInputOptionsFrom(
-    items: any[],
-    mapping?: PropertyMapping
-): React.ReactNode {
-    const defaultMapping: PropertyMapping = {
-        label: 'label',
-        value: 'value',
-    }
-
-    const finalMapping = { ...defaultMapping, ...mapping };
-
-    return (
-        <>
-            {items.map((item, index) => (
-                <option
-                    key={index}
-                    label={item[finalMapping.label!]}
-                    value={item[finalMapping.value!]}
-                />
-            ))}
-        </>
-    )
-}
-
-function buildDefaultDataListOptions() {
-    const items: InputOptionItem[] = [
-        { label: 'VsCode TMDL', url: 'https://github.com/microsoft/vscode-tmdl' },
-        { label: 'Vertipaq Analzyer', url: 'https://github.com/sql-bi/vertipaq-analyzer' },
-        { label: 'Dotfiles', url: 'https://www.github.com/ninmonkey/dotfiles_git' },
-        { label: 'PSEditor Services', url: 'https://www.github.com/PowerShell/PowerShellEditorServices' },
-        { label: 'PowerShell', url: 'https://www.github.com/powershell/powershell' },
-        { label: 'PSSvg', url: 'https://www.github.com/startautomating/pssvg' },
-        { url: 'https://www.github.com/startautomating/psadapter' },
-        { url: 'https://www.github.com/startautomating/emoji' },
-        { url: 'https://www.github.com/startautomating/obs-powershell' },
-        { label: 'UGit', url: 'https://www.github.com/startautomating/ugit' },
-        { url: 'https://www.github.com/startautomating/helpout' },
-        { url: 'https://www.github.com/startautomating/ezout' },
-        { url: 'https://www.github.com/startautomating/rocker' },
-        { url: 'https://www.github.com/startautomating/roughdraft' },
-        { label: 'PowerQueryLib', url: 'https://www.github.com/ninmonkey/ninmonkey.PowerQueryLib' },
-        { label: 'PSReadLine', url: 'https://www.github.com/powershell/PSReadLine' },
-        { label: 'VS Code', url: 'https://github.com/microsoft/vscode' },
-        { label: 'Windows Terminal', url: 'https://github.com/microsoft/terminal' },
-    ];
-
-    return BuildInputOptionsFrom(items, { label: 'label', value: 'url' })
 }
 
 function buildDataList({ dataListId, children }: { dataListId?: string; children?: React.ReactNode }) {
@@ -79,23 +18,23 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     }
     if (!children) {
         // console.error(`<RepositoryUrlPicker> -> buildDataList: missing required children`)
-        children = buildDefaultDataListOptions()
+        children = BuildInputOptionsFrom(defaultRepoUrlList, { label: 'label', value: 'url' })
     }
+    /*
+    example output:
+        <option
+        label="VS Code"
+            value="https://github.com/microsoft/vscode"
+            data-repo-url="https://github.com/microsoft/vscode"
+        ></option>
+    */
     return (
         <datalist id={dataListId}>
-            {/*
-          <option
-        label="VS Code"
-              value="https://github.com/microsoft/vscode"
-              data-repo-url="https://github.com/microsoft/vscode"
-          ></option>
-          */}
             {/*
 
           `Option.Label` is optional, but can be used to provide a more human-readable name for the url
           */}
             {children}
-
         </datalist>
     )
 }

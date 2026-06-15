@@ -3,7 +3,7 @@ import Image from "next/image"
 // import Stack from "react-bootstrap/Stack"
 import { use } from "react"
 // import Button from 'react-bootstrap/Button'
-import { PageHeaderContent } from "./components/PageHeaderContent"
+import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
 export function OriginalGitloggerSite() {
     console.log(`skip components`)
