@@ -1,7 +1,7 @@
 /**
  * @summary Select a repository from the list of known cloned repos
  */
-export async function RepoListPicker() {
+export async function RepoListNamePicker() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
     const clonedRepos = await data.json()
     console.warn(`clonedRepos: should be cached`, clonedRepos)

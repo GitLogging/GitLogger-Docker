@@ -1,5 +1,5 @@
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-import { RepoListPicker } from "@/app/components/input/RepositoryNamePicker"
+import { RepoListNamePicker } from "@/app/components/input/RepositoryNamePicker"
 import { Suspense } from "react"
 import Table from "react-bootstrap/esm/Table"
 // import { Table } from "react-bootstrap/Table"
