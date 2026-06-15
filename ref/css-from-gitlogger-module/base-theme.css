@@ -1,0 +1,245 @@
+@import url("/style/component/base-forms.css");
+/*
+import form defaults animate / add outlines / etc
+@import url("/style/component/base-forms.css");
+*/
+
+/*
+Url: /style/base.css
+About: This is the base template used for all pages
+    Variables are defined here
+    Later sheets can modify variables, without repeating definitions
+
+How to override:
+
+    @import url("/style/base.css");
+
+    :root {
+        --primary-fg: #abc0cc;
+    }
+
+Variables named: "color-alpha-50" are 50% transparent
+*/
+
+:root {
+    /* section: base theme */
+    --brightWhite: #d2d4de;
+    --brightCyan: #95c4ce;
+    --brightPurple: #ada0d3;
+    --brightBlue: #91acd1;
+    --brightYellow: #e9b189;
+    --brightGreen: #c0ca8e;
+    --brightRed: #e98989;
+    --brightBlack: #6b7089;
+    --white: #c6c8d1;
+    --cyan: #89b8c2;
+    --purple: #a093c7;
+    --blue: #84a0c6;
+    --yellow: #e2a478;
+    --green: #b4be82;
+    --red: #e27878;
+    --black: #1e2132;
+    --name: 'iceberg-dark';
+
+    --selectionBackground: #c6c8d1;
+    --cursorColor: #c6c8d1;
+    --foreground: hsl(229, 11%, 80%);
+    --background: hsl(229.1, 20%, 10.8%);
+    --primary-bg: hsl(229.1, 20%, 10.8%);
+
+    --primary-fg: #abc0cc;
+    --border-primary-fg: #7f7f7fff;
+
+    /* variations */
+    --primary-bg-0: #abc0cc;
+    --primary-bg-4: #6c7fcc;
+    --primary-bg-4: #6c7fcc;
+    --primary-bg-1: #161821;
+    --primary-bg-2: #3b3f50;
+    --primary-bg-3: #646774;
+    --primary-bg: var(--primary-bg-2);
+
+    --header-fg-1-dim: #3c3f51;
+    --header-fg-1: #647e8f;
+
+    --content-bg-darker: rgb(255, 102, 0); /* --content-bg: #eebdab; */
+    --content-bg-darker: var(--brightBlue);
+    --darker: var(--brightBlue);
+
+    --border-primary-fg-dim-1: hsla(0, 0%, 50%, 0.835);
+    --border-primary-fg-dim-2: hsla(0, 0%, 50%, 0.396);
+    --border-primary-fg-dim-3: hsla(0, 0%, 50%, 0.129);
+    /* --font-family-default-sans: 'Comfortaa', 'cascadia code', Impact, "Arial Narrow Bold", sans-serif; */
+    --font-family-default-sans: Comfortaa, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    /* --green-alpha-50: #00ffaa81; */
+    --dark-red: #551414;
+    --dark-green: #316e4f;
+
+    --green-alpha-75:  color(from var(--green) srgb r g b / 75% );
+
+    --red-alpha-50:  color(from var(---red) srgb r g b / 50% );
+    --red-alpha-75:  color(from var(---red) srgb r g b / 75% );
+
+    --dark-red-alpha-50:  color(from var(--dark-red) srgb r g b / 50% );
+    --dark-red-alpha-75:  color(from var(--dark-red) srgb r g b / 75% );
+
+    --dark-green-alpha-50: color(from var(--dark-green) srgb r g b / 50% );
+    --dark-green-alpha-75: color(from var(--dark-green) srgb r g b / 75% );
+
+    --font-root-size: 16px;
+    --font-root-size-2: 22px;
+    --font-root-weight: bold;
+
+    /* forms */
+    --form-color-valid: var(--dark-green); /* var(--dark-green-alpha-75); */
+    --form-color-invalid: var(--red); /* var(--red-alpha-75); */
+    --form-color-focus: var(--blue ); /* or cyan */
+    --form-color-active: var(--yellow );
+    --form-valid-outline: 2px solid var(--green-alpha-75);
+    --form-border-1: 2px solid var(--primary-bg-2);
+
+    /*
+        --form-valid-outline: #00ffaab7;
+        --form-invalid-outline: #cc00009c;
+        --form-valid-outline: 2px solid var( --form-valid );
+    */
+
+    padding: min(100px, 7vw);
+}
+
+body,
+html {
+    /* background-color: var(--primary-bg); */
+    background-color: var(--background);
+    color: var(--primary-bg-3);
+    font-family: var(--font-family-default-sans);
+    font-weight: var(--font-root-weight );
+    /* font-size: 14px; */
+
+    /* margin: 3rem 1.5rem; */
+    margin: 0px 0px;
+}
+
+ /* html { */
+    /* border: 2px solid var(--border-primary-fg-dim-1); */
+    /* background-color: var(--primary-bg); */
+/* } */
+
+body {
+    font-size: var(--font-root-size); /* update with modern container queries for responsive, stable scaling. */
+    /* font-size: 10px;
+    font-size: 1.5rem;
+    font-size: 1em; */
+}
+
+h1,h2, h3, h4,h5, h6 {
+    color: var(--header-fg-1);
+}
+
+.hidden {
+    display: none;
+}
+.not-visible {
+    visibility: hidden;
+}
+
+
+.flexParent {
+    /* border: 2px solid purple; */
+    display: flex;
+    /* gap: 40px; */
+    /* align-items: flex-end; */
+    flex-wrap: wrap;
+}
+
+/* section: responsive overrides */
+@media (min-width: 1600px) {
+    /* update with modern container queries for more reliable responsive scaling.
+    should not use px sizes to pass accessibility standards requirements */
+    :root {
+        --font-root-size: var(--font-root-size-2);
+        font-size: var(--font-root-size-2);
+    }
+}
+
+
+#mainLogoHeader, .mainLogoHeader {
+    max-height: 300px;
+    margin-bottom: -120px;
+    margin-top: -160px;
+    width: 100%;
+}
+
+/* don't show custom controls that are in the undefined state */
+:is( chart-with-controls,
+metric-name-selector,
+chart-core,
+graph-type-selector,
+nav-list,
+data-table ) {
+    visibility: hidden;
+}
+
+:is( chart-with-controls:defined,
+metric-name-selector:defined,
+chart-core:defined,
+graph-type-selector:defined,
+nav-list:defined,
+data-table:defined ),
+:is(:defined) {
+    visibility: visible;
+}
+
+.opacity-max {
+    opacity: 100%;
+}
+.opacity-min {
+    opacity: 0%;
+}
+
+
+.opacity-max {
+    opacity: 100%;
+}
+.opacity-min {
+    opacity: 0%;
+}
+
+#cloneRepo-loading-icon {
+  transition:
+      opacity ease-out 1s,
+      visibility ease-out 1s;
+
+   /* display ease-out 1s; */
+    position: relative;
+    z-index: 1;
+    top: 0px;
+/*     left: 0px;
+    left: 30px; */
+    right: 20px;
+    right: 0;
+    top: -50%;
+    top: 15px;
+    transform: translate(0, -10px);
+/*     width: 40px;
+    position: relative;
+    top: 10px;
+    */
+/*     width: 40px;  */
+/*     outline: 2px solid red; */
+
+  transition-behavior: allow-discrete;
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/* don't show lastpass icons on form fields */
+div[data-lastpass-icon-root] { display: none; }
+div[data-lastpass-root] { display: none; }
+
+
+img.tinyImageButton {
+  vertical-align: middle;
+}

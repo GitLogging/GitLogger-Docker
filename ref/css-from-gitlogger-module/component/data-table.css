@@ -1,0 +1,101 @@
+table {
+    --table-outer-border: var(--cyan);
+    --table-header-bg: rgb(228 240 245);
+    --table-header-bg: rgb(228 240 245 / 0.05 );
+    --table-header-fg: slategray;
+    --table-border-inset: rgb(160 160 160);
+    --table-border-inset: rgba(47, 79, 79, 0.7);
+    --font-family-default-sans: "Open Sans", Helvetica, Arial, sans-serif;
+
+    table-layout: fixed;
+    width: 100%;
+
+    border: 2px solid var(--table-outer-border);
+    font: 16px var(--font-family-default-sans);
+    border-collapse: collapse;
+    tr {
+        td {
+
+            border: 1px solid var(--table-border-inset );
+            padding-inline: 1.3ch;
+        }
+    }
+
+    thead th, thead tr {
+        font-family: var(--font-family-default-sans, arial);
+        background-color: var(--table-header-bg);
+        padding: 1.5ch;
+        font-weight: bold;
+    }
+
+    caption {
+        color: var(--table-header-fg);
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-block: 1ch;
+    }
+
+    th {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    td {
+        /* don't overflow for all columns as the default */
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        /* huge change in layout when enabled */
+        white-space: nowrap;
+
+        &[data-column-name="name"] {
+            /* color: var( --primary-bg-4, white); */
+            color: var(--cyan);
+            font-weight: bold;
+            font-size: 110%;
+        }
+        &[data-column-name="description"] {
+            font-size: 75%;
+        }
+    }
+
+    /* starting styles, adding new rows fade in */
+    /*  The state at which the element is open + transition logic */
+    tr {
+        transition: opacity 0.75s, transform 0.75s, height 0.25s, display 0.75s allow-discrete;
+    }
+
+    /*  1. BEFORE-OPEN STATE   */
+    /*  Starting point for the transition */
+    @starting-style {
+        tr {
+            opacity: 0;
+            height: 0;
+            transform: skewX(50deg) translateX(-25vw);
+        }
+    }
+
+    /*  2. EXITING STATE   */
+    /*  While it is deleting, before DOM removal in JS, apply this
+        transformation for height, opacity, and a transform which
+        skews the element and moves it to the left before setting
+        it to display: none */
+    .is-deleting {
+        opacity: 0;
+        height: 0;
+        display: none;
+        transform: skewX(50deg) translateX(-25vw);
+    }
+
+}
+
+.clear-repository-button {
+    --red-bright: red;
+    color: var(--red);
+
+    &:hover {
+        color: var(--red-bright);
+
+    }
+    transition: ease-out color 1.3s;
+}

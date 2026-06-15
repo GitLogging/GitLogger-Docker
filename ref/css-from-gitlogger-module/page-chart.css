@@ -1,0 +1,289 @@
+/* @import url("/style/base.css"); */
+@import url("/style/base-theme.css");
+@import url("/style/component/nav-list.css");
+/*
+    did not seem to cascade variables declared in :root
+*/
+:root {
+    --page-div-border-color: #3c3f51;
+    --page-div-outline: 2px solid var(--page-div-border-color);
+
+    --background: hsl(229.1, 20%, 10.8%);
+    --primary-bg: #d4d6df;
+    --primary-bg: hsl(229.1, 20%, 10.8%);
+    --primary-bg-0: #abc0cc;
+    --primary-bg-4: #6c7fcc;
+    --primary-bg-4: #6c7fcc;
+    --primary-bg-1: #161821;
+    --primary-bg-2: #3b3f50;
+    --primary-bg-3: #646774;
+    --primary-bg: var(--primary-bg-2);
+
+    --header-fg-1-dim: #3c3f51;
+    --header-fg-1: #647e8f;
+
+    --primary-fg: #abc0cc;
+
+    /* --content-bg: rgb(238, 189, 171); */
+    --content-bg-darker: rgb(255, 102, 0);
+    --content-bg-darker: var(--brightBlue);
+    --darker: var(--brightBlue);
+
+    --border-primary-fg: #7f7f7fff;
+    --border-primary-fg-dim-1: #7f7f7fd5;
+    --border-primary-fg-dim-2: #7f7f7f65;
+    --border-primary-fg-dim-3: #7f7f7f21;
+    /* --font-family-default-sans: 'Comfortaa', 'cascadia code', Impact, "Arial Narrow Bold", sans-serif; */
+    --font-family-default-sans: Comfortaa, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    --selectionBackground: #c6c8d1;
+    --cursorColor: #c6c8d1;
+    --foreground: rgb(198, 200, 209);
+    --foreground: #c6c8d1;
+    --background: #161821;
+    --brightWhite: #d2d4de;
+    --brightCyan: #95c4ce;
+    --brightPurple: #ada0d3;
+    --brightBlue: #91acd1;
+    --brightYellow: #e9b189;
+    --brightGreen: #c0ca8e;
+    --brightRed: #e98989;
+    --brightBlack: #6b7089;
+    --white: #c6c8d1;
+    --cyan: #89b8c2;
+    --purple: #a093c7;
+    --blue: #84a0c6;
+    --blue-darker: #344694;
+    --yellow: #e2a478;
+    --green: #b4be82;
+    --red: #e27878;
+    --black: #1e2132;
+    --name: 'iceberg-dark';
+
+    /* <chart-with-controls> */
+    --chart-grid-outline-color: color(from var(--brightPurple) srgb r g b / 60%);
+    --chart-grid-outline: 2px solid var(--chart-grid-outline-color);
+}
+
+
+div.flexHorizParent a:hover {
+    color: var(--blue-darker);
+}
+
+div.flexHorizParent {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* outline: 2px solid blue; */
+}
+
+td {
+    /* padding: 15px;  */
+    padding: 0.7ch;
+}
+
+a {
+    color: var(--blue);
+}
+
+a,
+a:visited,
+a:hover {
+    color: var(--cyan);
+}
+
+/* section: maybe no longer used, removing in steps */
+#mainFormContent {
+    border: var(--border-table-outline);
+}
+
+#rootBodyContents {
+    /*
+    width: fit-content;
+    width: max-content;
+    width: auto;
+    margin: 1rem auto;
+        */
+    /*
+        margin-left: 10%;
+        margin-left: 0;
+        margin-right: 10%;
+        */
+    border: 2px solid var(--page-div-border-color);
+}
+
+#repoListParent {
+    --outline-style: 3px solid rgba(250, 128, 114, 0.315);
+    /*
+    --outline-style: none;
+    outline: var( --page-div-outline );
+    */
+    outline: var(--outline-style);
+
+
+    width: 80%;
+    margin: 2rem auto;
+    /*
+    margin: 1rem auto;
+    */
+}
+
+#repoListParent {
+    --outline-style: 2px solid salmon;
+    /*
+    */
+    --outline-style: none;
+    outline: var(--outline-style);
+}
+
+#repoListParent>table {
+    --outline-style: 2px solid green;
+    /*
+    */
+    --outline-style: none;
+    outline: var(--outline-style);
+}
+
+#repoListParent ul {}
+
+#repoListParent li {
+    --outline-style: 1px solid orange;
+    list-style: none;
+    /*
+    */
+    --outline-style: none;
+    outline: var(--outline-style);
+}
+
+#debugMenu-titlebar {
+    /* display: none; */
+}
+
+/* section: to keep */
+.horizontalMenuBar a:hover {
+    color: #344694;
+}
+
+.horizontalMenuBar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+
+
+
+.debugBar,
+#debugMenu-titlebar {
+    /* font-size: 0.9rem; */
+    line-height: 1.6;
+    /* font-size: max(min(0.5vw, 0.5em), 1rem); */
+    font-size: max(min(0.5vw, 0.4rem), 1.0rem);
+    /* font-size: max(min(0.5vw, 0.5em), 1.1rem); */
+    /* font-size: 1rem; */
+}
+
+div#mainFormContent {
+    /* responsive grid wrapper of a list of <chart-with-controls> */
+    --_min-column-width: 600px;
+
+    gap: 1.5rem;
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit,
+            minmax(var(--_min-column-width), 1fr));
+    /* outline: 2px solid var(--brightGreen); */
+    /* outline: 2px solid blue; */
+}
+
+chart-with-controls {
+    border: var(--chart-grid-outline);
+    padding: 2rem;
+
+    /* display: inline-block; is required for width: */
+}
+
+/* .chartWithControlsRoot > * {
+    border: 3px solid purple;
+
+    padding-block: 0.3rem;
+
+} */
+/* future: container queries for <chart-with-controls> to make fonts sizes and children more responsive */
+
+#documentRoot {
+    background-color: var(--content-bg);
+    padding: 30px 2rem;
+    margin: 2rem auto;
+    margin: 0.6rem 0.3rem;
+    margin: 0 auto;
+    margin: 0 0;
+    padding: 0 0;
+    padding: 15px 20px;
+    max-width: 90%;
+    border: 3px solid var(--content-bg-darker);
+
+}
+
+/* future: clamp max width based rem etc */
+/* future: clamp min-font-size based  etc */
+.contentRoot {
+    margin: 40px auto;
+    padding: 30px 2rem;
+    max-width: 80%;
+    border: 3px solid var(--content-bg-darker);
+    border-top: 0;
+    border-bottom: 0;
+    border-color: rgb(223, 35, 223, 30%);
+
+}
+
+
+#cloneRepo-form div.row {
+    margin-block: 1.8ch;
+}
+
+#cloneRepoListUrlButton {
+    /* color: hsla(from var(--blue) srgb r g b / 80%); */
+    /* color: color-mix(in lch longer hue, hsl(200deg 50% 80%), coral); */
+    /* color: color-mix(in lch shorter hue, var(--blue), var(--cyan) ); */
+    /* color: color-mix(in lch shorter hue, var(--blue), white); */
+    transition: all ease-out 0.3s;
+    --color-state-loading: hsl(163.3, 60%, 57.8%);
+    --color-state-loading: var(--brightGreen);
+    --color-state-failed: var(--red);
+
+    &.stateLoading {
+        color: var(--color-state-loading);
+    }
+
+    &.stateFailed {
+        color: var(--color-state-failed);
+        /* color: lch(from var(--cyan) calc(l + 0) c calc(h - 180)); */
+        /* color: color-mix(in lch longer hue, var(--blue), white 40%); */
+        /* color: var(--red); */
+        /* is: rgb(206, 166, 157) */
+        /* plum: rgb(118, 98, 137) */
+    }
+
+}
+
+/* hide debug bar and randomization bars */
+/* :is( .randomizeMenuWrapper, .randomizeMenuWrapperParent ) {
+    display: none;
+} */
+
+div#debugMenu-titlebar {
+    display: none;
+}
+
+/* transitions to display none */
+.fade-out {
+  animation: fade-out 3.25s forwards;
+}
+@keyframes fade-out {
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}

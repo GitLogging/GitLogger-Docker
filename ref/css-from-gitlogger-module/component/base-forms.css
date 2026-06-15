@@ -1,0 +1,102 @@
+/*
+Url: /style/component/base-forms.css
+About: This adds animations / transitions to regular form states like radio inputs
+*/
+
+/* Section: core rules for 'appearance: default' */
+fieldset {
+    margin: 1.2rem 0.2rem;
+    border: var( --form-border-1 );
+    font-size: 0.8rem;
+    margin: 1.2rem 0.2rem;
+    padding-block: .65rem;
+    padding-inline: 1rem;
+}
+
+label {
+    padding-inline-start: 1ch;
+    padding-inline-end: 1.5ch;
+}
+
+input[type="radio"] {
+    padding-inline: 0;
+    padding-block: 0;
+    margin-inline: 0;
+}
+
+input.auto-size-width {
+    field-sizing: content;
+}
+
+/* input:valid, */
+input[type="url"]:valid,
+input[type="searchb"]:valid,
+input[type="text"]:valid
+{
+    outline: 2px solid var(--form-color-valid);
+}
+/* input:invalid, */
+input[type="url"]:invalid,
+input[type="search"]:invalid,
+input[type="text"]:invalid
+{
+    outline: 2px solid var(--form-color-invalid);
+}
+
+/* input:focus, */
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="url"]:focus-visible,
+input[type="search"]:focus-visible,
+input[type="text"]:focus-visible
+{
+    outline: 2px solid var(--form-color-focus);
+}
+
+/* input:active, */
+input[type="url"]:active,
+input[type="search"]:active,
+input[type="text"]:active
+{
+    outline: 2px solid var(--form-color-active);
+}
+
+input {
+    transition: outline ease-in 0.15s;
+}
+
+/* Section: 'appearance: none' for 'radio' */
+input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: 2px solid color(from var(--blue, deepskyblue) srgb r g b / 30% );
+    vertical-align: -2px; /* Adjusts the position of the checkboxes on the text baseline */
+    outline: none;
+    padding: 0;
+}
+
+input[type="radio"]:hover {
+    border: 2px solid color(from var(--blue, deepskyblue) srgb r g b / 70% );
+}
+
+input[type="radio"]::before {
+    display: block;
+    content: " ";
+    width: 10px;
+    height: 10px;
+    border-radius: 6px;
+    background-color: darkblue;
+    background-color: var(--form-color-focus);
+    font-size: 1.2em;
+    transform: translate(3px, 3px) scale(0);
+    transform-origin: center;
+    transition: all .6s ease-in;
+}
+
+input[type="radio"]:checked::before {
+    transform: translate(3px, 3px) scale(1);
+    transition: all 0.3s cubic-bezier(0.25, 0.25, 0.56, 2);
+}

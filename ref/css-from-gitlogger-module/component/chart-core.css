@@ -1,0 +1,65 @@
+/* @import url("/style/page-chart.css"); */
+
+/* :root, html {
+    font-size: 1.1rem;
+}
+ */
+
+div.chartCoreRoot {
+    outline: 2px solid transparent;
+    --color-warn-base: var(--brightRed );
+    --color-warn-start:color(from var(--color-warn-base) srgb r g b / 35% );
+    --color-warn-end:  color(from var(--color-warn-base) srgb r g b / 65% );
+
+    --color-fetch: var(--primary-bg-4);
+    --color-warn:  var(--color-warn-end);
+
+    transition: outline 0.8s;
+
+    &.stateFetching {
+        outline-color: var(--color-fetch);
+    }
+    /* failed has visible-priority */
+    &.stateFailed {
+        outline-color: var(--color-warn);
+    }
+}
+
+a {
+    --fg-dim: #1a2b3c;
+    --fg: var(--blue);
+    color: var(--blue);
+    color: var(--fg-dim);
+    /* --blue: #344694; */
+    /* color: #1a2b3c; */
+
+    &:hover {
+        color: var(--fg);
+    }
+    & :visited {
+        color: var(--fg);
+    }
+}
+
+/* under each chart: links to json and icons for saving */
+.source-summary-links {
+    color: var(--primary-bg-2);
+    font-family: var(--font-family-default-sans);
+    font-weight: var(--font-root-weight );
+    font-size: 70%;
+
+    display: inline flex;
+    gap: 0.8ch;
+
+    &:has(> #copySettingsButton) {
+        align-items: center;
+    }
+}
+
+.chartCoreRoot  {
+    #errorMessage {
+        color: var(--red);
+        /* position: relative; */
+        /* margin: 30%; */
+    }
+}

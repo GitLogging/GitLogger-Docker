@@ -1,0 +1,33 @@
+/* .navListRoot { */
+:where( nav-list, .navListRoot ) {
+    --font-size: max(min(0.5vw, 0.4rem), 1.0rem);
+    --link-fg-hover: var(--linkHover, #344694 );
+    --link-fg-primary: hsl(218.4, 66.8%, 55.1%);
+
+    font-size: var(--font-size);
+    line-height: 1.6;
+
+    margin: 0;
+    gap: 0;
+    padding: 10px;
+    margin: 10px;
+    padding-inline-start: 10px;
+    margin-inline-start: 10px;
+
+    & a.currentLocation {
+        font-weight: bold;
+        color: var(--link-fg-primary, var(--link-fg-hover ) );
+    }
+
+    & a:hover {
+        color:  var(--link-fg-hover);
+    }
+    & ul {
+        list-style-type: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1ch;
+        margin-inline-start: 0;
+        padding-inline-start: 0;
+    }
+}
