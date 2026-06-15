@@ -82,46 +82,32 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
 }
 
 function buildForm() {
+    // should these by dynamic?
     const dataListId = `clone-repo-url-source-list`
     const inputElementId = `clone-repo-url-choice`
     return (
         <>
-            <div id="mainFormContent">
-                {/* <a href="#" id="resetCachedPageListRepos">Refresh</a> */}
-                <div className="horizontalMenuBar" id="repoSelectByUrl">
-                    <form id="cloneRepo-form">
-                        <div className="row">
-                            <input
-                                type="search"
-                                list={dataListId}
-                                id={inputElementId}
-                                name={inputElementId}
-                                defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
-                                placeholder="Enter a git repository url"
-                                required={false}
-                            />
-                        </div>
-                    </form>
-                    {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
-                    {/*
-      This list define the mapping of names to urls for args when cloning
-      */}
-                    <datalist id="cloneRepo-user-name-list">
-                        <option value="Ninmonkey" label="Ninmonkey" />
-                        <option value="StartAutomating" />
-                        <option value="Microsoft" />
-                        <option value="PowerShellWeb" />
-                    </datalist>
-                    {buildDataList({
-                        dataListId: dataListId,
-                        // children: [],
 
-                    })}
+            <form id="oldcloneRepo-form">
+                <div className="row">
+                    <input
+                        type="search"
+                        list={dataListId}
+                        id={inputElementId}
+                        name={inputElementId}
+                        defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
+                        placeholder="Enter a git repository url"
+                        required={false}
+                    />
                 </div>
-                {/* <div id="rootBodyContents">
-      <div id="repoListParent"></div>
-  </div> */}
-            </div>
+            </form>
+            {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
+            {buildDataList({
+                dataListId: dataListId,
+            // children: [],
+
+            })}
+
             {/* end of: div#mainFormContent */}
         </>
     )
@@ -131,7 +117,10 @@ function buildForm() {
  * @summary Select a repository from the list of known cloned repos
  */
 export function RepositoryUrlPicker() {
-
+    /**
+     * @summary Autocomplete urls, but also allow freeform entry for new ones
+     * @description If no list is provided, fallback to example repo urls.
+     */
 
     return (<>
         {buildForm()}
