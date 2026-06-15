@@ -11,7 +11,7 @@ export function CloneRepoControl() {
      */
     const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
 
-    return null
+    // return null
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault() // prevent page reload
@@ -63,6 +63,7 @@ export default function ListPage() {
                 {PageHeaderContent()}
             </article>
             <article>
+                <section><h2>disable await until pwsh server edit</h2></section>
                 <section>
                     {RepoListNamePicker()}
                 </section>
@@ -70,10 +71,10 @@ export default function ListPage() {
                     <h2>Clone Repository</h2>
                     {CloneRepoControl()}
                 </section>
-                <section>
+                {/* <section>
                     <h2>Repo Listing</h2>
                     {RepoSummaryTable()}
-                </section>
+                </section> */}
             </article>
         </>
     )
