@@ -53,14 +53,26 @@ Turbopack is now the default bundler. To use Webpack run next dev --webpack or n
 
 ## Running as local debugging mode
 
-```bash
-# process [1] : pwsh server
+<!-- the old path was: 
 pushd 'H:\data\2026\pwsh\Sketch.📁\GitDocker.📁'
 . H:\data\2026\pwsh\Sketch.📁\GitDocker.📁\app\server-run.ps1 -PortNumber 3001
+-->
+
+```bash
+# process [1] : pwsh server
+#      or: gh repo clone ninmonkey/GitServe
+
+pushd 'H:\data\2026\pwsh\AlphaModule.📁\GitServed'
+. ./build/Build.Module.ps1
+Import-Module './GitServe' -force -pass
+GitServe.Start -HostName '127.0.0.1' -Port 3001
+
+# to cleanup HttpListeners, use:
+GitServe.Stop
 ```
+
 ```bash
 # process [2] : The React front end 
 pushd 'H:\data\2026\web\Sketch.dir\2026-06-01.ReactTut\app-front'
 pnpm run dev
-
 ````
