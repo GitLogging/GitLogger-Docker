@@ -65,22 +65,24 @@ export default function ListPage() {
             </article>
             <article>
                 <section>
+                    <h2>Clone Repository</h2>
                     <RepositoryUrlPicker />
                 </section>
-                <section><h2>disable await until pwsh server edit</h2></section>
-                {/* <section>
-                    <RepoListNamePicker />
-                </section> */}
-                <section>
-                    <h2>(submit works but old input ) Clone Repository</h2>
-                    {/* {CloneRepoControl()} */}
-                    <CloneRepoControl />
-                </section>
-                {/* <section>
-                    <h2>Repo Listing</h2>
-                    {RepoSummaryTable()}
-                </section> */}
             </article>
+            <article>
+            </article>
+            <section>
+                {/* <Suspense fallback={<div>Loading repositories...</div>}>
+                    <RepoListNamePicker />
+                    <RepoSummaryTable />
+                </Suspense> */}
+            </section>
+
+
+            {/*
+                    <RepoListNamePicker />
+                    {RepoSummaryTable()}
+                */}
         </>
     )
 }

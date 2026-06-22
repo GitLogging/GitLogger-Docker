@@ -1,7 +1,7 @@
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
-import { InputGroup, Form, Button } from "react-bootstrap"
+import { InputGroup, Form } from "react-bootstrap"
 
 interface InputOptionItem {
     /**
@@ -59,13 +59,16 @@ function buildForm() {
          */
         e.preventDefault() // prevent page reload
         console.log('Clone url: ', { eventObj: e })
+        const formData = new FormData(e.currentTarget)
         const port = 3001
         // const queryUrl = `http://127.0.0.1:${port}/repo/clone?=url=${defaultCloneUrl}`
+        const cloneUrlValue = formData.get(inputElementId)
+        const cloneUrl = typeof cloneUrlValue === 'string' ? cloneUrlValue : ''
+        const requestUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
         // `http://127.0.0.1:${hostPort}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
-        const queryUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
 
         try {
-            const response = await fetch(queryUrl)
+            const response = await fetch(requestUrl)
             const data = await response.json()
             console.log(`<CloneRepoButton>.onSubmit: response:`, data)
         }
@@ -73,7 +76,7 @@ function buildForm() {
             console.error(`<CloneRepoButton>.onSubmit: promise threw when cloning repo:`, error)
         }
 
-        console.log(`<CloneRepoButton>.onSubmit(Sync): request`, { port: port, queryUrl, eventObj: e })
+        console.log(`<CloneRepoButton>.onSubmit(Sync): request`, { port: port, eventObj: e })
 
     }
 
