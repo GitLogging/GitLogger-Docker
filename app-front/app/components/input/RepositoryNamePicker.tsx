@@ -4,7 +4,7 @@
 export async function RepoListNamePicker() {
     const data = await fetch(`http://127.0.0.1:3001/repo/list`)
     const clonedRepos = await data.json()
-    console.warn(`clonedRepos: should be cached`, clonedRepos)
+    console.warn(`<RepoListNamePicker> clonedRepos: should be cached`, clonedRepos)
 
     return (
         <>
