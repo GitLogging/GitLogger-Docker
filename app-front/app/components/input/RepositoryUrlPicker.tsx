@@ -56,6 +56,7 @@ function buildForm() {
 
     const formContents = (
         <div
+            className={'mb-3 input-group'}
             style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -64,7 +65,7 @@ function buildForm() {
         >
             <input
                 style={{
-                    width: '100%', // enable this expand to full width of parent
+                    flexGrow: 2,
                 }}
                 type="search"
                 list={dataListId}
