@@ -1,5 +1,6 @@
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
+import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
 
 interface InputOptionItem {
     /**
@@ -40,15 +41,30 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
 }
 
 function buildForm() {
+    /**
+     * @summary (internal) Builds the input form elements for listing and cloning repo urls
+     */
     // should these by dynamic?
     const dataListId = `clone-repo-url-source-list`
     const inputElementId = `clone-repo-url-choice`
     const formId = `clone-repo-form`
+
+
+    const cloneButton = (
+        <CloneRepoButton />
+    )
+
     const formContents = (
-        <div className="row">
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.5ch',
+            }}
+        >
             <input
                 style={{
-                    width: '100%',
+                    width: '100%', // enable this expand to full width of parent
                 }}
                 type="search"
                 list={dataListId}
@@ -58,8 +74,11 @@ function buildForm() {
                 placeholder="Enter a git repository url"
                 required={false}
             />
+            {cloneButton}
         </div>
     )
+
+
     return (
         <>
             <form id={formId}>
@@ -78,7 +97,7 @@ function buildForm() {
 }
 
 /**
- * @summary Select a repository from the list of known cloned repos
+ * @summary Select a repository from the list of known cloned repos. Entry point for this component
  */
 export function RepositoryUrlPicker() {
     /**
