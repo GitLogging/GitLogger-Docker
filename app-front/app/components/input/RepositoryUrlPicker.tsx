@@ -1,6 +1,8 @@
+import { useState } from "react"
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
+import { InputGroup, Form, Button } from "react-bootstrap"
 
 interface InputOptionItem {
     /**
@@ -48,6 +50,7 @@ function buildForm() {
     const dataListId = `clone-repo-url-source-list`
     const inputElementId = `clone-repo-url-choice`
     const formId = `clone-repo-form`
+    const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
 
 
     const cloneButton = (
@@ -58,12 +61,24 @@ function buildForm() {
         <div
             className={'mb-3 input-group'}
             style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.5ch',
+                // display: 'flex',
+                // alignItems: 'center',
+                // gap: '1.5ch',
             }}
         >
-            <input
+            <InputGroup className="mb-3">
+                <Form.Control
+                    placeholder="Git Repository URL"
+                    aria-label="Git Repository URL"
+                    aria-describedby="git-repo-clone-button"
+                    value={'clone url...'}
+                    onChange={(e) => setCloneUrl(e.target.value)}
+                >
+
+                </Form.Control>
+                {cloneButton}
+            </InputGroup>
+            {/* <input
                 style={{
                     flexGrow: 2,
                 }}
@@ -74,8 +89,8 @@ function buildForm() {
                 defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 placeholder="Enter a git repository url"
                 required={false}
-            />
-            {cloneButton}
+            /> */}
+
         </div>
     )
 

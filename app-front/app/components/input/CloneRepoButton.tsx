@@ -1,5 +1,6 @@
 
 import { useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 export function CloneRepoButton() {
     /**
@@ -13,8 +14,13 @@ export function CloneRepoButton() {
     }
 
     return (
-        <button onClick={handleClick} >
+        <Button
+            variant="outline-secondary"
+            id="git-repo-clone-button"
+            type="submit"
+            onClick={handleClick}
+        >
             Clone
-        </button>
+        </Button>
     )
 }
