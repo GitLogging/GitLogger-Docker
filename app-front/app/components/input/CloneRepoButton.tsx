@@ -13,10 +13,7 @@ export function CloneRepoButton() {
     }
 
     return (
-        <button onClick={handleClick}
-            style={{
-
-            }}>
+        <button onClick={handleClick} >
             Clone
         </button>
     )

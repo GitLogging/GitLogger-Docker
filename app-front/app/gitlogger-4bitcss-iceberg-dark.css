@@ -1,5 +1,6 @@
 :root {
   --selectionBackground: #c6c8d1;
+  --selectionForeground: #161821;
   --cursorColor: #c6c8d1;
   --foreground: #c6c8d1;
   --background: #161821;
@@ -860,7 +861,7 @@ a:hover {
 
 ::selection,
 ::-moz-selection {
-  color: var(--cursorColor);
+  color: var(--selectionForeground);
   background-color: var(--selectionBackground);
 }
 
