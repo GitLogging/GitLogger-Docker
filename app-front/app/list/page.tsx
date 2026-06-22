@@ -4,6 +4,7 @@ import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import { InputGroup, Form, Button } from "react-bootstrap"
 import { RepoListNamePicker } from "@/app/components/input/RepositoryNamePicker"
 import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
+import { RepositoryUrlPicker } from "@/app/components/input/RepositoryUrlPicker"
 
 export function CloneRepoControl() {
     /**
@@ -63,13 +64,17 @@ export default function ListPage() {
                 {PageHeaderContent()}
             </article>
             <article>
-                <section><h2>disable await until pwsh server edit</h2></section>
                 <section>
-                    {RepoListNamePicker()}
+                    <RepositoryUrlPicker />
                 </section>
+                <section><h2>disable await until pwsh server edit</h2></section>
+                {/* <section>
+                    <RepoListNamePicker />
+                </section> */}
                 <section>
-                    <h2>Clone Repository</h2>
-                    {CloneRepoControl()}
+                    <h2>(submit works but old input ) Clone Repository</h2>
+                    {/* {CloneRepoControl()} */}
+                    <CloneRepoControl />
                 </section>
                 {/* <section>
                     <h2>Repo Listing</h2>

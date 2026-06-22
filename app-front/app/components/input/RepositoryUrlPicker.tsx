@@ -53,6 +53,30 @@ function buildForm() {
         <CloneRepoButton />
     )
 
+    async function handleSubmitCloneRepo(e: React.FormEvent<HTMLFormElement>) {
+        /**
+         * @summary calls `GitServe`'s /repo/clone endpoint
+         */
+        e.preventDefault() // prevent page reload
+        console.log('Clone url: ', { eventObj: e })
+        const port = 3001
+        // const queryUrl = `http://127.0.0.1:${port}/repo/clone?=url=${defaultCloneUrl}`
+        // `http://127.0.0.1:${hostPort}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
+        const queryUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
+
+        try {
+            const response = await fetch(queryUrl)
+            const data = await response.json()
+            console.log(`<CloneRepoButton>.onSubmit: response:`, data)
+        }
+        catch (error) {
+            console.error(`<CloneRepoButton>.onSubmit: promise threw when cloning repo:`, error)
+        }
+
+        console.log(`<CloneRepoButton>.onSubmit(Sync): request`, { port: port, queryUrl, eventObj: e })
+
+    }
+
     const formContents = (
         <div
             className={'mb-3 input-group'}
@@ -72,7 +96,7 @@ function buildForm() {
                     aria-label="Git Repository URL"
                     aria-describedby="git-repo-clone-button"
                     required={false}
-                    defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
+                    // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 >
 
                 </Form.Control>
@@ -97,7 +121,7 @@ function buildForm() {
 
     return (
         <>
-            <form id={formId}>
+            <form id={formId} onSubmit={handleSubmitCloneRepo}>
                 {formContents}
             </form>
             {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
