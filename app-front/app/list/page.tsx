@@ -72,17 +72,13 @@ export default function ListPage() {
             <article>
             </article>
             <section>
+                <RepoSummaryTable />
                 {/* <Suspense fallback={<div>Loading repositories...</div>}>
                     <RepoListNamePicker />
                     <RepoSummaryTable />
                 </Suspense> */}
             </section>
 
-
-            {/*
-                    <RepoListNamePicker />
-                    {RepoSummaryTable()}
-                */}
         </>
     )
 }
