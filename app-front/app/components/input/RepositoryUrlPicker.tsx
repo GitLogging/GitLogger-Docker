@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
@@ -50,9 +49,6 @@ function buildForm() {
     const dataListId = `clone-repo-url-source-list`
     const inputElementId = `clone-repo-url-choice`
     const formId = `clone-repo-form`
-    const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
-
-
     const cloneButton = (
         <CloneRepoButton />
     )
@@ -68,11 +64,15 @@ function buildForm() {
         >
             <InputGroup className="mb-3">
                 <Form.Control
-                    placeholder="Git Repository URL"
+                    type="search"
+                    list={dataListId}
+                    id={inputElementId}
+                    name={inputElementId}
+                    placeholder="Enter a git repository url"
                     aria-label="Git Repository URL"
                     aria-describedby="git-repo-clone-button"
-                    value={'clone url...'}
-                    onChange={(e) => setCloneUrl(e.target.value)}
+                    required={false}
+                    defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 >
 
                 </Form.Control>
