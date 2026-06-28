@@ -6,7 +6,7 @@ import Table from "react-bootstrap/esm/Table"
 // import Nav from 'react-bootstrap/Nav'
 // import NavBar from 'react-bootstrap/NavBar'
 
-interface RepoListItem {
+interface RepoSummaryItem {
     Name: string
     Owner: string
     CommitCount: string | number
@@ -17,11 +17,11 @@ interface RepoListItem {
 }
 
 interface RepoListResponse {
-    RepoList?: RepoListItem[]
+    RepoList?: RepoSummaryItem[]
 }
 
 export function RepoSummaryTable() {
-    const [repoList, setRepoList] = useState<RepoListItem[]>([])
+    const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
