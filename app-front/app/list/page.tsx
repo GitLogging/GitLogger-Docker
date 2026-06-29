@@ -12,8 +12,6 @@ export function CloneRepoControl() {
      */
     const [cloneUrl, setCloneUrl] = useState(`https://github.com/sharkdp/fd.git`)
 
-    // return null
-
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault() // prevent page reload
         console.log('Clone url: ', cloneUrl)
@@ -67,18 +65,13 @@ export default function ListPage() {
                 <section>
                     <h2>Clone Repository</h2>
                     <CloneRepositoryUrlPicker />
-                    {/* <CloneRepositoryUrlPicker /> */}
                 </section>
             </article>
             <article>
-            </article>
-            <section>
-                <RepoSummaryTable />
-                {/* <Suspense fallback={<div>Loading repositories...</div>}>
-                    <RepoListNamePicker />
+                <section>
                     <RepoSummaryTable />
-                </Suspense> */}
-            </section>
+                </section>
+            </article>
 
         </>
     )

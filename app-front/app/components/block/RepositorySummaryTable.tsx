@@ -86,24 +86,25 @@ export function RepoSummaryTable() {
         <Table striped bordered hover>
             <thead>
                 <tr>
-                    <th>Name</th>
                     <th>Owner</th>
+                    <th>Name</th>
                     <th>Commit Count</th>
-                    <th>Newest Commit Date</th>
-                    <th>Newest Commit Relative</th>
-                    <th>Path</th>
+                    <th>Latest Commit</th>
+                    {/* <th>Path</th> */}
                     <th>Remote</th>
                 </tr>
             </thead>
             <tbody>
                 {repoList.map((repo) => (
                     <tr key={repo.Path}>
-                        <td>{repo.Name}</td>
                         <td>{repo.Owner}</td>
+                        <td>{repo.Name}</td>
                         <td>{repo.CommitCount}</td>
-                        <td>{repo.NewestCommitDate}</td>
                         <td>{repo.NewestCommitRelative}</td>
-                        <td>{repo.Path}</td>
+
+                        {/* <td>{repo.NewestCommitDate}</td> */}
+
+                        {/* <td>{repo.Path}</td> */}
                         <td>{repo.Remote}</td>
                     </tr>
                 ))}
