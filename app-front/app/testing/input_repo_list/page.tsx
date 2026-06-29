@@ -1,7 +1,7 @@
 "use client"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 // import { RepoListPicker } from "@/app/components/input/RepositoryNamePicker"
-import { RepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
+import { CloneRepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
 
 function RepoSourcesDataListPicker() {
     return (
@@ -113,7 +113,7 @@ export default function Page() {
             <article>
                 <section>
                     <h1>refactored import: app-front/app/components/input/RepositoryNamePicker.tsx</h1>
-                    <RepositoryUrlPicker />
+                    <CloneRepositoryUrlPicker />
                 </section>
                 <section>
                     <h1>Testing single component: input_repo_list</h1>

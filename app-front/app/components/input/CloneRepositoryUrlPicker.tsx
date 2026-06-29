@@ -44,7 +44,7 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     )
 }
 
-function buildForm({
+function CloneRepoForm({
     isSubmitting,
     setIsSubmitting,
 }: {
@@ -159,16 +159,19 @@ function buildForm({
 /**
  * @summary Select a repository from the list of known cloned repos. Entry point for this component
  */
-export function RepositoryUrlPicker() {
+export function CloneRepositoryUrlPicker() {
     /**
-     * @summary Autocomplete urls, but also allow freeform entry for new ones
+     * @summary Git urls to clone. Autocomplete urls, but also allow freeform entry for new ones
      * @description If no list is provided, fallback to example repo urls.
      */
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (<>
-        {buildForm({ isSubmitting, setIsSubmitting })}
+        <CloneRepoForm
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+        />
     </>
     )
 }

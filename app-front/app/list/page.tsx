@@ -4,7 +4,7 @@ import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import { InputGroup, Form, Button } from "react-bootstrap"
 import { RepoListNamePicker } from "@/app/components/input/RepositoryNamePicker"
 import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
-import { RepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
+import { CloneRepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
 
 export function CloneRepoControl() {
     /**
@@ -66,7 +66,8 @@ export default function ListPage() {
             <article>
                 <section>
                     <h2>Clone Repository</h2>
-                    <CloneRepoControl />
+                    <CloneRepositoryUrlPicker />
+                    {/* <CloneRepositoryUrlPicker /> */}
                 </section>
             </article>
             <article>
