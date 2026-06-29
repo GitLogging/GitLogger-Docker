@@ -1,6 +1,6 @@
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
-import { collectTestingRoutes } from "./collectTestingRoutes"
+import { staticCollectTestingRoutes } from "./staticCollectTestingRoutes"
 
 export const dynamic = "force-static"
 
@@ -8,7 +8,7 @@ export default async function PageContent() {
     /**
      * @summary this page is for testing individual components
      * */
-    const endpoints = await collectTestingRoutes()
+    const endpoints = await staticCollectTestingRoutes()
 
     return (
         <>
