@@ -36,10 +36,10 @@ RUN --mount=type=bind,src=./,target=/app-gitserve /bin/pwsh -nologo -command /do
 ENV PWSH_HOST=*
 ENV PWSH_PORT=3001
 
-ENV APPDIR=/app
+ENV APPDIR=/app-front
 WORKDIR $APPDIR
 
-COPY /app /app
+COPY /app-front /app-front
 # SHELL ["pwsh", "-NoProfile", "-NoLogo", "-Command"]
 
 RUN --mount=type=bind,src=.,target=/app
@@ -58,7 +58,7 @@ EXPOSE 3001
 #   if you are using "docker run -it tag"
 #   but not when using "docker run tag"
 # ENTRYPOINT [ "/bin/pwsh","-file","/app/server-run.ps1" ]
-ENTRYPOINT [ "/bin/pwsh","-noexit","-file","/app/server-run.ps1" ]
+ENTRYPOINT [ "/bin/pwsh","-noexit","-file","/app-gitserve/server-run.ps1" ]
 # ENTRYPOINT [ "/bin/pwsh","-nologo","-noexit","-file","/Container.start.ps1" ]
 
 # RUN --mount=type=bind,src=/app,target=/app2
