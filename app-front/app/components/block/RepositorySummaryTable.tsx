@@ -20,6 +20,8 @@ interface RepoListResponse {
     RepoList?: RepoSummaryItem[]
 }
 
+type RepoListApiResponse = RepoSummaryItem[] | RepoListResponse
+
 export function RepoSummaryTable() {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -38,9 +40,16 @@ export function RepoSummaryTable() {
                     throw new Error(`Request failed with status ${data.status}`)
                 }
 
-                const clonedRepos: RepoListResponse = await data.json()
+                const clonedRepos: RepoListApiResponse = await data.json()
                 if (isMounted) {
-                    setRepoList(Array.isArray(clonedRepos.RepoList) ? clonedRepos.RepoList : [])
+                    const repoSummaryList = Array.isArray(clonedRepos)
+                        ? clonedRepos
+                        : Array.isArray(clonedRepos.RepoList)
+                            ? clonedRepos.RepoList
+                            : []
+
+                    console.log(`<RepoSummaryTable> found ${repoSummaryList.length} items:`, repoSummaryList)
+                    setRepoList(repoSummaryList)
                 }
             } catch (error) {
                 if (isMounted) {
