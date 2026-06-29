@@ -99,7 +99,7 @@ function buildForm() {
                     aria-label="Git Repository URL"
                     aria-describedby="git-repo-clone-button"
                     required={false}
-                    // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
+                // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 >
 
                 </Form.Control>

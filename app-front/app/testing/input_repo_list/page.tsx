@@ -1,7 +1,7 @@
 "use client"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 // import { RepoListPicker } from "@/app/components/input/RepositoryNamePicker"
-import { RepositoryUrlPicker } from "@/app/components/input/RepositoryUrlPicker"
+import { RepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
 
 function RepoSourcesDataListPicker() {
     return (
