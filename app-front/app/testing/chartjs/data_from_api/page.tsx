@@ -7,33 +7,51 @@ import { Pie } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-export const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-        {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-        },
+const defaultColors = {
+    backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+    ],
+    borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
     ],
 }
 
+function transformApiResponseToChartData(apiResponse: CommitMetricItem[]) {
+    /**
+     * @summary transforms API response into this specific chart type
+     * @see ShowChartFromRequest
+     */
+    const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
+    const labels = apiResponse.map(
+        item => `${monthFormatter.format(new Date(item.CommitDate))}`)
+    const rawData = apiResponse.map(
+        item => item.CommitCount)
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Commits By Month',
+                data: rawData,
+                backgroundColor: defaultColors.backgroundColor,
+                borderColor: defaultColors.borderColor,
+                borderWidth: 1,
+            },
+        ],
+    }
+    console.log(apiResponse, "transformed to chart data:", data)
+    return data
+}
 
 interface CommitMetricItem {
     DateString: `${number}-${number}`
@@ -54,6 +72,10 @@ interface CommitMetricUrl {
 export function ShowChartFromRequest({
     RequestUrl
 }: CommitMetricUrl) {
+    /**
+     * Entry point that wraps any Pie chart with api response fetching and error handling. The RequestUrl is expected to return a JSON array of CommitMetricItem objects.
+     * @see transformApiResponseToChartData
+     */
     const logPrefix = "/testing/<ShowChartFromRequest>:"
     const [apiResponse, setApiResponse] = useState<CommitMetricItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -81,7 +103,9 @@ export function ShowChartFromRequest({
                             : []
 
                     console.log(`${logPrefix} found ${repoSummaryList.length} items:`, repoSummaryList)
-                    setApiResponse(repoSummaryList)
+
+                    // const transformed = transformApiResponseToChartData(repoSummaryList)
+                    setApiResponse(transformApiResponseToChartData(repoSummaryList))
                 }
             } catch (error) {
                 if (isMounted) {
@@ -115,7 +139,7 @@ export function ShowChartFromRequest({
     }
 
     return (
-        <Pie data={data} />
+        <Pie data={apiResponse} />
     )
 }
 
@@ -134,8 +158,39 @@ export default function Page() {
 
                         RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months`} />
                 </section>
+                <section>
+                    <h2>many</h2>
+
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=burntsushi/ripgrep&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode-tmdl&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=powershell/psreadline&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=santisq/pstree&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=sharkdp/fd&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/emoji&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ezout&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/helpout&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/obs-powershell&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/pssvg&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/roughdraft&since=6.months`} />
+                    <ShowChartFromRequest
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ugit&since=6.months`} />
+                </section>
             </article>
         </>
     )
 }
-
