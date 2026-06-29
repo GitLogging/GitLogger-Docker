@@ -1,52 +1,28 @@
-"use client"
-import { useState } from "react"
-// import Table from "react-bootstrap/Table"
-// import Button from 'react-bootstrap/Button'
-// import Form from 'react-bootstrap/Form'
-// import InputGroup from 'react-bootstrap/InputGroup'
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-import { ListGroup, ListGroupItem } from "react-bootstrap"
 
-// import Nav from 'react-bootstrap/Nav'
-// import NavBar from 'react-bootstrap/NavBar'
-// import { Nav, Navbar, NavbarBrand, NavbarCollapse, NavLink, NavbarToggle, NavDropdown, NavDropdownProps } from "react-bootstrap"
+import { collectTestingRoutes } from "./collectTestingRoutes"
 
-function MyButton() {
-    const [count, setCount] = useState(0)
+export const dynamic = "force-static"
 
-    function handleClick() {
-        setCount(count + 1)
-    }
-
-    return (
-        <button onClick={handleClick}>
-            Clicked {count} times
-        </button>
-    )
-}
-
-export default function PageContent() {
+export default async function PageContent() {
     /**
      * @summary this page is for testing individual components
      * */
-    const endpoints = [
-        { name: `input_repo_list`, path: `input_repo_list` },
-        { name: `input_repo_list_original`, path: `input_repo_list_original` },
-        { name: `button_counts`, path: `button_counts` },
-    ]
+    const endpoints = await collectTestingRoutes()
+
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
-                <h1>Testing lists</h1>
+                <h1>/testing Components</h1>
                 <section>
-                    <ListGroup >
+                    <ul>
                         {endpoints.map((endpoint) => (
-                            <ListGroupItem key={endpoint.path}>
-                                <a href={endpoint.path}>{endpoint.name}</a>
-                            </ListGroupItem>
+                            <li key={endpoint.url}>
+                                <a href={endpoint.url}>{endpoint.name}</a>
+                            </li>
                         ))}
-                    </ListGroup>
+                    </ul>
                 </section>
             </article>
         </>
