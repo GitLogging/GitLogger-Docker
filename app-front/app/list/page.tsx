@@ -22,13 +22,16 @@ export default function ListPage() {
             </article>
             <article>
             </article>
-            <section>
-                <RepoSummaryTable />
-                {/* <Suspense fallback={<div>Loading repositories...</div>}>
-                    <RepoListNamePicker />
+            <article>
+                <section>
+                    <h2>Your Repos</h2>
                     <RepoSummaryTable />
-                </Suspense> */}
-            </section>
+                    {/* <Suspense fallback={<div>Loading repositories...</div>}>
+                        <RepoListNamePicker />
+                        <RepoSummaryTable />
+                    </Suspense> */}
+                </section>
+            </article>
 
         </>
     )
