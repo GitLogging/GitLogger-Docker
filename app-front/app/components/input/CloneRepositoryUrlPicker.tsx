@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from "react"
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
@@ -41,7 +44,13 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     )
 }
 
-function buildForm() {
+function buildForm({
+    isSubmitting,
+    setIsSubmitting,
+}: {
+    isSubmitting: boolean
+    setIsSubmitting: (value: boolean) => void
+}) {
     /**
      * @summary (internal) Builds the input form elements for listing and cloning repo urls
      */
@@ -49,31 +58,39 @@ function buildForm() {
     const dataListId = `clone-repo-url-source-list`
     const inputElementId = `clone-repo-url-choice`
     const formId = `clone-repo-form`
-    const cloneButton = (
-        <CloneRepoButton />
-    )
+    const cloneButton = <CloneRepoButton isLoading={isSubmitting} />
 
     async function handleSubmitCloneRepo(e: React.FormEvent<HTMLFormElement>) {
         /**
          * @summary calls `GitServe`'s /repo/clone endpoint
          */
         e.preventDefault() // prevent page reload
+        if (isSubmitting) {
+            return
+        }
+
         console.log('Clone url: ', { eventObj: e })
         const formData = new FormData(e.currentTarget)
         const port = 3001
-        // const queryUrl = `http://127.0.0.1:${port}/repo/clone?=url=${defaultCloneUrl}`
         const cloneUrlValue = formData.get(inputElementId)
         const cloneUrl = typeof cloneUrlValue === 'string' ? cloneUrlValue : ''
         const requestUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
         // `http://127.0.0.1:${hostPort}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
 
+        setIsSubmitting(true)
         try {
             const response = await fetch(requestUrl)
+            if (!response.ok) {
+                throw new Error(`Clone request failed with status ${response.status}`)
+            }
             const data = await response.json()
             console.log(`<CloneRepoButton>.onSubmit: response:`, data)
         }
         catch (error) {
             console.error(`<CloneRepoButton>.onSubmit: promise threw when cloning repo:`, error)
+        }
+        finally {
+            setIsSubmitting(false)
         }
 
         console.log(`<CloneRepoButton>.onSubmit(Sync): request`, { port: port, eventObj: e })
@@ -148,8 +165,10 @@ export function RepositoryUrlPicker() {
      * @description If no list is provided, fallback to example repo urls.
      */
 
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     return (<>
-        {buildForm()}
+        {buildForm({ isSubmitting, setIsSubmitting })}
     </>
     )
 }
