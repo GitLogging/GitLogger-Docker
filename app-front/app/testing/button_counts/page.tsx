@@ -5,7 +5,6 @@ import { useState } from "react"
 // import Form from 'react-bootstrap/Form'
 // import InputGroup from 'react-bootstrap/InputGroup'
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-import { ListGroup, ListGroupItem } from "react-bootstrap"
 
 // import Nav from 'react-bootstrap/Nav'
 // import NavBar from 'react-bootstrap/NavBar'
@@ -29,24 +28,13 @@ export default function PageContent() {
     /**
      * @summary this page is for testing individual components
      * */
-    const endpoints = [
-        { name: `input_repo_list`, path: `input_repo_list` },
-        { name: `input_repo_list_original`, path: `input_repo_list_original` },
-        { name: `button_counts`, path: `button_counts` },
-    ]
     return (
         <>
             {PageHeaderContent()}
             <article>
-                <h1>Testing lists</h1>
                 <section>
-                    <ListGroup >
-                        {endpoints.map((endpoint) => (
-                            <ListGroupItem key={endpoint.path}>
-                                <a href={endpoint.path}>{endpoint.name}</a>
-                            </ListGroupItem>
-                        ))}
-                    </ListGroup>
+                    <MyButton />
+                    <MyButton />
                 </section>
             </article>
         </>
