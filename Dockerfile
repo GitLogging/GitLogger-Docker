@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # ENV InstallAptGet="git","curl","ca-certificates","libc6","libgcc1"
 ENV InstallModule="ugit,pansies"
 # Copy the module into the container
-RUN --mount=type=bind,src=./,target=/app-gitserve /bin/pwsh -nologo -command /docker-build/Initialize/Container.init.ps1
+RUN --mount=type=bind,src=./,target=/app-gitserve /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
 # Set the entrypoint to the script we just created.
 
 
@@ -42,7 +42,7 @@ WORKDIR $APPDIR
 COPY /app-front /app-front
 # SHELL ["pwsh", "-NoProfile", "-NoLogo", "-Command"]
 
-RUN --mount=type=bind,src=.,target=/app
+RUN --mount=type=bind,src=.,target=/app-front
 EXPOSE 3001
 # if process before node, then:
     # CMD ["pwsh", "-NoProfile", "-NoLogo", "-File", "/app/server-routing.ps1"]
