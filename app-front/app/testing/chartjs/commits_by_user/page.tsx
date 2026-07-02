@@ -127,7 +127,8 @@ export function FlatBarChart({
     }, [])
 
     if (isLoading) {
-        return (<><h1>Loading Metric...</h1></>)
+        return null
+        // return (<><h1>Loading Metric...</h1></>)
     }
 
     if (errorMessage) {
@@ -149,14 +150,26 @@ export default function Page() {
      * @summary this page is for testing individual components
      * */
     const since = `1.months`
+    const repoNames = [
+        { key: 0, name: `burntsushi/ripgrep`, },
+        { key: 1, name: `junegunn/fzf` },
+    ]
+    const chartList = []
+
+    repoNames.forEach((name) => {
+        chartList.push(
+            <FlatBarChart
+                key={name.key}
+                RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=${name.name}&since=${since}`} />
+        )
+    })
+
     return (
         <>
             {PageHeaderContent()}
             <article>
                 <section>
-                    <FlatBarChart
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=burntsushi/ripgrep&since=${since}`} />
-
+                    {chartList}
                 </section>
             </article>
         </>
