@@ -148,6 +148,7 @@ export default function Page() {
     /**
      * @summary this page is for testing individual components
      * */
+    const since = `1.months`
     return (
         <>
             {PageHeaderContent()}
@@ -156,39 +157,39 @@ export default function Page() {
                     <h2>Import Chart.JS</h2>
                     <ShowChartFromRequest
 
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=${since}`} />
                 </section>
                 <section>
                     <h2>many</h2>
 
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=burntsushi/ripgrep&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=burntsushi/ripgrep&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode-tmdl&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=microsoft/vscode-tmdl&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=powershell/psreadline&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=powershell/psreadline&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=santisq/pstree&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=santisq/pstree&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=sharkdp/fd&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=sharkdp/fd&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/emoji&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/emoji&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ezout&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ezout&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/helpout&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/helpout&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/obs-powershell&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/obs-powershell&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/pssvg&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/pssvg&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/roughdraft&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/roughdraft&since=${since}`} />
                     <ShowChartFromRequest
-                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ugit&since=6.months`} />
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=startautomating/ugit&since=${since}`} />
                 </section>
             </article>
         </>
