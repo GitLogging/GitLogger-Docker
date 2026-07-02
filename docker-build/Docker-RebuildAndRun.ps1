@@ -79,7 +79,7 @@ docker build -t $ImageName . &&
             # docker run -interactive --tty --publish 127.0.0.1:3001:3001 $ImageName @entryPoint
         } else {
             docker run --tty --rm `
-                --publish 127.0.0.1:3001:3001
+                --publish 127.0.0.1:3001:3001 `
                 -w /app --mount "type=bind,src=.,target=/app" `
                 -v cloned-repos:h:/RootClonedRepos `
                 $ImageName
