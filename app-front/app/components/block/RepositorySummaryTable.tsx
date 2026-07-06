@@ -87,6 +87,35 @@ export function RepoSummaryTable() {
         return (<><h1>No repositories found</h1></>)
     }
 
+    const popoverLatestCommit = ({ repo }) => (
+    /**
+    * build element for `<OverLayTrigger overlay=...>
+    */
+        <Popover
+            id="popover-lastest-commit"
+        >
+            <Popover.Header as="h3">Latest Commit</Popover.Header>
+            <Popover.Body>
+                <div><strong>Date:</strong> {repo.NewestCommitDate}</div>
+                <div><strong>Relative:</strong> {repo.NewestCommitRelative}</div>
+            </Popover.Body>
+        </Popover>
+    )
+    function DateWithPopover({ repo }) {
+        return (
+            <OverlayTrigger
+                // trigger="hover,focus"
+                trigger={['hover', 'focus']}
+                placement="right"
+                transition={true}
+                // delay={{ show: 250, hide: 400 }}
+                overlay={popoverLatestCommit({ repo })}
+            >
+                <span>{repo.NewestCommitRelative}</span>
+            </OverlayTrigger>
+        )
+    }
+
     return (
         <Table striped bordered hover>
             <thead>
@@ -103,7 +132,6 @@ export function RepoSummaryTable() {
                 {repoList.map((repo) => (
                     <tr key={repo.Path}>
                         <td>{repo.Owner}</td>
-                        {/* <td>{repo.Name}</td> */}
                         <td>
                             <OverlayTrigger
                                 placement="auto"
@@ -122,12 +150,17 @@ export function RepoSummaryTable() {
                             </OverlayTrigger>
 
                         </td>
-                        {/* <div>{repo.Name}</div> */}
+
                         {/* <td>{repo.CommitCount}</td> */}
-                        <td>{repo.NewestCommitRelative}</td>
+                        <td>
+                            <DateWithPopover repo={repo} >
+                                <span>inner</span>
+                            </DateWithPopover>
+                            {/* {repo.NewestCommitRelative} */}
+
+                        </td>
 
                         {/* <td>{repo.NewestCommitDate}</td> */}
-
                         {/* <td>{repo.Path}</td> */}
                         {/* <td>{repo.Remote}</td> */}
                     </tr>
