@@ -14,7 +14,7 @@ interface RepoListResponse {
 /**
  * @summary Select a repository from the list of known cloned repos
  */
-export function RepoListNamePicker() {
+export default function RepoListNamePicker() {
     const [repoList, setRepoList] = useState<RepoListItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
