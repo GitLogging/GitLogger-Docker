@@ -5,6 +5,11 @@ import Table from "react-bootstrap/esm/Table"
 // import { Table } from "react-bootstrap/Table"
 // import Nav from 'react-bootstrap/Nav'
 // import NavBar from 'react-bootstrap/NavBar'
+import Button from 'react-bootstrap/Button'
+import Overlay from 'react-bootstrap/Overlay'
+import Popover from 'react-bootstrap/Popover'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
 interface RepoSummaryItem {
     Name: string
@@ -88,24 +93,43 @@ export function RepoSummaryTable() {
                 <tr>
                     <th>Owner</th>
                     <th>Name</th>
-                    <th>Commit Count</th>
+                    {/* <th>Commit Count</th> */}
                     <th>Latest Commit</th>
                     {/* <th>Path</th> */}
-                    <th>Remote</th>
+                    {/* <th>Remote</th> */}
                 </tr>
             </thead>
             <tbody>
                 {repoList.map((repo) => (
                     <tr key={repo.Path}>
                         <td>{repo.Owner}</td>
-                        <td>{repo.Name}</td>
-                        <td>{repo.CommitCount}</td>
+                        {/* <td>{repo.Name}</td> */}
+                        <td>
+                            <OverlayTrigger
+                                placement="auto"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={(props) => (
+                                    <Tooltip
+                                        id='button-tooltip'
+                                        {...props}
+                                    >
+                                        {repo.Remote}
+                                    </Tooltip>
+                                )}
+                            >
+                                <span>{repo.Name}</span>
+
+                            </OverlayTrigger>
+
+                        </td>
+                        {/* <div>{repo.Name}</div> */}
+                        {/* <td>{repo.CommitCount}</td> */}
                         <td>{repo.NewestCommitRelative}</td>
 
                         {/* <td>{repo.NewestCommitDate}</td> */}
 
                         {/* <td>{repo.Path}</td> */}
-                        <td>{repo.Remote}</td>
+                        {/* <td>{repo.Remote}</td> */}
                     </tr>
                 ))}
             </tbody>
