@@ -18,4 +18,5 @@ export const defaultRepoUrlList: { label?: string; url: string }[] = [
     { label: 'PSReadLine', url: 'https://www.github.com/powershell/PSReadLine' },
     { label: 'VS Code', url: 'https://github.com/microsoft/vscode' },
     { label: 'Windows Terminal', url: 'https://github.com/microsoft/terminal' },
+    { label: 'Fzf', url: 'https://github.com/junegunn/fzf.git' }
 ]
