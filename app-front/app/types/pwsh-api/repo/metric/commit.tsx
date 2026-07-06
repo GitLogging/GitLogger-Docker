@@ -1,5 +1,6 @@
 export interface CommitMetricUrl {
     /**
+     * @summary Validate urls for the `GitServe` route `/repo/metric/commit`
      * @see CommitMetricItem
      * @example http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months
      */
@@ -7,7 +8,7 @@ export interface CommitMetricUrl {
 }
 export interface CommitMetricItem {
     /**
-     * @summary records from the api endpoint: http://127.0.0.1:3001/repo/list
+     * @summary response records from the api endpoint: http://127.0.0.1:3001/repo/list
      * @see CommitMetricUrl
      */
     DateString: `${number}-${number}`
