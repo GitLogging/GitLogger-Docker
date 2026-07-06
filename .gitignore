@@ -1,6 +1,18 @@
-.next
-node_modules
+# node/js
+node_modules/
+.next/
+
+# cloned pwsh module
+app-gitserve/
+
+# this is already ignored, but listed to as explicit
+app-front/node_modules
+app-front/.next
+
+# always exclude filetypes
 *.log
 *.dll
 *.zip
-app-gitserve
+
+# other:
+# Scratch/

@@ -1,0 +1,14 @@
+{
+    "folders": [
+        {
+            "path": "." // 2026-07-06
+        }
+    ],
+    "settings": {
+        "[typescript][typescriptreact][javascript][javascriptreact]": {
+            "editor.fontSize": 16,
+            "editor.formatOnSave": true,
+            "editor.formatOnSaveMode": "modificationsIfAvailable"
+        },
+    }
+}

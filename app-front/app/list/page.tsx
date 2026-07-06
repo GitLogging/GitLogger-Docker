@@ -57,21 +57,20 @@ export function CloneRepoControl() {
 export default function ListPage() {
     return (
         <>
-            <article>
+            {PageHeaderContent()}
 
-                {PageHeaderContent()}
-            </article>
             <article>
                 <section>
                     <h2>Clone Repository</h2>
                     <CloneRepositoryUrlPicker />
                 </section>
-            </article>
-            <article>
+
                 <section>
                     <RepoSummaryTable />
                 </section>
+
             </article>
+
 
         </>
     )

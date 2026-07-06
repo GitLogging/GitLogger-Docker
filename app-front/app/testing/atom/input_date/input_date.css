@@ -1,0 +1,18 @@
+article#atom-input-date {
+    section {
+        --_bg-1: var(--bs-primary-bg-subtle, magenta);
+        --_bg-1: var(--background, rgb(248, 32, 255));
+        --_fg-1: var(--brightCyan, #6e4b4b);
+        --_outline-mixed: color-mix(in lab, var(--_fg-1) 20%, var(--_bg-1) 20%);
+
+        outline: 1px solid var(--_outline-mixed);
+        border-radius: 5px;
+
+        padding: 20px;
+        margin: 20px;
+
+        /* box-shadow:
+            0 3px 3px #aaedfe0e; */
+    }
+
+}
