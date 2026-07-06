@@ -1,5 +1,5 @@
 import { Line } from "react-chartjs-2"
-import { CommitMetricUrl, CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit"
+import { CommitMetricUrl, CommitMetricItem, MetricCommitToChartData } from "@/app/types/pwsh-api/repo/metric/commit"
 import { useEffect, useState } from "react"
 
 export function FlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
@@ -36,7 +36,7 @@ export function FlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
                     console.log(`${logPrefix} found ${repoSummaryList.length} items:`, repoSummaryList)
 
                     // const transformed = transformApiResponseToChartData(repoSummaryList)
-                    setApiResponse(transformApiResponseToChartData(repoSummaryList))
+                    setApiResponse(MetricCommitToChartData(repoSummaryList))
                 }
             } catch (error) {
                 if (isMounted) {
@@ -73,7 +73,10 @@ export function FlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
     return (
         <>
             <div>chart here</div>
-            <Line data={apiResponse} />
+            <Line
+                data={apiResponse}
+            //
+            />
         </>
     )
     // return (
