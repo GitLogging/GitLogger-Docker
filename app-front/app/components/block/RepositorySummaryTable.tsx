@@ -12,21 +12,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 import Link from "next/link"
 
-interface RepoSummaryItem {
-    Name: string
-    Owner: string
-    CommitCount: string | number
-    NewestCommitDate: string
-    NewestCommitRelative: string
-    Path: string
-    Remote: string
-}
-
-interface RepoListResponse {
-    RepoList?: RepoSummaryItem[]
-}
-
-type RepoListApiResponse = RepoSummaryItem[] | RepoListResponse
+import { RepoListApiResponse, RepoListResponse, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
 
 export function RepoSummaryTable() {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])

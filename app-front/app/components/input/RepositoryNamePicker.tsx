@@ -1,20 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { RepoListItem, RepoListResponse } from "@/app/components/block/RepositorySummaryTable"
 
-interface RepoListItem {
-    Name: string
-    Path: string
-}
-
-interface RepoListResponse {
-    RepoList?: RepoListItem[]
-}
-
-/**
- * @summary Select a repository from the list of known cloned repos
- */
 export default function RepoListNamePicker() {
+    /**
+     * @summary Select a repository from the list of known cloned repos
+    * gets repo metadata from http://127.0.0.1:3001/repo/list
+    * then creates an input select that shows just the OwnerRepoPair by names
+    */
     const [repoList, setRepoList] = useState<RepoListItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
