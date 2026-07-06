@@ -2,7 +2,7 @@
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale } from 'chart.js'
-import { useState, useEffect } from "react"
+import { useState, useEffect, JSX } from "react"
 import { Line } from 'react-chartjs-2'
 
 ChartJS.register(LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend)
@@ -144,16 +144,23 @@ export function FlatBarChart({
     )
 }
 
+type ShortRepoName = `${string}/${string}`
+interface ShortRepoNameList {
+    key: number
+    name: ShortRepoName
+}
 
 export default function Page() {
     /**
      * @summary this page is for testing individual components
      * */
     const since = `1.months`
-    const repoNames = [
+    const repoNames: ShortRepoNameList[] = [
         { key: 0, name: `burntsushi/ripgrep`, },
         { key: 1, name: `junegunn/fzf` },
     ]
+
+    // const chartList: typeof FlatBarChart[] = []
     const chartList = []
 
     repoNames.forEach((name) => {
