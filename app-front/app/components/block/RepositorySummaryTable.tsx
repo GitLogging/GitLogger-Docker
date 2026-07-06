@@ -10,6 +10,7 @@ import Overlay from 'react-bootstrap/Overlay'
 import Popover from 'react-bootstrap/Popover'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
+import Link from "next/link"
 
 interface RepoSummaryItem {
     Name: string
@@ -87,21 +88,43 @@ export function RepoSummaryTable() {
         return (<><h1>No repositories found</h1></>)
     }
 
-    const popoverLatestCommit = ({ repo }) => (
+    const popoverLatestCommit = ({ repo }: { repo: RepoSummaryItem }) => (
     /**
-    * build element for `<OverLayTrigger overlay=...>
+     *  build `<Popover>` for `<OverLayTrigger overlay=...>
     */
         <Popover
-            id="popover-lastest-commit"
+            id="popover-latest-commit"
         >
             <Popover.Header as="h3">Latest Commit</Popover.Header>
             <Popover.Body>
                 <div><strong>Date:</strong> {repo.NewestCommitDate}</div>
                 <div><strong>Relative:</strong> {repo.NewestCommitRelative}</div>
+                <div><strong>Remote:</strong>
+                    <Link href={repo.Remote} > {repo.Remote} </Link>
+                </div>
             </Popover.Body>
         </Popover>
     )
-    function DateWithPopover({ repo }) {
+
+    const NameWithTooltip = ({ repo }: { repo: RepoSummaryItem }) => (
+        // create <OverlayTrigger> for `<Tooltip>` showing `Name` and `Remote` on hover
+        <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 400 }}
+            overlay={(props) => (
+                <Tooltip
+                    id='button-tooltip'
+                    {...props}
+                >
+                    {repo.Remote}
+                </Tooltip>
+            )}
+        >
+            <span>{repo.Name}</span>
+        </OverlayTrigger>
+    )
+
+    function DateWithPopover({ repo }: { repo: RepoSummaryItem }) {
         return (
             <OverlayTrigger
                 // trigger="hover,focus"
@@ -133,7 +156,7 @@ export function RepoSummaryTable() {
                     <tr key={repo.Path}>
                         <td>{repo.Owner}</td>
                         <td>
-                            <OverlayTrigger
+                            {/* <OverlayTrigger
                                 placement="auto"
                                 delay={{ show: 250, hide: 400 }}
                                 overlay={(props) => (
@@ -147,15 +170,15 @@ export function RepoSummaryTable() {
                             >
                                 <span>{repo.Name}</span>
 
-                            </OverlayTrigger>
+                            </OverlayTrigger> */}
+                            <NameWithTooltip repo={repo} />
 
                         </td>
 
                         {/* <td>{repo.CommitCount}</td> */}
                         <td>
-                            <DateWithPopover repo={repo} >
-                                <span>inner</span>
-                            </DateWithPopover>
+                            <DateWithPopover repo={repo} />
+
                             {/* {repo.NewestCommitRelative} */}
 
                         </td>
