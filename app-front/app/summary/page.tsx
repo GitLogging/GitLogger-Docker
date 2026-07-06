@@ -6,19 +6,45 @@ import RepoListNamePicker from "@/app/components/input/RepositoryNamePicker"
 import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
 import { CloneRepositoryUrlPicker } from "@/app/components/input/CloneRepositoryUrlPicker"
 
+function ShowSingleSummary({ RepoName }) {
+    /**
+     * @summary shows a single summary record for `<SummaryContainer>`
+     */
+
+    return (
+        <>
+            <div><strong>Owner:</strong> {RepoName}</div>
+        </>
+    )
+}
+
+function SummaryContainer() {
+    return (
+        <>
+            <section>
+                <h2>Select Repository</h2>
+                <RepoListNamePicker />
+            </section>
+
+            <section>
+                <ShowSingleSummary
+                    RepoName={"microsoft/vscode-tmdl"}
+                />
+                <ShowSingleSummary
+                    RepoName={"santisq/pstree"}
+                />
+            </section>
+        </>
+    )
+}
+
 export default function ListPage() {
     return (
         <>
-            {PageHeaderContent()}
-
+            <PageHeaderContent />
             <article>
-                <section>
-                    <h2>Select Repository</h2>
-                    <RepoListNamePicker />
-                </section>
+                <SummaryContainer />
             </article>
-
-
         </>
     )
 }
