@@ -81,13 +81,14 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]) {
 
 export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
     /**
-     * Entry point for simple line chart
+     * Create a chart, and link the source JSON. displays status during load, and/or errors
      */
 
     const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatLineChart>:"
     const [apiResponse, setApiResponse] = useState<CommitMetricItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [detailsJson, setDetailsJson] = useState('')
 
     useEffect(() => {
         let isMounted = true
@@ -96,7 +97,6 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
             try {
                 setIsLoading(true)
                 setErrorMessage(null)
-
                 // const data = await fetch(RequestUrl)
                 const data = JSON.parse(DemoResponse1)
 
@@ -106,12 +106,6 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                 // const response: CommitMetricItem[] = await data.json()
                 const response: CommitMetricItem[] = data
                 if (isMounted) {
-                    // const repoSummaryList = Array.isArray(response)
-                    //     ? response
-                    //     : Array.isArray(response)
-                    //         ? response
-                    //         : []
-
                     const transformedResponse = DemoMetricToChartData(data)
 
                     console.log(`${logPrefix} response ${response.length} items:`, response)
@@ -121,6 +115,13 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                     // setApiResponse(MetricCommitToChartData(repoSummaryList))
                     // setApiResponse(DemoMetricToChartData(repoSummaryList))
                     setApiResponse(transformedResponse)
+
+                    const topOnly = transformedResponse
+                    const dataSet1 = transformedResponse.datasets[0]
+                    const jsonDepth = 2
+                    // const jsonString1 = JSON.stringify(topOnly, null, jsonDepth)
+                    const jsonString2 = JSON.stringify(dataSet1, null, jsonDepth)
+                    setDetailsJson(jsonString2)
                 }
             } catch (error) {
                 if (isMounted) {
@@ -156,38 +157,18 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
 
     return (
         <>
-            <h2>Hard coded json used to test multiple dataset transforms with named properties</h2>
-            <Line
-                data={apiResponse}
-            //
-            />
-        </>
-    )
-    // return (
-    //     <>
-    //         <div>chart here</div>
-    //         {/* <Line data={data} /> */}
-    //         {/* key={name.key}
-    //             RequestUrl={`http://127.0.0.1:3001/repo/metric/commit?name=${name.name}&since=${since}`} /> */}
-    //     </>
-    // )
-}
+            <section className="chart__with__details">
+                <Line
+                    data={apiResponse}
 
-export function WrapDemoChart({ RequestUrl, children }) {
-    const logPrefix = "/testing/generic_multiple_dataset_transform/<WrapDemoChart>:"
-    const [detailsJson, setDetailsJson] = useState('')
-    return (
-        <section>
-            {children}
-            <h2>Chart</h2>
-            <DemoFlatLineChart
-                RequestUrl={RequestUrl}
-            />
-            <details>
-                <summary>Json Title</summary>
-                <pre>{detailsJson}</pre>
-            </details>
-        </section>
+                />
+                <a href={RequestUrl}>View Request</a>
+                <details>
+                    <summary>Dataset 1</summary>
+                    <pre>{detailsJson}</pre>
+                </details>
+            </section>
+        </>
     )
 }
 export default function Page() {
@@ -195,9 +176,10 @@ export default function Page() {
 
         <>
             <article>
-                <WrapDemoChart
+                <DemoFlatLineChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
                 />
+
             </article>
         </>
 
