@@ -172,12 +172,33 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
     //     </>
     // )
 }
+
+export function WrapDemoChart({ RequestUrl, children }) {
+    const logPrefix = "/testing/generic_multiple_dataset_transform/<WrapDemoChart>:"
+    const [detailsJson, setDetailsJson] = useState('')
+    return (
+        <section>
+            {children}
+            <h2>Chart</h2>
+            <DemoFlatLineChart
+                RequestUrl={RequestUrl}
+            />
+            <details>
+                <summary>Json Title</summary>
+                <pre>{detailsJson}</pre>
+            </details>
+        </section>
+    )
+}
 export default function Page() {
     return (
 
         <>
-            <h2>Inline demo</h2>
-            <DemoFlatLineChart RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months" />
+            <article>
+                <WrapDemoChart
+                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
+                />
+            </article>
         </>
 
     )
