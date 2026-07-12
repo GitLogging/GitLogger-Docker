@@ -60,6 +60,7 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
     /**
      * @summary transforms API response into this specific chart type
     * @see https://www.chartjs.org/docs/latest/api/#charttype
+    * @see https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
      */
 
 
@@ -105,7 +106,7 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
     return { data, options }
 }
 
-export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
+export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
      */
@@ -202,10 +203,10 @@ export default function Page() {
 
         <>
             <article>
-                <DemoFlatLineChart
+                <DemoFlatBarChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
                 />
-                <DemoFlatLineChart
+                <DemoFlatBarChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months"
                 />
 
