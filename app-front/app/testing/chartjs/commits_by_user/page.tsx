@@ -54,7 +54,7 @@ function transformApiResponseToChartData(apiResponse: CommitMetricItem[]) {
 }
 
 interface CommitMetricItem {
-    DateString: `${number}-${number}`
+    Date: `${number}-${number}-${number}`
     GitUserName: string
     CommitCount: number
     Year: number

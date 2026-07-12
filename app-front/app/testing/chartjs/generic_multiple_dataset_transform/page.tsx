@@ -15,7 +15,7 @@ ChartJS.register(LineElement, CategoryScale, PointElement, LinearScale, Title, T
 const DemoResponse1 = `
 [
   {
-    "DateString": "2026-06",
+    "Date": "2026-06-04",
     "GitUserName": "Micha Reiser",
     "CommitCount": 2,
     "Year": 2026,
@@ -24,7 +24,7 @@ const DemoResponse1 = `
     "CommitDate": "2026-06-04T07:19:52-05:00"
   },
   {
-    "DateString": "2026-06",
+    "Date": "2026-06-21",
     "GitUserName": "Jorge Gomez",
     "CommitCount": 1,
     "Year": 2026,
@@ -33,22 +33,22 @@ const DemoResponse1 = `
     "CommitDate": "2026-06-21T07:48:16-05:00"
   },
   {
-    "DateString": "2026-02",
+    "Date": "2026-06-05",
     "GitUserName": "Andrew Gallant",
     "CommitCount": 3,
     "Year": 2026,
-    "Month": 2,
-    "KeyId": "2026-02_Andrew Gallant",
-    "CommitDate": "2026-02-05T06:03:03-05:00"
+    "Month": 6,
+    "KeyId": "2026-06_Andrew Gallant",
+    "CommitDate": "2026-06-05T06:03:03-05:00"
   },
   {
-    "DateString": "2026-02",
+    "Date": "2026-05-26",
     "GitUserName": "Andrew Gallant",
     "CommitCount": 2,
     "Year": 2026,
-    "Month": 2,
-    "KeyId": "2026-02_Andrew Gallant",
-    "CommitDate": "2026-02-26T07:32:43-05:00"
+    "Month": 5,
+    "KeyId": "2026-05_Andrew Gallant",
+    "CommitDate": "2026-05-26T07:32:43-05:00"
   }
 ]
 `
@@ -63,17 +63,27 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]) {
     const rawData = apiResponse.map(
         item => item.CommitCount)
 
+    const datasets = [
+        {
+            label: 'Commits By Month',
+            data: rawData,
+            // backgroundColor: defaultColors.backgroundColor,
+            // borderColor: defaultColors.borderColor,
+            borderWidth: 1,
+        },
+    ]
+
     const data = {
+        type: 'line',
+        options: {
+            parsing: {
+                xAxisKey: 'Date',
+                yAxisKey: 'CommitCount'
+
+            }
+        },
         labels: labels,
-        datasets: [
-            {
-                label: 'Commits By Month',
-                data: rawData,
-                // backgroundColor: defaultColors.backgroundColor,
-                // borderColor: defaultColors.borderColor,
-                borderWidth: 1,
-            },
-        ],
+        datasets: datasets,
     }
     console.log(apiResponse, "transformed to chart data:", data)
     return data
@@ -116,12 +126,12 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                     // setApiResponse(DemoMetricToChartData(repoSummaryList))
                     setApiResponse(transformedResponse)
 
-                    const topOnly = transformedResponse
+                    const allJson = transformedResponse
                     const dataSet1 = transformedResponse.datasets[0]
                     const jsonDepth = 2
-                    // const jsonString1 = JSON.stringify(topOnly, null, jsonDepth)
+                    const jsonString1 = JSON.stringify(allJson, null, jsonDepth)
                     const jsonString2 = JSON.stringify(dataSet1, null, jsonDepth)
-                    setDetailsJson(jsonString2)
+                    setDetailsJson(jsonString1)
                 }
             } catch (error) {
                 if (isMounted) {
@@ -163,7 +173,7 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
 
                 />
                 <a href={RequestUrl}>View Request</a>
-                <details>
+                <details open>
                     <summary>Dataset 1</summary>
                     <pre>{detailsJson}</pre>
                 </details>
