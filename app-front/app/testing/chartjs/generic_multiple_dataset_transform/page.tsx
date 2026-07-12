@@ -18,12 +18,14 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: 
      * @see ShowChartFromRequest
      */
     const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
-    const labels = apiResponse.map(
-        item => `${monthFormatter.format(new Date(item.CommitDate))}`)
+    // const labels = apiResponse.map(
+    //     // item => `${monthFormatter.format(new Date(item.CommitDate))}`)
+    //     item => item.GitUserName)
+
 
     const datasets = [
         {
-            label: 'Commits',
+            label: 'Set1',
             data: apiResponse,
             borderWidth: 2,
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -32,13 +34,14 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: 
     ]
 
     const data: ChartData<'bar'> = {
-        labels: labels,
+        // labels, intentionally skip labels
         datasets: datasets,
     }
 
     const options: ChartOptions<'bar'> = {
         parsing: {
-            xAxisKey: 'CommitDate',
+            // xAxisKey: 'CommitDate',
+            xAxisKey: 'Date',
             yAxisKey: 'CommitCount'
         },
         responsive: true,
@@ -123,10 +126,11 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
     }
 
     const usingLineChart = false
-    const chartElem =
-        usingLineChart
-            ? <Line data={chartData} options={chartOptions} />
-            : <Bar data={chartData} options={chartOptions} />
+    // const chartElem =
+    //     usingLineChart
+    //         ? <Line data={chartData} options={chartOptions} />
+    //         : <Bar data={chartData} options={chartOptions} />
+    const chartElem = <Bar data={chartData} options={chartOptions} />
 
     return (
         <>
@@ -139,6 +143,7 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                 </details>
             </section>
         </>
+    )
 }
 export default function Page() {
     return (
