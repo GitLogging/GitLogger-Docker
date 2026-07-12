@@ -2,7 +2,7 @@
 import { CommitMetricUrl, CommitMetricItem, MetricCommitToChartData } from "@/app/types/pwsh-api/repo/metric/commit"
 import { useEffect, useState } from "react"
 import { Bar, Line } from "react-chartjs-2"
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement } from 'chart.js'
+import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
 
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
@@ -12,7 +12,7 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Toolti
 
 ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend)
 
-export function DemoMetricToChartData(apiResponse: CommitMetricItem[]) {
+export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
      * @summary transforms API response into this specific chart type
      * @see ShowChartFromRequest
@@ -31,12 +31,12 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]) {
         },
     ]
 
-    const data = {
+    const data: ChartData<'bar'> = {
         labels: labels,
         datasets: datasets,
     }
 
-    const options = {
+    const options: ChartOptions<'bar'> = {
         parsing: {
             xAxisKey: 'CommitDate',
             yAxisKey: 'CommitCount'
@@ -59,8 +59,8 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
      */
 
     const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatLineChart>:"
-    const [chartData, setChartData] = useState<any>(null)
-    const [chartOptions, setChartOptions] = useState<any>(null)
+    const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null)
+    const [chartOptions, setChartOptions] = useState<ChartOptions<'bar'> | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [detailsJson, setDetailsJson] = useState('')
@@ -139,7 +139,6 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                 </details>
             </section>
         </>
-    )
 }
 export default function Page() {
     return (
