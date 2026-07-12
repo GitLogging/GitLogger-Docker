@@ -12,11 +12,57 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Toolti
 
 ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend)
 
-export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
+function parseRequestUrl(url: string): { name?: string; since?: string; owner?: string; repo?: string; metric?: string } {
+    /**
+     * @summary parses the request URL to extract relevant query parameters and path segments
+     * @param url - the request URL to parse
+     * @returns an object containing the extracted metadata (name, since, owner, repo, metric)
+     * @example const { name, since } = parseRequestUrl( url )
+     */
+    try {
+        const urlObj = new URL(url)
+        const name = urlObj.searchParams.get('name') || undefined
+        const since = urlObj.searchParams.get('since') || undefined
+
+        // Extract owner and repo from name (e.g., "BurntSushi/ripgrep")
+        let owner: string | undefined
+        let repo: string | undefined
+        if (name) {
+            const [ownerPart, repoPart] = name.split('/')
+            owner = ownerPart || undefined
+            repo = repoPart || undefined
+        }
+
+        // Extract metric from path (e.g., "/repo/metric/commit" -> "commit")
+        const pathParts = urlObj.pathname.split('/').filter(Boolean)
+        const metric = pathParts[pathParts.length - 1] || undefined
+
+        return { name, since, owner, repo, metric }
+    } catch {
+        return {}
+    }
+}
+
+function formatDatasetLabel(url: string): string {
+    /**
+     * @summary formats the dataset label based on the request URL
+     * @param url - the request URL containing query parameters for the dataset
+     * @returns a formatted label string for the dataset based on the request URL
+     */
+    const { name, since } = parseRequestUrl(url)
+    if (!name && !since) return 'Dataset'
+    if (!name) return `Since ${since?.replace('.', ' ')}`
+    if (!since) return name
+    return `${name} since ${since.replace('.', ' ')}`
+}
+
+export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUrl: string): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
      * @summary transforms API response into this specific chart type
-     * @see ShowChartFromRequest
+    * @see https://www.chartjs.org/docs/latest/api/#charttype
      */
+
+
     // Sort by CommitDate
     const sortedData = [...apiResponse].sort((a, b) =>
         new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
@@ -28,7 +74,7 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: 
 
     const datasets = [
         {
-            label: 'Dataset1',
+            label: formatDatasetLabel(requestUrl),
             data: sortedData,
             borderWidth: 2,
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -84,11 +130,14 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
                 }
                 const response: CommitMetricItem[] = await data.json()
                 if (isMounted) {
-                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(response)
+                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(response, RequestUrl)
 
+                    console.group(logPrefix)
+                    console.log(`${logPrefix} parsedRequestUrl:`, parseRequestUrl(RequestUrl))
                     console.log(`${logPrefix} response ${response.length} items:`, response)
                     console.log(`${logPrefix} transformedData:`, transformedData)
                     console.log(`${logPrefix} transformedOptions:`, transformedOptions)
+                    console.groupEnd()
 
                     setChartData(transformedData)
                     setChartOptions(transformedOptions)
