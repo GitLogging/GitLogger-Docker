@@ -17,16 +17,19 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: 
      * @summary transforms API response into this specific chart type
      * @see ShowChartFromRequest
      */
-    const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
-    // const labels = apiResponse.map(
-    //     // item => `${monthFormatter.format(new Date(item.CommitDate))}`)
-    //     item => item.GitUserName)
+    // Sort by CommitDate
+    const sortedData = [...apiResponse].sort((a, b) =>
+        new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
+    )
 
+    const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
+    const labels = sortedData.map(
+        item => `${monthFormatter.format(new Date(item.CommitDate))}`)
 
     const datasets = [
         {
-            label: 'Set1',
-            data: apiResponse,
+            label: 'Dataset1',
+            data: sortedData,
             borderWidth: 2,
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -34,7 +37,7 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]): { data: 
     ]
 
     const data: ChartData<'bar'> = {
-        // labels, intentionally skip labels
+        // labels: labels,
         datasets: datasets,
     }
 
