@@ -20,34 +20,37 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[]) {
     const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
     const labels = apiResponse.map(
         item => `${monthFormatter.format(new Date(item.CommitDate))}`)
-    // const rawData = apiResponse.map(
-    //     item => item.CommitCount)
-    const rawData = apiResponse
-
 
     const datasets = [
         {
-            label: 'Set1',
-            data: rawData,
-            // backgroundColor: defaultColors.backgroundColor,
-            // borderColor: defaultColors.borderColor,
-            borderWidth: 1,
+            label: 'Commits',
+            data: apiResponse,
+            borderWidth: 2,
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            borderColor: 'rgba(75, 192, 192, 1)',
         },
     ]
 
     const data = {
-        type: 'line',
-        options: {
-            parsing: {
-                xAxisKey: 'Date',
-                yAxisKey: 'CommitCount'
-            }
-        },
-        // labels: labels,
+        labels: labels,
         datasets: datasets,
     }
+
+    const options = {
+        parsing: {
+            xAxisKey: 'CommitDate',
+            yAxisKey: 'CommitCount'
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+        }
+    }
+
     console.log(apiResponse, "transformed to chart data:", data)
-    return data
+    return { data, options }
 }
 
 export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
@@ -56,7 +59,8 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
      */
 
     const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatLineChart>:"
-    const [apiResponse, setApiResponse] = useState<CommitMetricItem[]>([])
+    const [chartData, setChartData] = useState<any>(null)
+    const [chartOptions, setChartOptions] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [detailsJson, setDetailsJson] = useState('')
@@ -68,36 +72,29 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
             try {
                 setIsLoading(true)
                 setErrorMessage(null)
-                // const data = await fetch(RequestUrl)
-                // const data = JSON.parse(DemoResponse1)
                 const data = await fetch(RequestUrl)
                 if (!data.ok) {
                     throw new Error(`Request failed with status ${data.status}`)
                 }
-                // const response: CommitMetricItem[] = await data.json()
                 const response: CommitMetricItem[] = await data.json()
                 if (isMounted) {
-                    const transformedResponse = DemoMetricToChartData(response)
+                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(response)
 
                     console.log(`${logPrefix} response ${response.length} items:`, response)
-                    console.log(`${logPrefix} transformedResponse:`, transformedResponse)
+                    console.log(`${logPrefix} transformedData:`, transformedData)
+                    console.log(`${logPrefix} transformedOptions:`, transformedOptions)
 
-                    // original:
-                    // setApiResponse(MetricCommitToChartData(repoSummaryList))
-                    // setApiResponse(DemoMetricToChartData(repoSummaryList))
-                    setApiResponse(transformedResponse)
+                    setChartData(transformedData)
+                    setChartOptions(transformedOptions)
 
-                    const allJson = transformedResponse
-                    const dataSet1 = transformedResponse.datasets[0]
-                    const jsonDepth = 2
-                    const jsonString1 = JSON.stringify(allJson, null, jsonDepth)
-                    const jsonString2 = JSON.stringify(dataSet1, null, jsonDepth)
-                    setDetailsJson(jsonString1)
+                    const jsonString = JSON.stringify(transformedData, null, 2)
+                    setDetailsJson(jsonString)
                 }
             } catch (error) {
                 if (isMounted) {
                     setErrorMessage(error instanceof Error ? error.message : "Unknown error")
-                    setApiResponse([])
+                    setChartData(null)
+                    setChartOptions(null)
                 }
             } finally {
                 if (isMounted) {
@@ -114,7 +111,6 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
     }, [])
 
     if (isLoading) {
-        // return null
         return (<><h1>Loading Metric...</h1></>)
     }
 
@@ -122,23 +118,23 @@ export function DemoFlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl 
         return (<><h1>Failed to load Metric</h1><p>{errorMessage}</p></>)
     }
 
-    if (!apiResponse || apiResponse.length === 0) {
+    if (!chartData || !chartData.datasets || chartData.datasets.length === 0) {
         return (<><h1>No Metric found</h1></>)
     }
+
     const usingLineChart = false
     const chartElem =
         usingLineChart
-            ? <Line data={apiResponse} />
-            : <Bar data={apiResponse} />
-
+            ? <Line data={chartData} options={chartOptions} />
+            : <Bar data={chartData} options={chartOptions} />
 
     return (
         <>
             <section className="chart__with__details">
                 {chartElem}
                 <a href={RequestUrl}>View Request</a>
-                <details open>
-                    <summary>Dataset 1</summary>
+                <details>
+                    <summary>Dataset</summary>
                     <pre>{detailsJson}</pre>
                 </details>
             </section>
@@ -152,6 +148,9 @@ export default function Page() {
             <article>
                 <DemoFlatLineChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
+                />
+                <DemoFlatLineChart
+                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months"
                 />
 
             </article>
