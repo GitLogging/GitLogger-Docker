@@ -72,7 +72,10 @@ const defaultDatasetColors = [
 ]
 
 export function DemoMetricToChartData(
-    apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]
+    apiResponses: CommitMetricItem[] | CommitMetricItem[][],
+    requestUrls: string | string[],
+    chartTitle: string,
+
 ): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
      * @summary transforms API response(s) into this specific chart type
@@ -144,8 +147,8 @@ export function DemoMetricToChartData(
                 position: 'top',
             },
             title: {
-                display: false,
-                text: 'Title'
+                display: !!chartTitle,
+                text: chartTitle
             },
             tooltip: {
                 callbacks: {
@@ -227,7 +230,13 @@ function ShowResponsePopover({ RequestUrl, DisplayJson, children }) {
 }
 
 
-export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
+export function DemoFlatBarChart({
+    RequestUrl, ChartTitle
+}: {
+    RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[],
+    ChartTitle?: string
+}
+) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
      * Supports both single and multiple request URLs
@@ -362,9 +371,11 @@ export default function Page() {
         <>
             <article>
                 <DemoFlatBarChart
+                    ChartTitle='Ripgrep only'
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
                 />
                 <DemoFlatBarChart
+                    ChartTitle='Fzf and Ripgrep'
                     RequestUrl={[
                         "http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=month",
                         "http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months&period=month",
@@ -373,6 +384,7 @@ export default function Page() {
                     ]}
                 />
                 <DemoFlatBarChart
+                    ChartTitle='Ripgrep'
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=year"
                 />
                 <DemoFlatBarChart
