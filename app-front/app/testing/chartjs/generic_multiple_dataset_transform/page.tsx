@@ -4,6 +4,12 @@ import { useEffect, useState } from "react"
 import { Bar, Line } from "react-chartjs-2"
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
 
+import Button from 'react-bootstrap/Button'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
+import { ListGroup, ListGroupItem } from "react-bootstrap"
+
+
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
 /**
@@ -155,6 +161,72 @@ export function DemoMetricToChartData(
     return { data, options }
 }
 
+
+
+
+
+// const Example = () => (
+//     <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+//         <Button variant="success">Response 1</Button>
+//     </OverlayTrigger>
+// )
+
+// render(<Example />);
+
+function ShowResponsePopover({ RequestUrl, DisplayJson, children }) {
+
+    const urlObj = new URL(RequestUrl)
+    const abbrPathWithQuery = urlObj.pathname + urlObj.search
+    function keysAsDefinitionList(Url) {
+        const url = new URL(Url)
+        const items = Array.from(url.searchParams.entries()).map(([key, value]) => (
+            <ListGroupItem key={key}>
+                {key}: {value}
+            </ListGroupItem>
+        ))
+        return (
+            <>
+                <ListGroup>
+                    {items}
+                </ListGroup>
+            </>
+        )
+    }
+
+    const popover = (
+        <Popover id="popover-basic"
+            style={{
+                // outline: '2px solid orange',
+                maxHeight: '80vh',
+            }}
+        >
+            <Popover.Header as="h3">Request:
+                <a href={RequestUrl} target="_blank" rel="noopener noreferrer">{abbrPathWithQuery}</a>
+            </Popover.Header>
+            <Popover.Body>
+                <h4>query</h4>
+                {keysAsDefinitionList(RequestUrl)}
+                {children}
+                <h4>response</h4>
+                <pre>{DisplayJson}</pre>
+            </Popover.Body>
+        </Popover>
+    )
+
+    return (
+        <>
+            <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+                <Button variant="success">Response 1</Button>
+            </OverlayTrigger>
+            {popover}
+        </>
+        // <>
+        //     {popover}
+        // </>
+    )
+}
+
+
 export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
@@ -255,6 +327,20 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl |
         <>
             <section className="chart__with__details">
                 {chartElem}
+
+
+                <div>
+                    {requestUrls.map((url, index) => (
+                        <ShowResponsePopover
+                            RequestUrl={url}
+                            DisplayJson={detailsJson}
+                        />
+                        // <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
+                        //     View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
+                        // </a>
+                    ))}
+
+                </div>
                 <div>
                     {requestUrls.map((url, index) => (
                         <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
