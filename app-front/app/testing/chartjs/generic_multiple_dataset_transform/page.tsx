@@ -176,8 +176,14 @@ export function DemoMetricToChartData(
 
 // render(<Example />);
 
-function ShowResponsePopover({ RequestUrl, DisplayJson, children }) {
-
+function TestResponseDetailsPopoverButton({
+    RequestUrl, ButtonLabel, DisplayJson, children
+}: {
+    RequestUrl: string,
+    ButtonLabel?: string,
+    DisplayJson: string,
+    children?: React.ReactNode
+}) {
     const urlObj = new URL(RequestUrl)
     const abbrPathWithQuery = urlObj.pathname + urlObj.search
     function keysAsDefinitionList(Url) {
@@ -219,7 +225,7 @@ function ShowResponsePopover({ RequestUrl, DisplayJson, children }) {
     return (
         <>
             <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-                <Button variant="success">Response 1</Button>
+                <Button variant="success">{ButtonLabel ?? 'View'}</Button>
             </OverlayTrigger>
         </>
     )
@@ -337,7 +343,9 @@ export function DemoFlatBarChart({
 
                 <div>
                     {requestUrls.map((url, index) => (
-                        <ShowResponsePopover
+                        <TestResponseDetailsPopoverButton
+                            ButtonLabel={index}
+                            key={index}
                             RequestUrl={url}
                             DisplayJson={detailsJson}
                         />
