@@ -52,7 +52,7 @@ function PageSummary() {
                 />
                 <BarMetric
                     RequestUrl={[
-                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=week",
+                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=day",
                         // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
                     ]}
                 />

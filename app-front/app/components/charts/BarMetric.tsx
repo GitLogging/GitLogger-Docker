@@ -182,10 +182,10 @@ export function TransformedMetricData(
 
 export function BarMetric({
     RequestUrl,
-    chartTitle
+    ChartTitle
 }: {
     RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[],
-    chartTitle?: string,
+        ChartTitle?: string,
 }) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
@@ -225,7 +225,8 @@ export function BarMetric({
                 const responses = await Promise.all(fetchPromises)
 
                 if (isMounted) {
-                    const { data: transformedData, options: transformedOptions } = TransformedMetricData(responses, requestUrlList)
+                    const { data: transformedData, options: transformedOptions } =
+                        TransformedMetricData(responses, requestUrlList, ChartTitle)
 
                     console.group(logPrefix)
                     console.log(`${logPrefix} requesting ${requestUrlList.length} URL(s)`)
@@ -264,22 +265,20 @@ export function BarMetric({
     }, [RequestUrl])
 
     if (isLoading) {
-        return (<><h1>Loading Metric...</h1></>)
+        return (<><h3>Loading Metric...</h3></>)
     }
 
     if (errorMessage) {
-        return (<><h1>Failed to load Metric</h1><p>{errorMessage}</p></>)
+        return (<><h3>Failed to load Metric</h3><p>{errorMessage}</p></>)
     }
 
     if (!chartData || !chartData.datasets || chartData.datasets.length === 0) {
-        return (<><h1>No Metric found</h1></>)
+        return (<><h3>No Metric found</h3></>)
     }
+    // if (isLoading && chartData.datasets.length === 0) {
+    //     return (<><h3>Zero Records with filters...</h3></>)
+    // }
 
-    const usingLineChart = false
-    // const chartElem =
-    //     usingLineChart
-    //         ? <Line data={chartData} options={chartOptions} />
-    //         : <Bar data={chartData} options={chartOptions} />
     const chartElem = <Bar data={chartData} options={chartOptions} />
 
     return (
