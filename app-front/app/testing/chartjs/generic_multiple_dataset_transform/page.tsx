@@ -90,8 +90,9 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
 
     const options: ChartOptions<'bar'> = {
         parsing: {
-            // xAxisKey: 'CommitDate',
-            xAxisKey: 'Date',
+            xAxisKey: 'CommitDate',
+            // xAxisKey: 'Date',
+            xAxisKey: 'DateDisplay',
             yAxisKey: 'CommitCount'
         },
         responsive: true,
@@ -207,9 +208,14 @@ export default function Page() {
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
                 />
                 <DemoFlatBarChart
+                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=day"
+                />
+                <DemoFlatBarChart
+                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=year"
+                />
+                <DemoFlatBarChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months"
                 />
-
             </article>
         </>
 
