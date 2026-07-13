@@ -84,8 +84,11 @@ export function TransformedMetricData(
     const urlsArray = Array.isArray(requestUrls) ? requestUrls : [requestUrls]
     const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
 
-    // Build datasets for each URL
-    const datasets = urlsArray.map((requestUrl, index) => {
+    // First pass: collect all unique date keys from all datasets
+    const allDateKeys = new Set<string>()
+    const allAggregatedDataByUrl: Map<number, Map<string, number>> = new Map()
+
+    urlsArray.forEach((_, index) => {
         const apiResponse = responsesArray[index] || []
 
         // Sort by CommitDate
@@ -99,18 +102,34 @@ export function TransformedMetricData(
             // Use DateString or create from Year/Month
             const dateKey = 'DateDisplay' in item ? (item as any).DateDisplay : (item.DateString || `${item.Year}-${item.Month}`)
             aggregatedByDate.set(dateKey, (aggregatedByDate.get(dateKey) || 0) + item.CommitCount)
+            allDateKeys.add(dateKey)
         })
 
-        // Convert aggregated data back to array format for charting
-        const aggregatedData = Array.from(aggregatedByDate.entries()).map(([date, totalCount]) => ({
-            CommitDate: date,
-            CommitCount: totalCount,
+        allAggregatedDataByUrl.set(index, aggregatedByDate)
+    })
+
+    // Sort all date keys chronologically
+    const sortedDateKeys = Array.from(allDateKeys).sort((a, b) => {
+        // Parse dates for sorting - handle both YYYY-MM and YYYY-MM-DD formats
+        const dateA = new Date(a)
+        const dateB = new Date(b)
+        return dateA.getTime() - dateB.getTime()
+    })
+
+    // Build datasets for each URL, ensuring all datasets have all date keys
+    const datasets = urlsArray.map((requestUrl, index) => {
+        const aggregatedByDate = allAggregatedDataByUrl.get(index) || new Map()
+
+        // Create data array with entries for all dates (fill missing with 0)
+        const alignedData = sortedDateKeys.map(dateKey => ({
+            CommitDate: dateKey,
+            CommitCount: aggregatedByDate.get(dateKey) || 0,
         }))
 
         const colors = defaultDatasetColors[index % defaultDatasetColors.length]
         return {
             label: formatDatasetLabel(requestUrl),
-            data: aggregatedData,
+            data: alignedData,
             borderWidth: 2,
             backgroundColor: colors.backgroundColor,
             borderColor: colors.borderColor,
@@ -118,19 +137,21 @@ export function TransformedMetricData(
     })
 
     const data: ChartData<'bar'> = {
-        // labels: labels,
+        labels: sortedDateKeys,
         datasets: datasets,
     }
-    console.log('🐒datasets', { datasets })
+    console.log('🐒datasets', { datasets, sortedDateKeys })
 
     const options: ChartOptions<'bar'> = {
         parsing: {
             xAxisKey: 'CommitDate',
             yAxisKey: 'CommitCount'
         },
+        // indexAxis: undefined,
         scales: {
             x: {
                 stacked: true,
+                type: 'category',
             },
             y: {
                 stacked: true,
