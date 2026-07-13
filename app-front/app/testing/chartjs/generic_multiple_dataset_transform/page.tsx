@@ -63,20 +63,34 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
     * @see https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
      */
 
-
     // Sort by CommitDate
     const sortedData = [...apiResponse].sort((a, b) =>
         new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
     )
 
+    // Aggregate commits by date - sum all commits for each unique date
+    const aggregatedByDate = new Map<string, number>()
+    sortedData.forEach(item => {
+        const dateKey = item.DateDisplay
+        aggregatedByDate.set(dateKey, (aggregatedByDate.get(dateKey) || 0) + item.CommitCount)
+    })
+
+    // Convert aggregated data back to array format for charting
+    const aggregatedData = Array.from(aggregatedByDate.entries()).map(([date, totalCount]) => ({
+        CommitDate: date,
+        CommitCount: totalCount,
+        // Label: 'Total' // Label for aggregated data
+    }))
+
     const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
-    const labels = sortedData.map(
-        item => `${monthFormatter.format(new Date(item.CommitDate))}`)
+    // const labels = aggregatedData.map(
+    //     item => `${monthFormatter.format(new Date(item.CommitDate))}`)
+    const labels = aggregatedData.map((e) => e.DateDisplay)
 
     const datasets = [
         {
             label: formatDatasetLabel(requestUrl),
-            data: sortedData,
+            data: aggregatedData,
             borderWidth: 2,
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -91,8 +105,6 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
     const options: ChartOptions<'bar'> = {
         parsing: {
             xAxisKey: 'CommitDate',
-            // xAxisKey: 'Date',
-            xAxisKey: 'DateDisplay',
             yAxisKey: 'CommitCount'
         },
         responsive: true,
@@ -103,15 +115,15 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
             tooltip: {
                 callbacks: {
                     label: (context) => {
-                        const dataPoint = context.raw as CommitMetricItem
-                        return `${dataPoint.GitUserName || 'Unknown'}: ${dataPoint.CommitCount} commits`
+                        const dataPoint = context.raw as any
+                        return `Total commits: ${dataPoint.CommitCount}`
                     }
                 }
             }
         }
     }
 
-    console.log(apiResponse, "transformed to chart data:", data)
+    console.log(apiResponse, "aggregated data:", aggregatedData)
     return { data, options }
 }
 
