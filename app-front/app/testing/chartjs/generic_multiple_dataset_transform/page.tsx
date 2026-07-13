@@ -74,7 +74,7 @@ const defaultDatasetColors = [
 export function DemoMetricToChartData(
     apiResponses: CommitMetricItem[] | CommitMetricItem[][],
     requestUrls: string | string[],
-    chartTitle: string,
+    chartTitle?: string,
 
 ): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
@@ -221,11 +221,7 @@ function ShowResponsePopover({ RequestUrl, DisplayJson, children }) {
             <OverlayTrigger trigger="click" placement="right" overlay={popover}>
                 <Button variant="success">Response 1</Button>
             </OverlayTrigger>
-            {popover}
         </>
-        // <>
-        //     {popover}
-        // </>
     )
 }
 
@@ -275,7 +271,8 @@ export function DemoFlatBarChart({
                 const responses = await Promise.all(fetchPromises)
 
                 if (isMounted) {
-                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(responses, urlsArray)
+                    const { data: transformedData, options: transformedOptions } =
+                        DemoMetricToChartData(responses, urlsArray, ChartTitle)
 
                     console.group(logPrefix)
                     console.log(`${logPrefix} requesting ${urlsArray.length} URL(s)`)
@@ -350,17 +347,6 @@ export function DemoFlatBarChart({
                     ))}
 
                 </div>
-                <div>
-                    {requestUrls.map((url, index) => (
-                        <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
-                            View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
-                        </a>
-                    ))}
-                </div>
-                <details>
-                    <summary>Dataset</summary>
-                    <pre>{detailsJson}</pre>
-                </details>
             </section>
         </>
     )
