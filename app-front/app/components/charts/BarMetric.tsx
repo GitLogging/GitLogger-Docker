@@ -3,6 +3,7 @@ import { CommitMetricUrl, CommitMetricItem, MetricCommitToChartData } from "@/ap
 import { useEffect, useState } from "react"
 import { Bar, Line } from "react-chartjs-2"
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
+import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton.tsx"
 
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
@@ -66,7 +67,10 @@ const defaultDatasetColors = [
 ]
 
 export function TransformedMetricData(
-    apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]
+    apiResponses: CommitMetricItem[] | CommitMetricItem[][],
+    requestUrls: string | string[],
+    chartTitle?: string,
+
 ): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
      * @summary transforms API response(s) into this specific chart type
@@ -138,8 +142,8 @@ export function TransformedMetricData(
                 position: 'top',
             },
             title: {
-                display: false,
-                text: 'Title'
+                display: !!chartTitle,
+                text: chartTitle
             },
             tooltip: {
                 callbacks: {
@@ -155,7 +159,13 @@ export function TransformedMetricData(
     return { data, options }
 }
 
-export function BarMetric({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
+export function BarMetric({
+    RequestUrl,
+    chartTitle
+}: {
+    RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[],
+    chartTitle?: string,
+}) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
      * Supports both single and multiple request URLs
@@ -257,6 +267,20 @@ export function BarMetric({ RequestUrl }: { RequestUrl: CommitMetricUrl | Commit
                 {chartElem}
                 <div>
                     {requestUrls.map((url, index) => (
+                        <ResponseDetailsPopoverButton
+                            ButtonLabel={index}
+                            key={index}
+                            RequestUrl={url}
+                            DisplayJson={detailsJson}
+                        />
+                        // <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
+                        //     View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
+                        // </a>
+                    ))}
+
+                </div>
+                {/* <div>
+                    {requestUrls.map((url, index) => (
                         <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
                             View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
                         </a>
@@ -265,7 +289,7 @@ export function BarMetric({ RequestUrl }: { RequestUrl: CommitMetricUrl | Commit
                 <details>
                     <summary>Dataset</summary>
                     <pre>{detailsJson}</pre>
-                </details>
+                </details> */}
             </section>
         </>
     )
