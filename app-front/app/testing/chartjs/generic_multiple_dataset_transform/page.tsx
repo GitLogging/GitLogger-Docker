@@ -65,7 +65,9 @@ const defaultDatasetColors = [
     { backgroundColor: 'rgba(255, 159, 64, 0.5)', borderColor: 'rgba(255, 159, 64, 1)' },
 ]
 
-export function DemoMetricToChartData(apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
+export function DemoMetricToChartData(
+    apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]
+): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
      * @summary transforms API response(s) into this specific chart type
      * @param apiResponses - single array or array of arrays (one per URL)
@@ -122,10 +124,22 @@ export function DemoMetricToChartData(apiResponses: CommitMetricItem[] | CommitM
             xAxisKey: 'CommitDate',
             yAxisKey: 'CommitCount'
         },
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+            },
+        },
         responsive: true,
         plugins: {
             legend: {
                 position: 'top',
+            },
+            title: {
+                display: false,
+                text: 'Title'
             },
             tooltip: {
                 callbacks: {
