@@ -132,7 +132,7 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }
      * Create a chart, and link the source JSON. displays status during load, and/or errors
      */
 
-    const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatLineChart>:"
+    const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatBarChart>:"
     const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null)
     const [chartOptions, setChartOptions] = useState<ChartOptions<'bar'> | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -228,7 +228,10 @@ export default function Page() {
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
                 />
                 <DemoFlatBarChart
-                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=day"
+                    RequestUrl={[
+                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=6.months&period=month",
+                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=6.months&period=month",
+                    ]}
                 />
                 <DemoFlatBarChart
                     RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=year"
