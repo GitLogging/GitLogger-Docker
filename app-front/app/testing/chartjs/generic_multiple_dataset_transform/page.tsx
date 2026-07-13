@@ -56,51 +56,66 @@ function formatDatasetLabel(url: string): string {
     return `${name} since ${since.replace('.', ' ')}`
 }
 
-export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUrl: string): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
+const defaultDatasetColors = [
+    { backgroundColor: 'rgba(75, 192, 192, 0.5)', borderColor: 'rgba(75, 192, 192, 1)' },
+    { backgroundColor: 'rgba(255, 99, 132, 0.5)', borderColor: 'rgba(255, 99, 132, 1)' },
+    { backgroundColor: 'rgba(54, 162, 235, 0.5)', borderColor: 'rgba(54, 162, 235, 1)' },
+    { backgroundColor: 'rgba(255, 206, 86, 0.5)', borderColor: 'rgba(255, 206, 86, 1)' },
+    { backgroundColor: 'rgba(153, 102, 255, 0.5)', borderColor: 'rgba(153, 102, 255, 1)' },
+    { backgroundColor: 'rgba(255, 159, 64, 0.5)', borderColor: 'rgba(255, 159, 64, 1)' },
+]
+
+export function DemoMetricToChartData(apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
-     * @summary transforms API response into this specific chart type
+     * @summary transforms API response(s) into this specific chart type
+     * @param apiResponses - single array or array of arrays (one per URL)
+     * @param requestUrls - single URL or array of URLs
     * @see https://www.chartjs.org/docs/latest/api/#charttype
     * @see https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
      */
 
-    // Sort by CommitDate
-    const sortedData = [...apiResponse].sort((a, b) =>
-        new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
-    )
+    // Normalize inputs to arrays
+    const urlsArray = Array.isArray(requestUrls) ? requestUrls : [requestUrls]
+    const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
 
-    // Aggregate commits by date - sum all commits for each unique date
-    const aggregatedByDate = new Map<string, number>()
-    sortedData.forEach(item => {
-        const dateKey = item.DateDisplay
-        aggregatedByDate.set(dateKey, (aggregatedByDate.get(dateKey) || 0) + item.CommitCount)
-    })
+    // Build datasets for each URL
+    const datasets = urlsArray.map((requestUrl, index) => {
+        const apiResponse = responsesArray[index] || []
 
-    // Convert aggregated data back to array format for charting
-    const aggregatedData = Array.from(aggregatedByDate.entries()).map(([date, totalCount]) => ({
-        CommitDate: date,
-        CommitCount: totalCount,
-        // Label: 'Total' // Label for aggregated data
-    }))
+        // Sort by CommitDate
+        const sortedData = [...apiResponse].sort((a, b) =>
+            new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
+        )
 
-    const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" })
-    // const labels = aggregatedData.map(
-    //     item => `${monthFormatter.format(new Date(item.CommitDate))}`)
-    const labels = aggregatedData.map((e) => e.DateDisplay)
+        // Aggregate commits by date - sum all commits for each unique date
+        const aggregatedByDate = new Map<string, number>()
+        sortedData.forEach(item => {
+            // Use DateString or create from Year/Month
+            const dateKey = 'DateDisplay' in item ? (item as any).DateDisplay : (item.DateString || `${item.Year}-${item.Month}`)
+            aggregatedByDate.set(dateKey, (aggregatedByDate.get(dateKey) || 0) + item.CommitCount)
+        })
 
-    const datasets = [
-        {
+        // Convert aggregated data back to array format for charting
+        const aggregatedData = Array.from(aggregatedByDate.entries()).map(([date, totalCount]) => ({
+            CommitDate: date,
+            CommitCount: totalCount,
+        }))
+
+        const colors = defaultDatasetColors[index % defaultDatasetColors.length]
+        return {
             label: formatDatasetLabel(requestUrl),
             data: aggregatedData,
             borderWidth: 2,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-        },
-    ]
+            backgroundColor: colors.backgroundColor,
+            borderColor: colors.borderColor,
+        }
+    })
 
     const data: ChartData<'bar'> = {
         // labels: labels,
         datasets: datasets,
     }
+    console.log('🐒datasets', { datasets })
 
     const options: ChartOptions<'bar'> = {
         parsing: {
@@ -123,13 +138,13 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
         }
     }
 
-    console.log(apiResponse, "aggregated data:", aggregatedData)
     return { data, options }
 }
 
-export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
+export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
+     * Supports both single and multiple request URLs
      */
 
     const logPrefix = "/testing/generic_multiple_dataset_transform/<DemoFlatBarChart>:"
@@ -138,6 +153,7 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [detailsJson, setDetailsJson] = useState('')
+    const [requestUrls, setRequestUrls] = useState<string[]>([])
 
     useEffect(() => {
         let isMounted = true
@@ -146,17 +162,32 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }
             try {
                 setIsLoading(true)
                 setErrorMessage(null)
-                const data = await fetch(RequestUrl)
-                if (!data.ok) {
-                    throw new Error(`Request failed with status ${data.status}`)
-                }
-                const response: CommitMetricItem[] = await data.json()
+
+                // Normalize RequestUrl to array
+                const urlsArray = Array.isArray(RequestUrl) ? RequestUrl : [RequestUrl]
+                setRequestUrls(urlsArray)
+
+                // Fetch all URLs in parallel
+                const fetchPromises = urlsArray.map(url =>
+                    fetch(url).then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Request failed for ${url} with status ${response.status}`)
+                        }
+                        return response.json() as Promise<CommitMetricItem[]>
+                    })
+                )
+
+                const responses = await Promise.all(fetchPromises)
+
                 if (isMounted) {
-                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(response, RequestUrl)
+                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(responses, urlsArray)
 
                     console.group(logPrefix)
-                    console.log(`${logPrefix} parsedRequestUrl:`, parseRequestUrl(RequestUrl))
-                    console.log(`${logPrefix} response ${response.length} items:`, response)
+                    console.log(`${logPrefix} requesting ${urlsArray.length} URL(s)`)
+                    urlsArray.forEach((url, index) => {
+                        console.log(`${logPrefix} [${index}] parsedRequestUrl:`, parseRequestUrl(url))
+                        console.log(`${logPrefix} [${index}] response ${responses[index].length} items:`, responses[index])
+                    })
                     console.log(`${logPrefix} transformedData:`, transformedData)
                     console.log(`${logPrefix} transformedOptions:`, transformedOptions)
                     console.groupEnd()
@@ -185,7 +216,7 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }
         return () => {
             isMounted = false
         }
-    }, [])
+    }, [RequestUrl])
 
     if (isLoading) {
         return (<><h1>Loading Metric...</h1></>)
@@ -210,7 +241,13 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }
         <>
             <section className="chart__with__details">
                 {chartElem}
-                <a href={RequestUrl}>View Request</a>
+                <div>
+                    {requestUrls.map((url, index) => (
+                        <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
+                            View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
+                        </a>
+                    ))}
+                </div>
                 <details>
                     <summary>Dataset</summary>
                     <pre>{detailsJson}</pre>
@@ -229,8 +266,10 @@ export default function Page() {
                 />
                 <DemoFlatBarChart
                     RequestUrl={[
-                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=6.months&period=month",
-                        "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=6.months&period=month",
+                        "http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=month",
+                        "http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months&period=month",
+                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=30.months&period=month",
+                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
                     ]}
                 />
                 <DemoFlatBarChart
