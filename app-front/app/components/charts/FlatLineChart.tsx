@@ -60,6 +60,7 @@ export function FlatLineChart({ RequestUrl }: { RequestUrl: CommitMetricUrl }) {
     if (isLoading) {
         // return null
         return (<><h1>Loading Metric...</h1></>)
+        console.warn(`deprecated`)
     }
 
     if (errorMessage) {

@@ -11,8 +11,8 @@ export function PageHeaderContent() {
             <nav>
                 <div className="nav-inner">
                     <ul className="nav-menu">
-                        <li><a href="/list">My Repos</a></li>
-                        <li><a href="/summary">Summary</a></li>
+                        <li><a href="/list">Repos</a></li>
+                        <li><a href="/home">Home</a></li>
                         <li><a href="/">About GitLogger</a></li>
                         <li><a href="/testing">Test Page</a></li>
                     </ul>
