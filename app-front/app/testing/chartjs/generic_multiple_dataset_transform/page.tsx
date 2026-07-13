@@ -100,6 +100,14 @@ export function DemoMetricToChartData(apiResponse: CommitMetricItem[], requestUr
             legend: {
                 position: 'top',
             },
+            tooltip: {
+                callbacks: {
+                    label: (context) => {
+                        const dataPoint = context.raw as CommitMetricItem
+                        return `${dataPoint.GitUserName || 'Unknown'}: ${dataPoint.CommitCount} commits`
+                    }
+                }
+            }
         }
     }
 
