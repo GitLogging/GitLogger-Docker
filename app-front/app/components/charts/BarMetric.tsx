@@ -65,7 +65,7 @@ const defaultDatasetColors = [
     { backgroundColor: 'rgba(255, 159, 64, 0.5)', borderColor: 'rgba(255, 159, 64, 1)' },
 ]
 
-export function DemoMetricToChartData(
+export function TransformedMetricData(
     apiResponses: CommitMetricItem[] | CommitMetricItem[][], requestUrls: string | string[]
 ): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
@@ -88,7 +88,7 @@ export function DemoMetricToChartData(
         const sortedData = [...apiResponse].sort((a, b) =>
             new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
         )
-        d
+
         // Aggregate commits by date - sum all commits for each unique date
         const aggregatedByDate = new Map<string, number>()
         sortedData.forEach(item => {
@@ -155,7 +155,7 @@ export function DemoMetricToChartData(
     return { data, options }
 }
 
-export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
+export function BarMetric({ RequestUrl }: { RequestUrl: CommitMetricUrl | CommitMetricUrl[] | string | string[] }) {
     /**
      * Create a chart, and link the source JSON. displays status during load, and/or errors
      * Supports both single and multiple request URLs
@@ -178,11 +178,11 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl |
                 setErrorMessage(null)
 
                 // Normalize RequestUrl to array
-                const urlsArray = Array.isArray(RequestUrl) ? RequestUrl : [RequestUrl]
-                setRequestUrls(urlsArray)
+                const requestUrlList = Array.isArray(RequestUrl) ? RequestUrl : [RequestUrl]
+                setRequestUrls(requestUrlList)
 
                 // Fetch all URLs in parallel
-                const fetchPromises = urlsArray.map(url =>
+                const fetchPromises = requestUrlList.map(url =>
                     fetch(url).then(response => {
                         if (!response.ok) {
                             throw new Error(`Request failed for ${url} with status ${response.status}`)
@@ -194,11 +194,11 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl |
                 const responses = await Promise.all(fetchPromises)
 
                 if (isMounted) {
-                    const { data: transformedData, options: transformedOptions } = DemoMetricToChartData(responses, urlsArray)
+                    const { data: transformedData, options: transformedOptions } = TransformedMetricData(responses, requestUrlList)
 
                     console.group(logPrefix)
-                    console.log(`${logPrefix} requesting ${urlsArray.length} URL(s)`)
-                    urlsArray.forEach((url, index) => {
+                    console.log(`${logPrefix} requesting ${requestUrlList.length} URL(s)`)
+                    requestUrlList.forEach((url, index) => {
                         console.log(`${logPrefix} [${index}] parsedRequestUrl:`, parseRequestUrl(url))
                         console.log(`${logPrefix} [${index}] response ${responses[index].length} items:`, responses[index])
                     })
@@ -270,33 +270,3 @@ export function DemoFlatBarChart({ RequestUrl }: { RequestUrl: CommitMetricUrl |
         </>
     )
 }
-export default function Page() {
-    return (
-
-        <>
-            <article>
-                <DemoFlatBarChart
-                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months"
-                />
-                <DemoFlatBarChart
-                    RequestUrl={[
-                        "http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=month",
-                        "http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months&period=month",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=30.months&period=month",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
-                    ]}
-                />
-                <DemoFlatBarChart
-                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=2.months&period=year"
-                />
-                <DemoFlatBarChart
-                    RequestUrl="http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months"
-                />
-            </article>
-        </>
-
-    )
-
-}
-
-
