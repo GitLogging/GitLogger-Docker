@@ -10,9 +10,20 @@ import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
 // import { FlatLineChart } from "@/app/components/charts/FlatLineChart"
 
 function PageSummary() {
-    const dataset1Config = {
-        RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
-    }
+    const config = [
+        {
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `CommitCount`
+        },
+        {
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `LinesChanged`,
+            DatasetLabel: `LinesChanged`
+        }
+    ]
     return (
 
         <>
@@ -20,9 +31,7 @@ function PageSummary() {
 
 
                 <CustomBarMetric
-                    DatasetConfig={[
-                        dataset1Config,
-                    ]}
+                    DatasetConfig={config}
                 />
             </article>
         </>

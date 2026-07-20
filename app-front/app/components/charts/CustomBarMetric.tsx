@@ -1,24 +1,33 @@
 "use client"
-import { CommitMetricUrl, CommitMetricItem, MetricCommitToChartData } from "@/app/types/pwsh-api/repo/metric/commit"
+import { CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit"
 import { useEffect, useState } from "react"
-import { Bar, Line } from "react-chartjs-2"
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
+import { Bar } from "react-chartjs-2"
+import { Chart as ChartJS, BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js'
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton.tsx"
 
-// import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-
 /**
- * @summary this file is an example that supports changing the axis / aka key-value pairs with different properties
+ * @summary CustomBarMetric supports per-dataset configuration for flexible axis mapping
+ * Each dataset can specify its own XAxisKey, YAxisKey, RequestUrl, and label
  */
 
 ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend)
+
+/**
+ * @summary Configuration for a single dataset in the chart
+ */
+export interface DatasetConfig {
+    RequestUrl: string
+    XAxisKey: string
+    YAxisKey: string
+    DatasetLabel: string
+}
 
 function parseRequestUrl(url: string): { name?: string; since?: string; owner?: string; repo?: string; metric?: string } {
     /**
      * @summary parses the request URL to extract relevant query parameters and path segments
      * @param url - the request URL to parse
      * @returns an object containing the extracted metadata (name, since, owner, repo, metric)
-     * @example const { name, since } = parseRequestUrl( url )
+     * @example const { name, since } = parseRequestUrl(url)
      */
     try {
         const urlObj = new URL(url)
@@ -44,19 +53,6 @@ function parseRequestUrl(url: string): { name?: string; since?: string; owner?: 
     }
 }
 
-function formatDatasetLabel(url: string): string {
-    /**
-     * @summary formats the dataset label based on the request URL
-     * @param url - the request URL containing query parameters for the dataset
-     * @returns a formatted label string for the dataset based on the request URL
-     */
-    const { name, since } = parseRequestUrl(url)
-    if (!name && !since) return 'Dataset'
-    if (!name) return `Since ${since?.replace('.', ' ')}`
-    if (!since) return name
-    return `${name} since ${since.replace('.', ' ')}`
-}
-
 const defaultDatasetColors = [
     { backgroundColor: 'rgba(75, 192, 192, 0.5)', borderColor: 'rgba(75, 192, 192, 1)' },
     { backgroundColor: 'rgba(255, 99, 132, 0.5)', borderColor: 'rgba(255, 99, 132, 1)' },
@@ -68,67 +64,73 @@ const defaultDatasetColors = [
 
 export function TransformedMetricData(
     apiResponses: CommitMetricItem[] | CommitMetricItem[][],
-    requestUrls: string | string[],
+    datasetConfigs: DatasetConfig | DatasetConfig[],
     chartTitle?: string,
-
 ): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
     /**
-     * @summary transforms API response(s) into this specific chart type
-     * @param apiResponses - single array or array of arrays (one per URL)
-     * @param requestUrls - single URL or array of URLs
-    * @see https://www.chartjs.org/docs/latest/api/#charttype
-    * @see https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
+     * @summary transforms API response(s) into chart data with per-dataset axis configuration
+     * @param apiResponses - single array or array of arrays (one per config)
+     * @param datasetConfigs - single config or array of configs with RequestUrl, XAxisKey, YAxisKey, DatasetLabel
+     * @param chartTitle - optional chart title
+     * @returns chart data and options ready for Chart.js Bar chart
      */
 
     // Normalize inputs to arrays
-    const urlsArray = Array.isArray(requestUrls) ? requestUrls : [requestUrls]
+    const configsArray = Array.isArray(datasetConfigs) ? datasetConfigs : [datasetConfigs]
     const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
 
-    // First pass: collect all unique date keys from all datasets
-    const allDateKeys = new Set<string>()
-    const allAggregatedDataByUrl: Map<number, Map<string, number>> = new Map()
+    // First pass: collect all unique X-axis keys from all datasets
+    const allXKeys = new Set<string>()
+    const allAggregatedDataByConfig: Map<number, Map<string, number>> = new Map()
 
-    urlsArray.forEach((_, index) => {
+    configsArray.forEach((config, index) => {
         const apiResponse = responsesArray[index] || []
+        const xAxisKey = config.XAxisKey
+        const yAxisKey = config.YAxisKey
 
-        // Sort by CommitDate
-        const sortedData = [...apiResponse].sort((a, b) =>
-            new Date(a.CommitDate).getTime() - new Date(b.CommitDate).getTime()
-        )
+        // Sort by X-axis key
+        const sortedData = [...apiResponse].sort((a, b) => {
+            const aVal = (a as any)[xAxisKey]
+            const bVal = (b as any)[xAxisKey]
 
-        // Aggregate commits by date - sum all commits for each unique date
-        const aggregatedByDate = new Map<string, number>()
-        sortedData.forEach(item => {
-            // Use DateString or create from Year/Month
-            const dateKey = 'DateDisplay' in item ? (item as any).DateDisplay : (item.DateString || `${item.Year}-${item.Month}`)
-            aggregatedByDate.set(dateKey, (aggregatedByDate.get(dateKey) || 0) + item.CommitCount)
-            allDateKeys.add(dateKey)
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                return new Date(aVal).getTime() - new Date(bVal).getTime()
+            }
+            return 0
         })
 
-        allAggregatedDataByUrl.set(index, aggregatedByDate)
+        // Aggregate by X-axis key
+        const aggregatedByXKey = new Map<string, number>()
+        sortedData.forEach(item => {
+            const xKeyValue = String((item as any)[xAxisKey])
+            const yValue = (item as any)[yAxisKey] || 0
+            aggregatedByXKey.set(xKeyValue, (aggregatedByXKey.get(xKeyValue) || 0) + yValue)
+            allXKeys.add(xKeyValue)
+        })
+
+        allAggregatedDataByConfig.set(index, aggregatedByXKey)
     })
 
-    // Sort all date keys chronologically
-    const sortedDateKeys = Array.from(allDateKeys).sort((a, b) => {
-        // Parse dates for sorting - handle both YYYY-MM and YYYY-MM-DD formats
+    // Sort all X-axis keys chronologically
+    const sortedXKeys = Array.from(allXKeys).sort((a, b) => {
         const dateA = new Date(a)
         const dateB = new Date(b)
         return dateA.getTime() - dateB.getTime()
     })
 
-    // Build datasets for each URL, ensuring all datasets have all date keys
-    const datasets = urlsArray.map((requestUrl, index) => {
-        const aggregatedByDate = allAggregatedDataByUrl.get(index) || new Map()
+    // Build datasets for each config, normalizing data to consistent structure
+    const datasets = configsArray.map((config, index) => {
+        const aggregatedByXKey = allAggregatedDataByConfig.get(index) || new Map()
 
-        // Create data array with entries for all dates (fill missing with 0)
-        const alignedData = sortedDateKeys.map(dateKey => ({
-            CommitDate: dateKey,
-            CommitCount: aggregatedByDate.get(dateKey) || 0,
+        // Create data array with normalized properties (xValue, yValue)
+        const alignedData = sortedXKeys.map(xKey => ({
+            xValue: xKey,
+            yValue: aggregatedByXKey.get(xKey) || 0,
         }))
 
         const colors = defaultDatasetColors[index % defaultDatasetColors.length]
         return {
-            label: formatDatasetLabel(requestUrl),
+            label: config.DatasetLabel,
             data: alignedData,
             borderWidth: 2,
             backgroundColor: colors.backgroundColor,
@@ -137,17 +139,16 @@ export function TransformedMetricData(
     })
 
     const data: ChartData<'bar'> = {
-        labels: sortedDateKeys,
+        labels: sortedXKeys,
         datasets: datasets,
     }
-    console.log('🐒datasets', { datasets, sortedDateKeys })
+    console.log('🐒 CustomBarMetric:', { datasets, sortedXKeys })
 
     const options: ChartOptions<'bar'> = {
         parsing: {
-            xAxisKey: 'CommitDate',
-            yAxisKey: 'CommitCount'
+            xAxisKey: 'xValue',
+            yAxisKey: 'yValue'
         },
-        // indexAxis: undefined,
         scales: {
             x: {
                 stacked: true,
@@ -169,8 +170,9 @@ export function TransformedMetricData(
             tooltip: {
                 callbacks: {
                     label: (context) => {
+                        const config = configsArray[context.datasetIndex]
                         const dataPoint = context.raw as any
-                        return `Total commits: ${dataPoint.CommitCount}`
+                        return `${config.DatasetLabel}: ${dataPoint.yValue}`
                     }
                 }
             }
@@ -184,13 +186,13 @@ export function CustomBarMetric({
     DatasetConfig,
     ChartTitle
 }: {
-        DatasetConfig: CommitMetricUrl | CommitMetricUrl[] | string | string[],
+    DatasetConfig: DatasetConfig | DatasetConfig[],
     ChartTitle?: string,
 }) {
     /**
-     * @summary A more customizable version of `<BarMetric>`
-     * Create a chart, and link the source JSON. displays status during load, and/or errors
-     * Supports both single and multiple request URLs
+     * @summary A customizable bar chart component that supports per-dataset configuration
+     * Each dataset can have different RequestUrl, XAxisKey, YAxisKey, and label
+     * Displays loading state, errors, and supports multiple concurrent requests
      */
 
     const logPrefix = "<CustomBarMetric>:"
@@ -209,15 +211,15 @@ export function CustomBarMetric({
                 setIsLoading(true)
                 setErrorMessage(null)
 
-                // Normalize RequestUrl to array
-                const requestUrlList = Array.isArray(RequestUrl) ? RequestUrl : [RequestUrl]
-                setRequestUrls(requestUrlList)
+                // Normalize DatasetConfig to array
+                const configsArray = Array.isArray(DatasetConfig) ? DatasetConfig : [DatasetConfig]
+                setRequestUrls(configsArray.map(c => c.RequestUrl))
 
                 // Fetch all URLs in parallel
-                const fetchPromises = requestUrlList.map(url =>
-                    fetch(url).then(response => {
+                const fetchPromises = configsArray.map(config =>
+                    fetch(config.RequestUrl).then(response => {
                         if (!response.ok) {
-                            throw new Error(`Request failed for ${url} with status ${response.status}`)
+                            throw new Error(`Request failed for ${config.RequestUrl} with status ${response.status}`)
                         }
                         return response.json() as Promise<CommitMetricItem[]>
                     })
@@ -227,13 +229,13 @@ export function CustomBarMetric({
 
                 if (isMounted) {
                     const { data: transformedData, options: transformedOptions } =
-                        TransformedMetricData(responses, requestUrlList, ChartTitle)
+                        TransformedMetricData(responses, configsArray, ChartTitle)
 
                     console.group(logPrefix)
-                    console.log(`${logPrefix} requesting ${requestUrlList.length} URL(s)`)
-                    requestUrlList.forEach((url, index) => {
-                        console.log(`${logPrefix} [${index}] parsedRequestUrl:`, parseRequestUrl(url))
-                        console.log(`${logPrefix} [${index}] response ${responses[index].length} items:`, responses[index])
+                    console.log(`${logPrefix} requesting ${configsArray.length} dataset(s)`)
+                    configsArray.forEach((config, index) => {
+                        console.log(`${logPrefix} [${index}] config:`, config)
+                        console.log(`${logPrefix} [${index}] response with ${responses[index].length} items:`, responses[index])
                     })
                     console.log(`${logPrefix} transformedData:`, transformedData)
                     console.log(`${logPrefix} transformedOptions:`, transformedOptions)
@@ -263,7 +265,7 @@ export function CustomBarMetric({
         return () => {
             isMounted = false
         }
-    }, [RequestUrl])
+    }, [DatasetConfig, ChartTitle])
 
     if (isLoading) {
         return (<><h3>Loading Metric...</h3></>)
@@ -276,9 +278,6 @@ export function CustomBarMetric({
     if (!chartData || !chartData.datasets || chartData.datasets.length === 0) {
         return (<><h3>No Metric found</h3></>)
     }
-    // if (isLoading && chartData.datasets.length === 0) {
-    //     return (<><h3>Zero Records with filters...</h3></>)
-    // }
 
     const chartElem = <Bar data={chartData} options={chartOptions} />
 
@@ -294,23 +293,9 @@ export function CustomBarMetric({
                             RequestUrl={url}
                             DisplayJson={detailsJson}
                         />
-                        // <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
-                        //     View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
-                        // </a>
                     ))}
 
                 </div>
-                {/* <div>
-                    {requestUrls.map((url, index) => (
-                        <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
-                            View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
-                        </a>
-                    ))}
-                </div>
-                <details>
-                    <summary>Dataset</summary>
-                    <pre>{detailsJson}</pre>
-                </details> */}
             </section>
         </>
     )
