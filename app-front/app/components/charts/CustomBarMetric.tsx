@@ -3,7 +3,7 @@ import { CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit"
 import { useEffect, useState } from "react"
 import { Bar } from "react-chartjs-2"
 import { Chart as ChartJS, BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js'
-import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton.tsx"
+import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
 
 /**
  * @summary CustomBarMetric supports per-dataset configuration for flexible axis mapping

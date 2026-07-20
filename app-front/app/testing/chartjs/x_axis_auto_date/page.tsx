@@ -2,6 +2,7 @@
 // import { useState, Suspense, useEffect } from "react"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
+import { config } from "next/dist/build/templates/pages"
 // import { InputGroup, Form, Button } from "react-bootstrap"
 // import RepoListNamePicker from "@/app/components/input/RepositoryNamePicker"
 // import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
@@ -10,28 +11,39 @@ import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
 // import { FlatLineChart } from "@/app/components/charts/FlatLineChart"
 
 function Chart1() {
-    const config = [
+    const chart1 = [
         {
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=day`,
             XAxisKey: `CommitDate`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
-        },
+        }]
+
+    const chart2 = [
         {
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=week`,
             XAxisKey: `CommitDate`,
-            YAxisKey: `LinesChanged`,
-            DatasetLabel: `LinesChanged`
-        }
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `CommitCount`
+        }]
+    const chart3 = [
+        ...chart1,
+        ...chart2,
     ]
+
     return (
 
         <>
             <article>
 
-
                 <CustomBarMetric
-                    DatasetConfig={config}
+                    DatasetConfig={chart3}
+                />
+                <CustomBarMetric
+                    DatasetConfig={chart1}
+                />
+                <CustomBarMetric
+                    DatasetConfig={chart2}
                 />
             </article>
         </>
