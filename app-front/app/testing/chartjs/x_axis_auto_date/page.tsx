@@ -122,6 +122,7 @@ function Chart3() {
         {
             RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day`,
             XAxisKey: `CommitDate`,
+            // XAxisKey: `DateDisplay`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
         },
@@ -159,6 +160,34 @@ function Chart3() {
     //         },
     //     },
     // }
+    const axisPerDay: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    parser: 'yyyy-MM-dd', // Defines how to read your input keys
+                    unit: 'day',          // Forces gridlines/labels to day intervals
+                    displayFormats: {
+                        day: 'yyyy-MM-dd'   // Defines how the label looks on the axis
+                    }
+                }
+            }
+        }
+    }
+    const axisPerMonth: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    parser: 'yyyy-MM-dd', // Defines how to read your input keys
+                    unit: 'month',          // Forces gridlines/labels to day intervals
+                    displayFormats: {
+                        month: 'MMM yyyy'   // Defines how the label looks on the axis
+                    }
+                }
+            }
+        }
+    }
 
     return (
 
@@ -173,13 +202,34 @@ function Chart3() {
                 /> */}
                 <CustomBarMetric
                     DatasetConfig={config1}
-                    ChartTitle="3:1 | opts1 - should by days"
+                    ChartTitle="3:1:B | default"
+                // ChartConfig={opts1}
+                />
+                <CustomBarMetric
+                    DatasetConfig={config1}
+                    ChartTitle="3:1:A | axisPerDay"
+                    ChartConfig={axisPerDay}
+                // ChartConfig={opts1}
+                />
+                <CustomBarMetric
+                    DatasetConfig={config1}
+                    ChartTitle="3:1:C | axisPerMonth"
+                    ChartConfig={axisPerMonth}
                 // ChartConfig={opts1}
                 />
                 <CustomBarMetric
                     DatasetConfig={config2}
-                    ChartTitle="3:2 | opts1 - should be month"
-                // ChartConfig={opts1}
+                    ChartTitle="3:2:A | default"
+                />
+                <CustomBarMetric
+                    DatasetConfig={config2}
+                    ChartTitle="3:2:B | axisPerDay"
+                    ChartConfig={axisPerDay}
+                />
+                <CustomBarMetric
+                    DatasetConfig={config2}
+                    ChartTitle="3:2:C | axisPerMonth"
+                    ChartConfig={axisPerMonth}
                 />
             </article>
         </>
@@ -193,10 +243,10 @@ export default function Page() {
         <>
             <PageHeaderContent />
             <Chart3 />
-            <Chart1 />
+            {/* <Chart1 /> */}
             {/*
              */}
-            <Chart2 />
+            {/* <Chart2 /> */}
         </>
     )
 }

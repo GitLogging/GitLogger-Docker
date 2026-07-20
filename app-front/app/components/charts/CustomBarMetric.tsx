@@ -2,16 +2,19 @@
 import { CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit"
 import { useEffect, useState } from "react"
 import { Bar } from "react-chartjs-2"
-import { Chart as ChartJS, BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js'
+import { Chart as ChartJS, BarElement, LineElement, CategoryScale, PointElement, LinearScale, TimeScale, Title, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js'
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
 import Button from "react-bootstrap/esm/Button"
+import 'chartjs-adapter-date-fns'
+
+// import { Chart, TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
 /**
  * @summary CustomBarMetric supports per-dataset configuration for flexible axis mapping
  * Each dataset can specify its own XAxisKey, YAxisKey, RequestUrl, and label
  */
 
-ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend)
+ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearScale, TimeScale, Title, Tooltip, Legend)
 
 /**
  * @summary Configuration for a single dataset in the chart
