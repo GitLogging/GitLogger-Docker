@@ -18,9 +18,9 @@ ChartJS.register(BarElement, LineElement, CategoryScale, PointElement, LinearSca
  */
 export interface DatasetConfig {
     RequestUrl: string
-    XAxisKey: string
-    YAxisKey: string
-    DatasetLabel: string
+    XAxisKey?: string
+    YAxisKey?: string
+    DatasetLabel?: string
 }
 
 function parseRequestUrl(url: string): { name?: string; since?: string; owner?: string; repo?: string; metric?: string } {

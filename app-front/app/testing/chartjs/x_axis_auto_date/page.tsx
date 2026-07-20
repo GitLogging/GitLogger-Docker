@@ -36,6 +36,7 @@ function Chart1() {
 
         <>
             <article>
+                <h2>button for scales.stackX toggle</h2>
 
                 <CustomBarMetric
                     DatasetConfig={chart3}
@@ -98,7 +99,7 @@ function Chart2() {
 
         <>
             <article>
-
+                <h2><strong>NYI:</strong> show two different metrics stacked on bars, ex: total lines changed: inserts vs deletions</h2>
 
                 <CustomBarMetric
                     DatasetConfig={config}
@@ -116,12 +117,85 @@ function Chart2() {
     )
 
 }
+function Chart3() {
+    const config1 = [
+        {
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `CommitCount`
+        },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `LinesChanged`,
+        //     DatasetLabel: `LinesChanged`
+        // }
+    ]
+    const config2 = [
+        {
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `CommitCount`
+        },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `LinesChanged`,
+        //     DatasetLabel: `LinesChanged`
+        // }
+    ]
+
+    // const opts1: ChartOptions<'bar'> = {
+    //     scales: {
+    //         x: {
+    //             stacked: false,
+    //             // stacked: true,
+    //             type: 'category',
+    //         },
+    //         y: {
+    //             stacked: true,
+    //         },
+    //     },
+    // }
+
+    return (
+
+        <>
+            <article>
+
+                <h3>comparing auto format for days vs months</h3>
+                {/* <CustomBarMetric
+                    DatasetConfig={config}
+                    ChartTitle="2:2 | opts2"
+                    ChartConfig={opts2}
+                /> */}
+                <CustomBarMetric
+                    DatasetConfig={config1}
+                    ChartTitle="3:1 | opts1 - should by days"
+                // ChartConfig={opts1}
+                />
+                <CustomBarMetric
+                    DatasetConfig={config2}
+                    ChartTitle="3:2 | opts1 - should be month"
+                // ChartConfig={opts1}
+                />
+            </article>
+        </>
+
+    )
+
+}
 
 export default function Page() {
     return (
         <>
             <PageHeaderContent />
+            <Chart3 />
             <Chart1 />
+            {/*
+             */}
             <Chart2 />
         </>
     )
