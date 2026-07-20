@@ -2,6 +2,7 @@
 // import { useState, Suspense, useEffect } from "react"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
+import { ChartOptions } from "chart.js"
 import { config } from "next/dist/build/templates/pages"
 // import { InputGroup, Form, Button } from "react-bootstrap"
 // import RepoListNamePicker from "@/app/components/input/RepositoryNamePicker"
@@ -38,18 +39,21 @@ function Chart1() {
 
                 <CustomBarMetric
                     DatasetConfig={chart3}
+                    ChartTitle="1:3"
+
                 />
                 <CustomBarMetric
                     DatasetConfig={chart1}
+                    ChartTitle="1:1"
                 />
                 <CustomBarMetric
                     DatasetConfig={chart2}
+                    ChartTitle="1:2"
                 />
             </article>
         </>
 
     )
-
 }
 function Chart2() {
     const config = [
@@ -66,6 +70,30 @@ function Chart2() {
             DatasetLabel: `LinesChanged`
         }
     ]
+
+    const opts1: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                stacked: false,
+                // stacked: true,
+                type: 'category',
+            },
+            y: {
+                stacked: true,
+            },
+        },
+    }
+    const opts2: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                stacked: true,
+                type: 'category',
+            },
+            y: {
+                stacked: true,
+            },
+        },
+    }
     return (
 
         <>
@@ -74,6 +102,13 @@ function Chart2() {
 
                 <CustomBarMetric
                     DatasetConfig={config}
+                    ChartTitle="2:2 | opts2"
+                    ChartConfig={opts2}
+                />
+                <CustomBarMetric
+                    DatasetConfig={config}
+                    ChartTitle="2:1 | opts1"
+                    ChartConfig={opts1}
                 />
             </article>
         </>
@@ -86,7 +121,7 @@ export default function Page() {
     return (
         <>
             <PageHeaderContent />
-            <Chart1 />
+            {/* <Chart1 /> */}
             <Chart2 />
         </>
     )

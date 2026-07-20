@@ -66,7 +66,11 @@ export function TransformedMetricData(
     apiResponses: CommitMetricItem[] | CommitMetricItem[][],
     datasetConfigs: DatasetConfig | DatasetConfig[],
     chartTitle?: string,
-): { data: ChartData<'bar'>, options: ChartOptions<'bar'> } {
+    chartOptions?: ChartOptions<'bar'>,
+): {
+    data: ChartData<'bar'>,
+    options: ChartOptions<'bar'>
+} {
     /**
      * @summary transforms API response(s) into chart data with per-dataset axis configuration
      * @param apiResponses - single array or array of arrays (one per config)
@@ -145,7 +149,8 @@ export function TransformedMetricData(
                     }
                 }
             }
-        }
+        },
+        ...chartOptions,
     }
 
     return { data, options }
@@ -153,9 +158,11 @@ export function TransformedMetricData(
 
 export function CustomBarMetric({
     DatasetConfig,
-    ChartTitle
+    ChartConfig,
+    ChartTitle,
 }: {
     DatasetConfig: DatasetConfig | DatasetConfig[],
+        ChartConfig?: ChartOptions<'bar'>,
     ChartTitle?: string,
 }) {
     /**
@@ -198,7 +205,7 @@ export function CustomBarMetric({
 
                 if (isMounted) {
                     const { data: transformedData, options: transformedOptions } =
-                        TransformedMetricData(responses, configsArray, ChartTitle)
+                        TransformedMetricData(responses, configsArray, ChartTitle, ChartConfig)
 
                     console.group(logPrefix)
                     console.log(`${logPrefix} requesting ${configsArray.length} dataset(s)`)
