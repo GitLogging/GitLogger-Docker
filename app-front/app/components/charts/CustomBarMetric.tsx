@@ -79,59 +79,29 @@ export function TransformedMetricData(
     const configsArray = Array.isArray(datasetConfigs) ? datasetConfigs : [datasetConfigs]
     const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
 
-    // First pass: collect all unique X-axis keys from all datasets
-    const allXKeys = new Set<string>()
-    const allAggregatedDataByConfig: Map<number, Map<string, number>> = new Map()
+    // Store raw data for each config
+    const allAggregatedDataByConfig: Map<number, CommitMetricItem[]> = new Map()
 
     configsArray.forEach((config, index) => {
         const apiResponse = responsesArray[index] || []
-        const xAxisKey = config.XAxisKey
-        const yAxisKey = config.YAxisKey
 
-        // Sort by X-axis key
-        const sortedData = [...apiResponse].sort((a, b) => {
-            const aVal = (a as any)[xAxisKey]
-            const bVal = (b as any)[xAxisKey]
-
-            if (typeof aVal === 'string' && typeof bVal === 'string') {
-                return new Date(aVal).getTime() - new Date(bVal).getTime()
-            }
-            return 0
-        })
-
-        // Aggregate by X-axis key
-        const aggregatedByXKey = new Map<string, number>()
-        sortedData.forEach(item => {
-            const xKeyValue = String((item as any)[xAxisKey])
-            const yValue = (item as any)[yAxisKey] || 0
-            aggregatedByXKey.set(xKeyValue, (aggregatedByXKey.get(xKeyValue) || 0) + yValue)
-            allXKeys.add(xKeyValue)
-        })
-
-        allAggregatedDataByConfig.set(index, aggregatedByXKey)
+        // Keep raw data without aggregation
+        allAggregatedDataByConfig.set(index, apiResponse)
     })
 
-    // Sort all X-axis keys chronologically
-    const sortedXKeys = Array.from(allXKeys).sort((a, b) => {
-        const dateA = new Date(a)
-        const dateB = new Date(b)
-        return dateA.getTime() - dateB.getTime()
-    })
+    // Get the axis keys from first config to use in parsing
+    const firstConfig = configsArray[0]
+    const xAxisKeyName = firstConfig.XAxisKey
+    const yAxisKeyName = firstConfig.YAxisKey
 
-    // Build datasets for each config, normalizing data to consistent structure
+    // Build datasets for each config
     const datasets = configsArray.map((config, index) => {
-        const aggregatedByXKey = allAggregatedDataByConfig.get(index) || new Map()
-
-        // Create data array with normalized properties (xValue, yValue)
-        const alignedData = sortedXKeys.map(xKey => ({
-            xValue: xKey,
-            yValue: aggregatedByXKey.get(xKey) || 0,
-        }))
+        const rawData = (allAggregatedDataByConfig.get(index) || []) as CommitMetricItem[]
 
         const colors = defaultDatasetColors[index % defaultDatasetColors.length]
         return {
             label: config.DatasetLabel,
-            data: alignedData,
+            data: rawData,
             borderWidth: 2,
             backgroundColor: colors.backgroundColor,
             borderColor: colors.borderColor,
@@ -139,15 +109,14 @@ export function TransformedMetricData(
     })
 
     const data: ChartData<'bar'> = {
-        labels: sortedXKeys,
         datasets: datasets,
     }
-    console.log('🐒 CustomBarMetric:', { datasets, sortedXKeys })
+    console.log('🐒 CustomBarMetric:', { datasets, configsArray })
 
     const options: ChartOptions<'bar'> = {
         parsing: {
-            xAxisKey: 'xValue',
-            yAxisKey: 'yValue'
+            xAxisKey: xAxisKeyName,
+            yAxisKey: yAxisKeyName
         },
         scales: {
             x: {
