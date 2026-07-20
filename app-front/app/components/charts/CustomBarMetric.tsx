@@ -121,11 +121,12 @@ export function TransformedMetricData(
     }
     console.log('🐒 CustomBarMetric:', { datasets, configsArray })
 
-    const options: ChartOptions<'bar'> = {
+    const baseOptions: ChartOptions<'bar'> = {
         parsing: {
             xAxisKey: xAxisKeyName,
             yAxisKey: yAxisKeyName
         },
+        /* note: type == 'category' and stacked, only works on string fields */
         scales: {
             x: {
                 stacked: true,
@@ -154,7 +155,16 @@ export function TransformedMetricData(
                 }
             }
         },
+    }
+
+    // Deep merge scales to preserve both x and y axis configs
+    const options: ChartOptions<'bar'> = {
+        ...baseOptions,
         ...chartOptions,
+        scales: {
+            ...baseOptions.scales,
+            ...(chartOptions?.scales || {}),
+        }
     }
 
     return { data, options }

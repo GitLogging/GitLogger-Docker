@@ -121,8 +121,7 @@ function Chart3() {
     const config1 = [
         {
             RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day`,
-            XAxisKey: `CommitDate`,
-            // XAxisKey: `DateDisplay`,
+            XAxisKey: `DateDisplay`,  // Use DateDisplay instead of CommitDate
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
         },
@@ -136,7 +135,7 @@ function Chart3() {
     const config2 = [
         {
             RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month`,
-            XAxisKey: `CommitDate`,
+            XAxisKey: `DateDisplay`,  // Use DateDisplay instead of CommitDate
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
         },
@@ -165,10 +164,13 @@ function Chart3() {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'yyyy-MM-dd', // Defines how to read your input keys
-                    unit: 'day',          // Forces gridlines/labels to day intervals
+                    parser: 'yyyy-MM-dd',  // DateDisplay is in this format
+                    unit: 'day',
                     displayFormats: {
-                        day: 'yyyy-MM-dd'   // Defines how the label looks on the axis
+                        day: 'yyyy-MM-dd'
+                    },
+                    ticks: {
+                        maxTicksLimit: 20
                     }
                 }
             }
@@ -179,10 +181,13 @@ function Chart3() {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'yyyy-MM-dd', // Defines how to read your input keys
-                    unit: 'month',          // Forces gridlines/labels to day intervals
+                    parser: 'yyyy-MM-dd',  // DateDisplay is in this format
+                    unit: 'month',
                     displayFormats: {
-                        month: 'MMM yyyy'   // Defines how the label looks on the axis
+                        month: 'MMM yyyy'
+                    },
+                    ticks: {
+                        maxTicksLimit: 12
                     }
                 }
             }
