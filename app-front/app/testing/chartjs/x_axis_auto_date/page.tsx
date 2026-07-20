@@ -121,7 +121,7 @@ export default function Page() {
     return (
         <>
             <PageHeaderContent />
-            {/* <Chart1 /> */}
+            <Chart1 />
             <Chart2 />
         </>
     )

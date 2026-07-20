@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Bar } from "react-chartjs-2"
 import { Chart as ChartJS, BarElement, LineElement, CategoryScale, PointElement, LinearScale, Title, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js'
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
+import Button from "react-bootstrap/esm/Button"
 
 /**
  * @summary CustomBarMetric supports per-dataset configuration for flexible axis mapping
@@ -156,6 +157,16 @@ export function TransformedMetricData(
     return { data, options }
 }
 
+function BarDebugButtons({ chartOptions }: { chartOptions: ChartOptions<'bar'> | null }) {
+    return (<>
+        <Button variant="secondary" onClick={() => {
+            console.log(`🤖 Current ChartOptions:`, chartOptions)
+            chartOptions?.plugins?.legend?.title && (chartOptions.plugins.legend.title.text = 'new title')
+        }}>JSON</Button>
+    </>)
+}
+
+
 export function CustomBarMetric({
     DatasetConfig,
     ChartConfig,
@@ -170,6 +181,7 @@ export function CustomBarMetric({
      * Each dataset can have different RequestUrl, XAxisKey, YAxisKey, and label
      * Displays loading state, errors, and supports multiple concurrent requests
      */
+    const enableDebugButtons = true
 
     const logPrefix = "<CustomBarMetric>:"
     const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null)
@@ -241,7 +253,7 @@ export function CustomBarMetric({
         return () => {
             isMounted = false
         }
-    }, [DatasetConfig, ChartTitle])
+    }, [DatasetConfig, ChartTitle]) // verify: are these no longer right
 
     if (isLoading) {
         return (<><h3>Loading Metric...</h3></>)
@@ -256,7 +268,6 @@ export function CustomBarMetric({
     }
 
     const chartElem = <Bar data={chartData} options={chartOptions} />
-
     return (
         <>
             <section className="chart__with__details">
@@ -264,12 +275,13 @@ export function CustomBarMetric({
                 <div>
                     {requestUrls.map((url, index) => (
                         <ResponseDetailsPopoverButton
-                            ButtonLabel={index}
+                            ButtonLabel={index.toString()}
                             key={index}
                             RequestUrl={url}
                             DisplayJson={detailsJson}
                         />
                     ))}
+                    {enableDebugButtons && <BarDebugButtons chartOptions={chartOptions} />}
 
                 </div>
             </section>
