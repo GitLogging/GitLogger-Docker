@@ -246,7 +246,7 @@ function Chart4() {
     const config1 = [
         {
             // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=4.months&period=day`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=1.months&period=day`,
             XAxisKey: `CommitDate`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount: GitServed`

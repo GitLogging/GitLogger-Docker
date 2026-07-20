@@ -24,6 +24,47 @@ export interface DatasetConfig {
     XAxisKey?: string
     YAxisKey?: string
     DatasetLabel?: string
+    GitUserName?: string  // Optional: if set, filters data to only this user's records
+}
+
+/**
+ * @summary Splits a single DatasetConfig into multiple configs, one per unique GitUserName
+ * @param config - The original dataset config with a RequestUrl
+ * @returns An array of DatasetConfig objects, each with a unique GitUserName as the DatasetLabel
+ * @example
+ * const configs = await splitDatasetConfigByUser(myConfig)
+ * // Returns: [
+ * //   { ...config, DatasetLabel: 'user1', GitUserName: 'user1' },
+ * //   { ...config, DatasetLabel: 'user2', GitUserName: 'user2' },
+ * // ]
+ */
+export async function splitDatasetConfigByUser(config: DatasetConfig): Promise<DatasetConfig[]> {
+    try {
+        const response = await fetch(config.RequestUrl)
+        if (!response.ok) {
+            console.warn(`Failed to fetch ${config.RequestUrl}: ${response.status}`)
+            return [config]
+        }
+
+        const data: CommitMetricItem[] = await response.json()
+
+        // Extract unique GitUserName values while preserving order
+        const userNames = Array.from(
+            new Map(data.map(item => [item.GitUserName, item])).keys()
+        )
+
+        // Create a new config for each unique user, storing the user name for filtering
+        const splitConfigs: DatasetConfig[] = userNames.map(userName => ({
+            ...config,
+            DatasetLabel: userName,
+            GitUserName: userName  // Store user name for data filtering
+        }))
+
+        return splitConfigs
+    } catch (error) {
+        console.error(`Error splitting dataset config: ${error}`)
+        return [config]
+    }
 }
 
 function parseRequestUrl(url: string): { name?: string; since?: string; owner?: string; repo?: string; metric?: string } {
@@ -87,11 +128,16 @@ export function TransformedMetricData(
     const configsArray = Array.isArray(datasetConfigs) ? datasetConfigs : [datasetConfigs]
     const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
 
-    // Store raw data for each config
+    // Store raw data for each config, filtering by GitUserName if specified
     const allAggregatedDataByConfig: Map<number, CommitMetricItem[]> = new Map()
 
     configsArray.forEach((config, index) => {
-        const apiResponse = responsesArray[index] || []
+        let apiResponse = responsesArray[index] || []
+
+        // Filter by GitUserName if specified in the config
+        if (config.GitUserName) {
+            apiResponse = apiResponse.filter(item => item.GitUserName === config.GitUserName)
+        }
 
         // Keep raw data without aggregation
         allAggregatedDataByConfig.set(index, apiResponse)
@@ -248,7 +294,20 @@ export function CustomBarMetric({
                 setErrorMessage(null)
 
                 // Normalize DatasetConfig to array
-                const configsArray = Array.isArray(DatasetConfig) ? DatasetConfig : [DatasetConfig]
+                let configsArray = Array.isArray(DatasetConfig) ? DatasetConfig : [DatasetConfig]
+
+                // Auto-split by unique GitUserName if enabled
+                if (usingAutoSplitDatasets) {
+                    const splitConfigs: DatasetConfig[] = []
+                    for (const config of configsArray) {
+                        const split = await splitDatasetConfigByUser(config)
+                        splitConfigs.push(...split)
+                    }
+                    configsArray = splitConfigs
+
+                    console.log(`${logPrefix} auto-split into ${configsArray.length} configs by GitUserName`)
+                }
+
                 setRequestUrls(configsArray.map(c => c.RequestUrl))
 
                 // Fetch all URLs in parallel
@@ -301,7 +360,7 @@ export function CustomBarMetric({
         return () => {
             isMounted = false
         }
-    }, [DatasetConfig, ChartTitle]) // verify: are these no longer right
+    }, [DatasetConfig, ChartTitle, usingAutoSplitDatasets]) // re-run if auto-split setting changes
 
     if (isLoading) {
         return (<><h3>Loading Metric...</h3></>)
