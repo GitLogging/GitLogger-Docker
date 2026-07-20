@@ -246,7 +246,7 @@ function Chart4() {
     const config1 = [
         {
             // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=day`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=4.months&period=day`,
             XAxisKey: `CommitDate`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount: GitServed`
@@ -341,6 +341,9 @@ function Chart4() {
                     DatasetConfig={config1}
                     ChartTitle="4:1:A | axisPerDay"
                     ChartConfig={axisPerDay}
+                    Options={{
+                        AutoSplitDatasets: true,
+                    }}
                 // ChartConfig={opts1}
                 />
             </article>

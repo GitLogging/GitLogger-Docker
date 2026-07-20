@@ -216,10 +216,12 @@ export function CustomBarMetric({
     DatasetConfig,
     ChartConfig,
     ChartTitle,
+    Options
 }: {
     DatasetConfig: DatasetConfig | DatasetConfig[],
         ChartConfig?: ChartOptions<'bar'>,
     ChartTitle?: string,
+        Options?: any // is object
 }) {
     /**
      * @summary A customizable bar chart component that supports per-dataset configuration
@@ -227,6 +229,7 @@ export function CustomBarMetric({
      * Displays loading state, errors, and supports multiple concurrent requests
      */
     const enableDebugButtons = true // toggle showing extra debug buttons for chart
+    const usingAutoSplitDatasets = Options?.AutoSplitDatasets || false // toggle auto-splitting datasets based on unique XAxisKey values
 
     const logPrefix = "<CustomBarMetric>:"
     const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null)
