@@ -157,12 +157,44 @@ export function TransformedMetricData(
     return { data, options }
 }
 
-function BarDebugButtons({ chartOptions }: { chartOptions: ChartOptions<'bar'> | null }) {
+function BarDebugButtons({
+    chartOptions,
+    setChartOptions
+}: {
+    chartOptions: ChartOptions<'bar'> | null,
+    setChartOptions: (options: ChartOptions<'bar'>) => void
+}) {
+    /**
+     * @summary attached to a <CustomBarMetric> component to provide debug buttons for toggling chart options
+     * @see CustomBarMetric for usage
+     *
+     */
+    const handleUpdateChartDataCommand = () => {
+        /**
+         * toggles ChartOptions.scales.x.stacked between true and false
+         */
+        console.group(`🤖 Updated ChartOptions:`)
+        if (!chartOptions) { console.groupEnd(); return }
+
+        const newOptions = { ...chartOptions }
+        // toggles boolean if existing
+        if (newOptions?.scales?.x?.stacked !== undefined) {
+            newOptions.scales!.x!.stacked = !newOptions.scales!.x!.stacked
+        }
+        console.log(newOptions)
+        console.groupEnd()
+        setChartOptions(newOptions)
+    }
+
+    // do not render the button if the property is undeclared (rather than when falsy)
+    if (chartOptions?.scales?.x?.stacked === undefined) {
+        return (<></>)
+    }
+
     return (<>
-        <Button variant="secondary" onClick={() => {
-            console.log(`🤖 Current ChartOptions:`, chartOptions)
-            chartOptions?.plugins?.legend?.title && (chartOptions.plugins.legend.title.text = 'new title')
-        }}>JSON</Button>
+        <Button variant="secondary" onClick={handleUpdateChartDataCommand}>
+            StackX
+        </Button>
     </>)
 }
 
@@ -181,7 +213,7 @@ export function CustomBarMetric({
      * Each dataset can have different RequestUrl, XAxisKey, YAxisKey, and label
      * Displays loading state, errors, and supports multiple concurrent requests
      */
-    const enableDebugButtons = true
+    const enableDebugButtons = true // toggle showing extra debug buttons for chart
 
     const logPrefix = "<CustomBarMetric>:"
     const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null)
@@ -268,6 +300,9 @@ export function CustomBarMetric({
     }
 
     const chartElem = <Bar data={chartData} options={chartOptions} />
+    const debugBarElems = (
+        <BarDebugButtons chartOptions={chartOptions} setChartOptions={setChartOptions} />
+    )
     return (
         <>
             <section className="chart__with__details">
@@ -281,7 +316,7 @@ export function CustomBarMetric({
                             DisplayJson={detailsJson}
                         />
                     ))}
-                    {enableDebugButtons && <BarDebugButtons chartOptions={chartOptions} />}
+                    {enableDebugButtons && debugBarElems}
 
                 </div>
             </section>

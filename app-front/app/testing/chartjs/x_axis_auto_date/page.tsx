@@ -22,7 +22,7 @@ function Chart1() {
 
     const chart2 = [
         {
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=week`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
             XAxisKey: `CommitDate`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
