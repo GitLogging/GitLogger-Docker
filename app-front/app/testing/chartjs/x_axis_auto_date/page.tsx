@@ -121,7 +121,7 @@ function Chart3() {
     const config1 = [
         {
             RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day`,
-            XAxisKey: `DateDisplay`,  // Use DateDisplay instead of CommitDate
+            XAxisKey: `CommitDate`,
             YAxisKey: `CommitCount`,
             DatasetLabel: `CommitCount`
         },
@@ -164,7 +164,7 @@ function Chart3() {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'yyyy-MM-dd',  // DateDisplay is in this format
+                    parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
                     unit: 'day',
                     displayFormats: {
                         day: 'yyyy-MM-dd'
@@ -181,7 +181,7 @@ function Chart3() {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'yyyy-MM-dd',  // DateDisplay is in this format
+                    parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
                     unit: 'month',
                     displayFormats: {
                         month: 'MMM yyyy'
@@ -242,11 +242,119 @@ function Chart3() {
     )
 
 }
+function Chart4() {
+    const config1 = [
+        {
+            // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=day`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `CommitCount: GitServed`
+        },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/TinyBits&since=12.months&period=day`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `CommitCount`,
+        //     DatasetLabel: `CommitCount`
+        // },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `LinesChanged`,
+        //     DatasetLabel: `LinesChanged`
+        // }
+    ]
+    // const config2 = [
+    //     {
+    //         RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month`,
+    //         XAxisKey: `CommitDate`,
+    //         YAxisKey: `CommitCount`,
+    //         DatasetLabel: `CommitCount`
+    //     },
+    //     // {
+    //     //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+    //     //     XAxisKey: `CommitDate`,
+    //     //     YAxisKey: `LinesChanged`,
+    //     //     DatasetLabel: `LinesChanged`
+    //     // }
+    // ]
+
+    // const opts1: ChartOptions<'bar'> = {
+    //     scales: {
+    //         x: {
+    //             stacked: false,
+    //             // stacked: true,
+    //             type: 'category',
+    //         },
+    //         y: {
+    //             stacked: true,
+    //         },
+    //     },
+    // }
+    const axisPerDay: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+                    unit: 'day',
+                    displayFormats: {
+                        day: 'yyyy-MM-dd'
+                    },
+                    ticks: {
+                        maxTicksLimit: 20
+                    }
+                }
+            }
+        }
+    }
+    const axisPerMonth: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+                    unit: 'month',
+                    displayFormats: {
+                        month: 'MMM yyyy'
+                    },
+                    ticks: {
+                        maxTicksLimit: 12
+                    }
+                }
+            }
+        }
+    }
+
+    return (
+
+        <>
+            <article>
+
+                <h3>multiple datasets on one axis</h3>
+                {/* <CustomBarMetric
+                    DatasetConfig={config}
+                    ChartTitle="2:2 | opts2"
+                    ChartConfig={opts2}
+                /> */}
+                <CustomBarMetric
+                    DatasetConfig={config1}
+                    ChartTitle="4:1:A | axisPerDay"
+                    ChartConfig={axisPerDay}
+                // ChartConfig={opts1}
+                />
+            </article>
+        </>
+
+    )
+
+}
 
 export default function Page() {
     return (
         <>
             <PageHeaderContent />
+            <Chart4 />
             <Chart3 />
             {/* <Chart1 /> */}
             {/*
