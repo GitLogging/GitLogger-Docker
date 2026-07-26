@@ -352,11 +352,132 @@ function Chart4() {
     )
 
 }
+function Chart5() {
+    // "http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=month",
+    //             "http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months&period=month",
+    const config1 = [
+        {
+            // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=junegunn/fzf&since=12.months&period=month`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `Fzf`
+        },
+        {
+            // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
+            RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=BurntSushi/ripgrep&since=12.months&period=month`,
+            XAxisKey: `CommitDate`,
+            YAxisKey: `CommitCount`,
+            DatasetLabel: `Ripgrep`
+        },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/TinyBits&since=12.months&period=day`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `CommitCount`,
+        //     DatasetLabel: `CommitCount`
+        // },
+        // {
+        //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+        //     XAxisKey: `CommitDate`,
+        //     YAxisKey: `LinesChanged`,
+        //     DatasetLabel: `LinesChanged`
+        // }
+    ]
+    // const config2 = [
+    //     {
+    //         RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month`,
+    //         XAxisKey: `CommitDate`,
+    //         YAxisKey: `CommitCount`,
+    //         DatasetLabel: `CommitCount`
+    //     },
+    //     // {
+    //     //     RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=month`,
+    //     //     XAxisKey: `CommitDate`,
+    //     //     YAxisKey: `LinesChanged`,
+    //     //     DatasetLabel: `LinesChanged`
+    //     // }
+    // ]
+
+    // const opts1: ChartOptions<'bar'> = {
+    //     scales: {
+    //         x: {
+    //             stacked: false,
+    //             // stacked: true,
+    //             type: 'category',
+    //         },
+    //         y: {
+    //             stacked: true,
+    //         },
+    //     },
+    // }
+    // const axisPerDay: ChartOptions<'bar'> = {
+    //     scales: {
+    //         x: {
+    //             type: 'time',
+    //             time: {
+    //                 parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+    //                 unit: 'day',
+    //                 displayFormats: {
+    //                     day: 'yyyy-MM-dd'
+    //                 },
+    //                 ticks: {
+    //                     maxTicksLimit: 20
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    const axisPerMonth: ChartOptions<'bar'> = {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    // parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+                    parser: "yyyy-MM-dd'T'HH:mm:ss",  // Matches CommitDate format with timezone
+                    unit: 'month',
+                    displayFormats: {
+                        month: 'MMM yyyy'
+                    },
+                    ticks: {
+                        maxTicksLimit: 12
+                    }
+                }
+            }
+        }
+    }
+
+    return (
+
+        <>
+            <article>
+
+                <h3>Fzf + Rg</h3>
+                {/* <CustomBarMetric
+                    DatasetConfig={config}
+                    ChartTitle="2:2 | opts2"
+                    ChartConfig={opts2}
+                /> */}
+                <CustomBarMetric
+                    DatasetConfig={config1}
+                    ChartTitle="4:1:A | axisPerMonth"
+                    ChartConfig={axisPerMonth}
+                    Options={{
+                        AutoSplitDatasets: false,
+                    }}
+                // ChartConfig={opts1}
+                />
+            </article>
+        </>
+
+    )
+
+}
 
 export default function Page() {
     return (
         <>
             <PageHeaderContent />
+            <Chart5 />
             <Chart4 />
             <Chart3 />
             {/* <Chart1 /> */}
