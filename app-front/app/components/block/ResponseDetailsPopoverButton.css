@@ -1,0 +1,6 @@
+/* tooltip shown used to display JSON source code */
+.popover-tooltip--show-json {
+    max-height: 80vh;
+    --bs-popover-max-width: 80vw;
+    overflow-y: auto;
+}

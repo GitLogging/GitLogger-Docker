@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
 import { ListGroup, ListGroupItem } from "react-bootstrap"
+import './ResponseDetailsPopoverButton.css'
 
 export function ResponseDetailsPopoverButton({
     RequestUrl, ButtonLabel, DisplayJson, children
@@ -32,12 +33,11 @@ export function ResponseDetailsPopoverButton({
         )
     }
 
+    // todo(clean):
     const popover = (
-        <Popover id="popover-basic"
-            style={{
-                // outline: '2px solid orange',
-                maxHeight: '80vh',
-            }}
+        // id="popover-basic"
+        <Popover
+            className="popover-tooltip--show-json"
         >
             <Popover.Header as="h3">Request:
                 <a href={RequestUrl} target="_blank" rel="noopener noreferrer">{abbrPathWithQuery}</a>
