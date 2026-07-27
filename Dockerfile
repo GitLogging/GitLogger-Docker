@@ -28,9 +28,10 @@ WORKDIR $APPDIR
 
 # Copy the actual code into the image
 COPY app-front /app
+COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
 
 EXPOSE 3001
 
 # Entrypoint runs when the container starts
-ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app/server-run.ps1"]
+ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]

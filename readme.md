@@ -2,6 +2,16 @@
 
 Front end for GitLogger site using React
 
+## quick docker build
+
+```ps1
+# build
+$ImageName = 'gitlogger-docker'; docker build -t $ImageName .
+
+# run
+docker run --interactive --tty --publish 127.0.0.1:3001:3001 $ImageName
+```
+
 ## How to Run
 
 ```ps1
