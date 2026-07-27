@@ -15,9 +15,8 @@ ENV InstallModule="ugit,pansies"
 
 # Now run the build script with mounts for your source code
 RUN --mount=type=bind,src=./app-gitserve,target=/app-gitserve \
-    --mount=type=bind,src=./app-front,target=/app-front
-    # \
-    # /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
+    --mount=type=bind,src=./app-front,target=/app-front \
+    /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
 
 # Set environment variables
 ENV PWSH_HOST=*
@@ -27,7 +26,7 @@ ENV APPDIR=/app-front
 WORKDIR $APPDIR
 
 # Copy the actual code into the image
-COPY app-front /app
+COPY app-front /app-front
 COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
 

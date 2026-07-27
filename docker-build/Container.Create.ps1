@@ -33,6 +33,12 @@ param(
 [switch]$KeepGit = $($env:KeepGit -match $true)
 )
 
+# Install-Module Pansies -Force -AllowClobber
+Install-module -Name 'ugit', 'pansies', 'classexplorer' -Force -AllowClobber
+
+'Done! 🐒' | Write-Host
+return
+
 # Copy all container-related scripts to the root of the container.
 Get-ChildItem -Path $PSScriptRoot |
     Where-Object Name -Match '^Container\..+?\.ps1$' |
