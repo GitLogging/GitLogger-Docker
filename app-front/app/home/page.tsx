@@ -4,6 +4,8 @@ import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import { BarMetric } from "@/app/components/charts/BarMetric"
 import { ChartOptions } from "chart.js"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
+import { useState } from "react"
+import { ButtonGroup, Dropdown, DropdownButton } from "react-bootstrap"
 // import { InputGroup, Form, Button } from "react-bootstrap"
 // import RepoListNamePicker from "@/app/components/input/RepositoryNamePicker"
 // import { RepoSummaryTable } from "@/app/components/block/RepositorySummaryTable"
@@ -66,6 +68,9 @@ function PageSummary() {
 
 }
 
+interface DateFnOption {
+    unit: 'day' | 'week' | 'month' | 'year'
+}
 function ShowTop5() {
     /**
      * $list_repos | sort NewestCommitDate -Descending | select -First 5
@@ -75,6 +80,8 @@ function ShowTop5() {
 
     const period = `day`
     const since = `2.months`
+    // const dateFnUnit_Slicer =
+    const [dateFnOption, setDateFnOption] = useState<DateFnOption['unit']>(`week`)
 
     const configTotal1 =
         yourTop5
@@ -92,9 +99,10 @@ function ShowTop5() {
                 stacked: true,
                 type: 'time',
                 time: {
-                    // parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
+                    // parser: "yyyy-MM-dd'T'HH:mm:ss",  // ISO 8601 with timezone offset (date-fns format)
                     parser: "yyyy-MM-dd",  // ISO 8601 with timezone offset (date-fns format)
-                    unit: 'week',
+                    // unit: 'week',
+                    unit: dateFnOption,
                     // unit: 'month',
                     displayFormats: {
                         day: 'yyyy-MM-dd',
@@ -127,6 +135,14 @@ function ShowTop5() {
                 // }}
                 // ChartConfig={opts1}
                 />
+                <ButtonGroup>
+                    <DropdownButton as={ButtonGroup} title="date-fn" id="bg-nested-dropdown">
+                        <Dropdown.Item onClick={(e) => { e.preventDefault(); setDateFnOption('day') }}>Day</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => { e.preventDefault(); setDateFnOption('week') }}>Week</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => { e.preventDefault(); setDateFnOption('month') }}>Month</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => { e.preventDefault(); setDateFnOption('year') }}>Year</Dropdown.Item>
+                    </DropdownButton>
+                </ButtonGroup>
             </article>
         </>
 
