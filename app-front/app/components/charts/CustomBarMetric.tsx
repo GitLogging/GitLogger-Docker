@@ -196,7 +196,9 @@ export function TransformedMetricData(
                     label: (context) => {
                         const config = configsArray[context.datasetIndex]
                         const dataPoint = context.raw as any
-                        return `${config.DatasetLabel}: ${dataPoint.yValue}`
+                        const yAxisKey = config.YAxisKey || yAxisKeyName
+                        const displayValue = yAxisKey ? dataPoint[yAxisKey] : dataPoint.yValue
+                        return `${config.DatasetLabel}: ${displayValue} ${yAxisKey}`
                     }
                 }
             }
