@@ -54,7 +54,7 @@ export function ResponseDetailsPopoverButton({
 
     return (
         <>
-            <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+            <OverlayTrigger trigger="click" placement="right" overlay={popover} >
                 <Button variant="success">{ButtonLabel ?? 'View'}</Button>
             </OverlayTrigger>
         </>
