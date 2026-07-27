@@ -70,77 +70,32 @@ function ShowTop5() {
     /**
      * $list_repos | sort NewestCommitDate -Descending | select -First 5
      */
-    const configTotal1 = [
-        {
-            // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=BurntSushi/ripgrep&period=day&since=5.months`,
-            XAxisKey: `XAxisKey`,
-            YAxisKey: `TotalCommits`,
-            DatasetLabel: `RipGrep`
-        },
-        {
-            // RequestUrl: `http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=day`,
-            RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=junegunn/fzf&period=day&since=5.months`,
-            XAxisKey: `XAxisKey`,
-            YAxisKey: `TotalCommits`,
-            DatasetLabel: `Fzf`
-        },
-    ]
 
-    // const opts1: ChartOptions<'bar'> = {
-    //     scales: {
-    //         x: {
-    //             stacked: false,
-    //             // stacked: true,
-    //             type: 'category',
-    //         },
-    //         y: {
-    //             stacked: true,
-    //         },
-    //     },
-    // }
-    // const axisPerDay: ChartOptions<'bar'> = {
-    //     scales: {
-    //         x: {
-    //             type: 'time',
-    //             time: {
-    //                 parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
-    //                 unit: 'day',
-    //                 displayFormats: {
-    //                     day: 'yyyy-MM-dd'
-    //                 },
-    //                 ticks: {
-    //                     maxTicksLimit: 20
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // const axisPerMonth: ChartOptions<'bar'> = {
-    //     scales: {
-    //         x: {
-    //             type: 'time',
-    //             time: {
-    //                 parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
-    //                 unit: 'month',
-    //                 displayFormats: {
-    //                     month: 'MMM yyyy'
-    //                 },
-    //                 // ticks: {
-    //                 //     maxTicksLimit: 12
-    //                 // }
-    //             }
-    //         }
-    //     }
-    // }
-    const axisPerDay: ChartOptions<'bar'> = {
+    const yourTop5 = ['ninmonkey/GitServed', 'junegunn/fzf', 'microsoft/vscode', 'powershell/powershelleditorservices', 'burntsushi/ripgrep']
+
+    const period = `day`
+    const since = `2.months`
+
+    const configTotal1 =
+        yourTop5
+            // .slice(0, 3)
+            .map(repo => ({
+                RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repo}&period=${period}&since=${since}`,
+            XAxisKey: `XAxisKey`,
+            YAxisKey: `TotalCommits`,
+                DatasetLabel: repo.split('/')[1],
+            }))
+
+    const axisPerWeek: ChartOptions<'bar'> = {
         scales: {
             x: {
+                stacked: true,
                 type: 'time',
                 time: {
                     // parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
                     parser: "yyyy-MM-dd",  // ISO 8601 with timezone offset (date-fns format)
-                    unit: 'day',
+                    unit: 'week',
+                    // unit: 'month',
                     displayFormats: {
                         day: 'yyyy-MM-dd',
                         // year: 'yyyy',
@@ -149,8 +104,6 @@ function ShowTop5() {
             },
 
         },
-
-
     }
 
     return (
@@ -163,11 +116,11 @@ function ShowTop5() {
                     DatasetConfig={configTotal1}
                     ChartTitle="6:1:A | totalCommits"
                 />
-                <h3>date-fn date axis</h3>
+                <h3>Your top 5 (using <strong>date-fn</strong> per <strong>week</strong>)</h3>
                 <CustomBarMetric
                     DatasetConfig={configTotal1}
                     ChartTitle="6:1:B | totalCommits"
-                    ChartConfig={axisPerDay}
+                    ChartConfig={axisPerWeek}
                 // ChartConfig={axisPerMonth}
                 // Options={{
                 //     AutoSplitDatasets: false,
