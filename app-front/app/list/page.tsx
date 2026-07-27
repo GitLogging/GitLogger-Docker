@@ -97,9 +97,11 @@ export default function ListPage() {
                 </section>
 
             </article>
-            <article>
-                {PageSummary()}
-            </article>
+            {false &&
+                <article>
+                    {PageSummary()}
+                </article>
+            }
 
 
         </>

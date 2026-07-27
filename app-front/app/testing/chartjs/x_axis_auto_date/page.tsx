@@ -164,7 +164,7 @@ function Chart3() {
             x: {
                 type: 'time',
                 time: {
-                    parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+                    parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
                     unit: 'day',
                     displayFormats: {
                         day: 'yyyy-MM-dd'
@@ -415,7 +415,7 @@ function Chart5() {
     //         x: {
     //             type: 'time',
     //             time: {
-    //                 parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
+    //                 parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
     //                 unit: 'day',
     //                 displayFormats: {
     //                     day: 'yyyy-MM-dd'
@@ -432,8 +432,7 @@ function Chart5() {
             x: {
                 type: 'time',
                 time: {
-                    // parser: "yyyy-MM-dd'T'HH:mm:ssXXX",  // Matches CommitDate format with timezone
-                    parser: "yyyy-MM-dd'T'HH:mm:ss",  // Matches CommitDate format with timezone
+                    parser: "yyyy-MM-dd'T'HH:mm:ssxxx",  // ISO 8601 with timezone offset (date-fns format)
                     unit: 'month',
                     displayFormats: {
                         month: 'MMM yyyy'
