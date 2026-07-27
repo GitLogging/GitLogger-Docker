@@ -114,12 +114,12 @@ function ShowTop5() {
                 <h3>Your Top 5</h3>
                 <CustomBarMetric
                     DatasetConfig={configTotal1}
-                    ChartTitle="6:1:A | totalCommits"
+                    ChartTitle="Your Top 5 | totalCommits"
                 />
                 <h3>Your top 5 (using <strong>date-fn</strong> per <strong>week</strong>)</h3>
                 <CustomBarMetric
                     DatasetConfig={configTotal1}
-                    ChartTitle="6:1:B | totalCommits"
+                    ChartTitle="Your Top 5 | totalCommits (date-fn per week)"
                     ChartConfig={axisPerWeek}
                 // ChartConfig={axisPerMonth}
                 // Options={{
