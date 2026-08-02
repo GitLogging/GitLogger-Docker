@@ -1,14 +1,8 @@
 "use client"
-// import { useState, Suspense, useEffect } from "react"
-import type { ChartOptions } from "chart.js"
 import { useMemo, useState } from "react"
 import { ButtonGroup, Dropdown, DropdownButton } from "react-bootstrap"
-import { BarMetric } from "@/app/components/charts/BarMetric"
-import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-import { DefaultDeserializer } from "v8"
-import { Line } from "react-chartjs-2"
 
 interface DateFnOptionTesting {
     unit: "day" | "week" | "month" | "year"
