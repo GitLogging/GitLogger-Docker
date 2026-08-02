@@ -11,6 +11,99 @@
             "editor.formatOnSave": true,
             "editor.formatOnSaveMode": "modificationsIfAvailable"
         },
-        /* #regionend code formatting */
+        /*
+
+        #regionend code formatting */
+        /* #region llm permissions
+
+        about: started 2026-08-02. Testing optional inclusion/exclusion lists
+
+        [tip!]: you can type a partial name like "chat" then "<ctrl+Spacebar> to **fuzzy find** these settings without knowing the exact names
+
+        more settings to disable: ( using glob syntax. '.' means a literal '.' )
+
+            *.agent.*.enable
+            *agentHost*
+            *.copilot.*.enable
+            chat.*.enable
+            chat.*.mcp
+
+
+        specific names:
+
+            chat.agent.networkFilter
+            chat.agentHost.agentDebugLog.enabled
+
+        */
+
+        "chat.disableAIFeatures": false,
+        // "chat.tools.edits.autoApprove": {
+            // #region auto approval filepaths
+                // "**/*": true,
+            // #regionend auto approval filepaths
+
+            // #region auto deny filepaths
+                // "**/.vscode/*.json": false,
+                // "**/.git/**": false,
+                // "**/{package.json,server.xml,build.rs,web.config,.gitattributes,.env,Cargo.toml}": false,
+                // "**/*.{code-workspace,csproj,fsproj,vbproj,vcxproj,proj,targets,props,gradle,gradle.kts}": false,
+                // // "**/gradle.properties": false,
+                // // "**/ruby_lsp/*/addon": false,
+                // // "**/*.lock": false,
+                // // "**/*-lock.{yaml,json}": false
+            // #regionend auto deny filepaths
+        // }
+        /*
+
+        */
+        "chat.tools.terminal.enableAutoApprove": true, /* ex: <https://r-vm.com/automating-my-git-workflow-vscode-copilot-chat-terminal-auto-approval.html> */
+        /* #region auto approval urls */
+        "chat.tools.urls.autoApprove": {
+            "http://127.0.0.1:3001/*": true, // the default GitServe API hostname
+            "http://127.0.0.1:3000/*": true, // the default GitLoggerApp hostname
+            "https://code.visualstudio.com": true,
+            "https://github.com/microsoft/vscode/wiki/*": true
+        },
+        /*
+
+        #regionend auto approval urls
+
+        */
+        // "chat.autopilot.advanced.enabled": false,
+        "chat.tools.terminal.autoApprove": {
+            /* #region terminal allow list */
+            "/^Set-Location .*$/": {
+                /* warning: this only ensures this command is the first in an expression. Not whether the rest is safe, or, even executions this command */
+                "approve": true,
+                "matchCommandLine": true
+            },
+            /* #regionend terminal allow list */
+            /* #region terminal deny list */
+            "/^(rm|rmdir|del|kill|curl|wget|eval|chmod|chown|Remove-Item)\\s+/": {
+                "approve": false,
+                "matchCommandLine": true
+            },
+            /* #regionend terminal deny list */
+        },
+        // "github.copilot.chat.agent.terminal.allowList": {
+        //     "git": true,
+        //     "echo": true,
+        //     "cd": true,
+        //     "ls": true,
+        //     "cat": true,
+        //     "pwd": true,
+        //     "dir": true,
+        //     "Write-Host": true,
+        //     "Set-Location": true,
+        //     "Get-ChildItem": true,
+        //     "Get-Content": true,
+        //     "Get-Location": true,
+        //     "less": true,
+        //     "more": true,
+        //     "python3": true
+        // },
+        /*
+        #endregion llm permissions
+        */
     }
 }
