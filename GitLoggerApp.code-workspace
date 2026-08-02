@@ -1,14 +1,16 @@
 {
     "folders": [
         {
-            "path": "." // 2026-07.
+            "path": "." // 2026-08: app root
         }
     ],
     "settings": {
+        /* #region code formatting */
         "[typescript][typescriptreact][javascript][javascriptreact]": {
             "editor.fontSize": 16,
             "editor.formatOnSave": true,
             "editor.formatOnSaveMode": "modificationsIfAvailable"
         },
+        /* #regionend code formatting */
     }
 }
