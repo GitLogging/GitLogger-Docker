@@ -190,7 +190,13 @@ export function TransformedMetricData(
     },
     scales: {
       x: {
-        type: "category",
+        type: "time",
+        time: {
+          unit: "day",
+          displayFormats: {
+            day: "yyyy-MM-dd",
+          },
+        },
       },
       y: {},
     },
