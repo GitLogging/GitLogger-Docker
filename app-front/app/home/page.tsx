@@ -139,7 +139,7 @@ function ShowTop5() {
         <ButtonGroup>
           <DropdownButton
             as={ButtonGroup}
-            title="date-fn"
+            title={"date-fn: " + dateFnOption}
             id="bg-nested-dropdown"
           >
             <Dropdown.Item
