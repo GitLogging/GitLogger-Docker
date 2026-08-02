@@ -348,7 +348,6 @@ export const CustomBarMetric = memo(function CustomBarMetric({
   );
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [detailsJson, setDetailsJson] = useState("");
   const [requestUrls, setRequestUrls] = useState<string[]>([]);
   const [resolvedConfigs, setResolvedConfigs] = useState<
     DatasetConfig[] | null
@@ -459,7 +458,6 @@ export const CustomBarMetric = memo(function CustomBarMetric({
 
     setChartData(transformedData);
     setChartOptions(transformedOptions);
-    setDetailsJson(JSON.stringify(transformedData, null, 2));
   }, [apiResponses, resolvedConfigs, ChartTitle, ChartConfig]);
 
   if (isLoading) {
@@ -502,9 +500,9 @@ export const CustomBarMetric = memo(function CustomBarMetric({
           {requestUrls.map((url, index) => (
             <ResponseDetailsPopoverButton
               ButtonLabel={index.toString()}
-              key={url}
+              key={`${url}-${index}`}
               RequestUrl={url}
-              DisplayJson={detailsJson}
+              DisplayJson={JSON.stringify(apiResponses[index] ?? [], null, 2)}
             />
           ))}
           {enableDebugButtons && debugBarElems}

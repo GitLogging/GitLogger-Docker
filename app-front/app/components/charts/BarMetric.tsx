@@ -197,8 +197,8 @@ export function BarMetric({
     const [chartOptions, setChartOptions] = useState<ChartOptions<'bar'> | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
-    const [detailsJson, setDetailsJson] = useState('')
     const [requestUrls, setRequestUrls] = useState<string[]>([])
+    const [apiResponses, setApiResponses] = useState<CommitMetricItem[][]>([])
 
     useEffect(() => {
         let isMounted = true
@@ -240,15 +240,14 @@ export function BarMetric({
 
                     setChartData(transformedData)
                     setChartOptions(transformedOptions)
-
-                    const jsonString = JSON.stringify(transformedData, null, 2)
-                    setDetailsJson(jsonString)
+                    setApiResponses(responses)
                 }
             } catch (error) {
                 if (isMounted) {
                     setErrorMessage(error instanceof Error ? error.message : "Unknown error")
                     setChartData(null)
                     setChartOptions(null)
+                    setApiResponses([])
                 }
             } finally {
                 if (isMounted) {
@@ -288,10 +287,10 @@ export function BarMetric({
                 <div>
                     {requestUrls.map((url, index) => (
                         <ResponseDetailsPopoverButton
-                            ButtonLabel={index}
-                            key={index}
+                            ButtonLabel={`${index}`}
+                            key={`${url}-${index}`}
                             RequestUrl={url}
-                            DisplayJson={detailsJson}
+                            DisplayJson={JSON.stringify(apiResponses[index] ?? [], null, 2)}
                         />
                         // <a key={index} href={url} style={{ marginRight: '1em', display: 'inline-block' }}>
                         //     View Request {requestUrls.length > 1 ? `${index + 1}` : ''}
