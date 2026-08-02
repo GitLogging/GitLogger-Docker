@@ -2,6 +2,8 @@
 
 Front end for GitLogger site using React
 
+- [File Layout for GitLoggerApp](readme.ProjectLayout.md)
+
 ## quick docker build
 
 ```ps1
