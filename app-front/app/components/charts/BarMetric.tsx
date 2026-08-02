@@ -3,7 +3,7 @@ import { CommitMetricUrl, CommitMetricItem, MetricCommitToChartData } from "@/ap
 import { useEffect, useState } from "react"
 import { Bar, Line } from "react-chartjs-2"
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
-import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton.tsx"
+import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
 
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 

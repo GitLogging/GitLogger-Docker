@@ -85,6 +85,9 @@
             },
             /* #regionend terminal deny list */
         },
+        "cSpell.words": [
+            "chartjs"
+        ],
         // "github.copilot.chat.agent.terminal.allowList": {
         //     "git": true,
         //     "echo": true,
