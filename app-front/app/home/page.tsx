@@ -1,7 +1,7 @@
 "use client"
 // import { useState, Suspense, useEffect } from "react"
 import type { ChartOptions } from "chart.js"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { ButtonGroup, Dropdown, DropdownButton } from "react-bootstrap"
 import { BarMetric } from "@/app/components/charts/BarMetric"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
@@ -213,26 +213,41 @@ function ShowTopLine() {
         [],
     )
 
-    const selectAuthorAutomating = [
-        // 'startautomating/emoji',
-        // 'startautomating/Escape',
-        // 'startautomating/ezout',
-        // 'startautomating/GitLogger',
-        // 'startautomating/helpout',
-        // 'startautomating/obs-powershell',
-        // 'startautomating/ollama-powershell',
-        // 'startautomating/psadapter',
-        // 'startautomating/pssvg',
-        'StartAutomating/PSAdapter', // PSAdapter-Init',
-        'StartAutomating/ugit', // ugit-updates',
-        'StartAutomating/escape', // escape-terminal'
-        // 'startautomating/rocker',
-        // 'startautomating/roughdraft',
-        // 'startautomating/ugit',
-    ]
+    // Fetch and cache the dynamic list of repos matching startautomating|gitlogger pattern
+    const [automatingRepoList, setAutomatingRepoList] = useState<string[]>([])
+    // Fetch repo list on component mount
+    useEffect(() => {
+        const fetchRepoList = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:3001/repo/list')
+                if (!response.ok) throw new Error('Failed to fetch repo list')
+                const repos = await response.json()
+
+                // Filter repos matching startautomating|gitlogger pattern and extract OwnerRepoPair
+                const filteredRepos = repos
+                    .filter((repo: { OwnerRepoPair: string }) =>
+                        /startautomating|gitlogger/i.test(repo.OwnerRepoPair)
+                    )
+                    .flatMap((repo: { OwnerRepoPair: string }) => repo.OwnerRepoPair)
+
+                setAutomatingRepoList(filteredRepos)
+            } catch (error) {
+                console.error('Error fetching repository list:', error)
+                setAutomatingRepoList([])
+            }
+        }
+
+        fetchRepoList()
+    }, [])
 
     const periodAutomating = `month`
     const afterAutomating = `2020-01-01`
+
+    const selectAuthorAutomating = [
+        'StartAutomating/PSAdapter', // PSAdapter-Init',
+        'StartAutomating/ugit', // ugit-updates',
+        'StartAutomating/escape'
+    ]
 
 
     const configTotal_Automating_SelectHistory = useMemo(
@@ -247,18 +262,16 @@ function ShowTopLine() {
         [selectAuthorAutomating, periodAutomating, afterAutomating],
     )
 
-    const selectAuthorAutomating_All = selectAuthorAutomating
-
     const configTotal_Automating_AllHistory = useMemo(
         () =>
-            selectAuthorAutomating_All.map((repo) => ({
+            automatingRepoList.map((repo) => ({
                 // &since=${since}
                 RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repo}&period=${periodAutomating}&after=${afterAutomating}`,
                 XAxisKey: `XAxisKey`,
                 YAxisKey: `TotalCommits`,
                 DatasetLabel: repo.split("/")[1],
             })),
-        [selectAuthorAutomating_All, periodAutomating, afterAutomating],
+        [automatingRepoList, periodAutomating, afterAutomating],
     )
 
     const axisPerMonth: ChartOptions<"line"> =
