@@ -7,6 +7,7 @@ import { BarMetric } from "@/app/components/charts/BarMetric"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
+import { fetchRepoList } from "@/app/types/pwsh-api/repo/list"
 import { DefaultDeserializer } from "v8"
 import { Line } from "react-chartjs-2"
 
@@ -215,29 +216,28 @@ function ShowTopLine() {
 
     // Fetch and cache the dynamic list of repos matching startautomating|gitlogger pattern
     const [automatingRepoList, setAutomatingRepoList] = useState<string[]>([])
-    // Fetch repo list on component mount
     useEffect(() => {
-        const fetchRepoList = async () => {
+        let isMounted = true
+
+        async function loadRepoList() {
             try {
-                const response = await fetch('http://127.0.0.1:3001/repo/list')
-                if (!response.ok) throw new Error('Failed to fetch repo list')
-                const repos = await response.json()
-
-                // Filter repos matching startautomating|gitlogger pattern and extract OwnerRepoPair
-                const filteredRepos = repos
-                    .filter((repo: { OwnerRepoPair: string }) =>
-                        /startautomating|gitlogger/i.test(repo.OwnerRepoPair)
-                    )
-                    .flatMap((repo: { OwnerRepoPair: string }) => repo.OwnerRepoPair)
-
-                setAutomatingRepoList(filteredRepos)
+                const filteredRepos = await fetchRepoList("startautomating|gitlogger")
+                if (isMounted) {
+                    setAutomatingRepoList(filteredRepos)
+                }
             } catch (error) {
-                console.error('Error fetching repository list:', error)
-                setAutomatingRepoList([])
+                console.error("Error fetching repository list:", error)
+                if (isMounted) {
+                    setAutomatingRepoList([])
+                }
             }
         }
 
-        fetchRepoList()
+        void loadRepoList()
+
+        return () => {
+            isMounted = false
+        }
     }, [])
 
     const periodAutomating = `month`
