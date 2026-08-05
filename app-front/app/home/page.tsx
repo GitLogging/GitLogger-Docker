@@ -188,7 +188,7 @@ function ShowTopLine() {
      * $list_repos | sort NewestCommitDate -Descending | select -First 5
      */
 
-    const yourTop5 = [
+    const selectAuthorNin = [
         "ninmonkey/GitServed",
         "GitLogging/GitLogger-Docker",
         // "junegunn/fzf",
@@ -202,9 +202,9 @@ function ShowTopLine() {
     const [dateFnOption, setDateFnOption] =
         useState<DateFnOption["unit"]>(`week`)
 
-    const configTotal1 = useMemo(
+    const configTotalNin1 = useMemo(
         () =>
-            yourTop5.map((repo) => ({
+            selectAuthorNin.map((repo) => ({
                 RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repo}&period=${period}&since=${since}`,
                 XAxisKey: `XAxisKey`,
                 YAxisKey: `TotalCommits`,
@@ -213,32 +213,115 @@ function ShowTopLine() {
         [],
     )
 
-    // const axisPerWeek: ChartOptions<"line"> = useMemo(
-    //     () => ({
-    //         scales: {
-    //             x: {
-    //                 type: "time",
-    //                 time: {
-    //                     parser: "yyyy-MM-dd",
-    //                     unit: dateFnOption,
-    //                     displayFormats: {
-    //                         day: "yyyy-MM-dd",
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     }),
-    //     [dateFnOption],
-    // )
+    const selectAuthorAutomating = [
+        // 'startautomating/emoji',
+        // 'startautomating/Escape',
+        // 'startautomating/ezout',
+        // 'startautomating/GitLogger',
+        // 'startautomating/helpout',
+        // 'startautomating/obs-powershell',
+        // 'startautomating/ollama-powershell',
+        // 'startautomating/psadapter',
+        // 'startautomating/pssvg',
+        'StartAutomating/PSAdapter', // PSAdapter-Init',
+        'StartAutomating/ugit', // ugit-updates',
+        'StartAutomating/escape', // escape-terminal'
+        // 'startautomating/rocker',
+        // 'startautomating/roughdraft',
+        // 'startautomating/ugit',
+    ]
+
+    const periodAutomating = `month`
+    const afterAutomating = `2020-01-01`
+
+
+    const configTotal_Automating_SelectHistory = useMemo(
+        () =>
+            selectAuthorAutomating.map((repo) => ({
+                // &since=${since}
+                RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repo}&period=${periodAutomating}&after=${afterAutomating}`,
+                XAxisKey: `XAxisKey`,
+                YAxisKey: `TotalCommits`,
+                DatasetLabel: repo.split("/")[1],
+            })),
+        [selectAuthorAutomating, periodAutomating, afterAutomating],
+    )
+
+    const selectAuthorAutomating_All = selectAuthorAutomating
+
+    const configTotal_Automating_AllHistory = useMemo(
+        () =>
+            selectAuthorAutomating_All.map((repo) => ({
+                // &since=${since}
+                RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repo}&period=${periodAutomating}&after=${afterAutomating}`,
+                XAxisKey: `XAxisKey`,
+                YAxisKey: `TotalCommits`,
+                DatasetLabel: repo.split("/")[1],
+            })),
+        [selectAuthorAutomating_All, periodAutomating, afterAutomating],
+    )
+
+    const axisPerMonth: ChartOptions<"line"> =
+    {
+        scales: {
+            x: {
+                type: "time",
+                time: {
+                    parser: "yyyy-MM-dd",
+                    unit: `month`,
+                    displayFormats: {
+                        day: "yyyy-MM-dd",
+                    },
+                },
+            },
+        },
+    }
+
+
 
     return (
         <>
             <article>
+                <h3>Pulse for StartAutomating</h3>
+                <CustomLineMetric
+                    ChartTitle="pulse: PsSVG | totalCommits | Monthly"
+                    DatasetConfig={{
+                        RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${`startautomating/pssvg`}&period=${`month`}`,
+
+                        XAxisKey: `XAxisKey`,
+                        YAxisKey: `TotalCommits`,
+                        DatasetLabel: `PsSvg`
+                    }}
+                    ChartConfig={axisPerMonth}
+                />
+                {/* <CustomLineMetric
+                    ChartTitle="pulse: PsSVG | totalCommits Monthly"
+                    DatasetConfig={{
+                        RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${`startautomating/pssvg`}&period=${`month`}`,
+
+                        XAxisKey: `XAxisKey`,
+                        YAxisKey: `TotalCommits`,
+                        DatasetLabel: `PsSvg`
+                    }}
+                // ChartConfig={axisPerWeek}
+                /> */}
                 <h3>Recent for Ninmonkey</h3>
                 <CustomLineMetric
-                    DatasetConfig={configTotal1}
+                    DatasetConfig={configTotalNin1}
                     ChartTitle="recent: Nin | totalCommits"
                 // ChartConfig={axisPerWeek}
+                />
+                <h3>Select History for StartAutomating</h3>
+                <CustomLineMetric
+                    DatasetConfig={configTotal_Automating_SelectHistory}
+                    ChartTitle="Pulse: StartAutomating | totalCommits | Monthly"
+                    ChartConfig={axisPerMonth}
+                />
+                <h3>All Repos for StartAutomating</h3>
+                <CustomLineMetric
+                    DatasetConfig={configTotal_Automating_AllHistory}
+                    ChartTitle="Pulse: StartAutomating | totalCommits | Monthly"
+                    ChartConfig={axisPerMonth}
                 />
                 <ButtonGroup>
                     <DropdownButton
