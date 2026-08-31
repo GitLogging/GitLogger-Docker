@@ -24,7 +24,7 @@ function PageSummary() {
             <BarMetric
                 RequestUrl={[
                     "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=day&since=6.months",
-                    // "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day",
+                    "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day",
                     // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=day",
                     // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=day",
                     // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
@@ -210,13 +210,15 @@ function ShowTopLine() {
     const selectAuthorNin = [
         "ninmonkey/GitServed",
         "GitLogging/GitLogger-Docker",
+        "ninmonkey/Donuts",
+        "ninmonkey/Mintils.ps1"
         // "junegunn/fzf",
         // "microsoft/vscode",
         // "powershell/powershelleditorservices",
     ]
 
     const period = `day`
-    const since = `2.months`
+    const since = `3.months`
     // const dateFnUnit_Slicer =
     const [dateFnOption, setDateFnOption] =
         useState<DateFnOption["unit"]>(`week`)
@@ -259,7 +261,7 @@ function ShowTopLine() {
     }, [])
 
     const periodAutomating = `month`
-    const afterAutomating = `2020-01-01`
+    const afterAutomating = `2025-01-01`
 
     const selectAuthorAutomating = [
         'StartAutomating/PSAdapter', // PSAdapter-Init',
@@ -313,7 +315,7 @@ function ShowTopLine() {
     return (
         <>
             <article>
-                <h3>Pulse for StartAutomating</h3>
+                {/* <h3>Pulse for StartAutomating</h3>
                 <CustomLineMetric
                     ChartTitle="pulse: PsSVG | totalCommits | Monthly"
                     DatasetConfig={{
@@ -324,7 +326,7 @@ function ShowTopLine() {
                         DatasetLabel: `PsSvg`
                     }}
                     ChartConfig={axisPerMonth}
-                />
+                /> */}
                 {/* <CustomLineMetric
                     ChartTitle="pulse: PsSVG | totalCommits Monthly"
                     DatasetConfig={{
@@ -342,12 +344,12 @@ function ShowTopLine() {
                     ChartTitle="recent: Nin | totalCommits"
                 // ChartConfig={axisPerWeek}
                 />
-                <h3>Select History for StartAutomating</h3>
+                {/* <h3>Select History for StartAutomating</h3>
                 <CustomLineMetric
                     DatasetConfig={configTotal_Automating_SelectHistory}
                     ChartTitle="Pulse: StartAutomating | totalCommits | Monthly"
                     ChartConfig={axisPerMonth}
-                />
+                /> */}
                 <h3>All Repos for StartAutomating</h3>
                 <CustomLineMetric
                     DatasetConfig={configTotal_Automating_AllHistory}
@@ -405,7 +407,7 @@ export default function Page() {
             <PageHeaderContent />
             {true && <ShowTopLine />}
             {true && <ShowTop5 />}
-            {true && <PageSummary />}
+            {false && <PageSummary />}
         </>
     )
 
