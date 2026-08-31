@@ -30,29 +30,29 @@ function PageSummary() {
                     // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
                 ]}
             />
+            <BarMetric
+                RequestUrl={[
+                    "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
+                ]}
+            />
+
+            <BarMetric
+                RequestUrl={[
+                    "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=month",
+                    "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=month",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=30.months&period=month",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
+                ]}
+            />
         </article>
     ]
     const enabledExpensiveBars = [
-            <article>
-                <BarMetric
-                    RequestUrl={[
-                        "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=day",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=day",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=day",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
-                    ]}
-                />
-
-                <BarMetric
-                    RequestUrl={[
-                        "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=12.months&period=month",
-                        "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=month",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=month",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/emoji&since=30.months&period=month",
-                        // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
-                    ]}
-                />
+        <article>
                 <BarMetric
                     RequestUrl={[
                         "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&since=30.months&period=day",
@@ -404,8 +404,8 @@ export default function Page() {
         <>
             <PageHeaderContent />
             {true && <ShowTopLine />}
-            {false && <ShowTop5 />}
-            {false && <PageSummary />}
+            {true && <ShowTop5 />}
+            {true && <PageSummary />}
         </>
     )
 
