@@ -19,8 +19,20 @@ import { Line } from "react-chartjs-2"
 // import { FlatLineChart } from "@/app/components/charts/FlatLineChart"
 
 function PageSummary() {
-    return (
-        <>
+    const enabledCheapBars = [
+        <article>
+            <BarMetric
+                RequestUrl={[
+                    "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/GitServed&period=day&since=6.months",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=ninmonkey/Mintils.ps1&since=12.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=startAutomating/GitLogger&since=12.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/GitLogger&since=30.months&period=day",
+                    // "http://127.0.0.1:3001/repo/metric/commit?name=StartAutomating/pssvg&since=30.months&period=month",
+                ]}
+            />
+        </article>
+    ]
+    const enabledExpensiveBars = [
             <article>
                 <BarMetric
                     RequestUrl={[
@@ -63,6 +75,12 @@ function PageSummary() {
                     ]}
                 />
             </article>
+
+    ]
+    return (
+        <>
+            {true && enabledCheapBars}
+            {false && enabledExpensiveBars}
         </>
     )
 }
@@ -385,8 +403,8 @@ export default function Page() {
     return (
         <>
             <PageHeaderContent />
-            <ShowTopLine />
-            {true && <ShowTop5 />}
+            {true && <ShowTopLine />}
+            {false && <ShowTop5 />}
             {false && <PageSummary />}
         </>
     )
