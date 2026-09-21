@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/powershell AS powershell
 #     rm -rf /var/lib/apt/lists/*
 
 # [1] using npm
+# ref: <https://github.com/vercel/next.js/blob/55b20af2d104b2126c2302ae4cabc9d6bd768714/examples/with-docker/Dockerfile#L17-L30>
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt/lists \
     apt-get update && \
@@ -25,6 +26,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # Copy docker-build scripts into the container FIRST
 COPY docker-build /docker-build
 COPY pwsh-modules /pwsh-modules
+
+# COPY --from=dependencies /app/node_modules ./node_modules
 
 ENV InstallModule="ugit,pansies"
 
@@ -47,6 +50,8 @@ WORKDIR $APPDIR
 COPY app-front /app-front
 # COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
+
+RUN pnpm run
 
 EXPOSE 3001
 
