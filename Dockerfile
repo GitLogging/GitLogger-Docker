@@ -1,12 +1,26 @@
 FROM mcr.microsoft.com/powershell AS powershell
 
 # Install packages
+# [1] without npm
+# RUN --mount=type=cache,target=/var/cache/apt \
+#     --mount=type=cache,target=/var/lib/apt/lists \
+#     apt-get update && \
+#     apt-get install -y git gh && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
+
+# [1] using npm
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/lib/apt/lists \
     apt-get update && \
-    apt-get install -y git gh && \
+    apt-get install -y git gh curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+
+# RUN npm install -g pnpm
 
 # Copy docker-build scripts into the container FIRST
 COPY docker-build /docker-build
