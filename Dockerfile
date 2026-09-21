@@ -51,7 +51,7 @@ COPY app-front /app-front
 # COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
 
-RUN pnpm run
+# RUN pnpm run
 
 EXPOSE 3001
 

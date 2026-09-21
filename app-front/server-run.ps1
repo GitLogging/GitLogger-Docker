@@ -53,7 +53,8 @@ $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 
 # Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
 Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
-GitServe.Start -PSHost -Port $PortNumber;
+# GitServe.Start -PSHost -Port $PortNumber
+GitServe.Start -PSHost -HostName $ENV:PWSH_HOST -Port $ENV:PWSH_PORT
 
 
 # $toDot = Get-Item -ea stop ( Join-Path $PSScriptRoot 'server-routing.ps1' )
