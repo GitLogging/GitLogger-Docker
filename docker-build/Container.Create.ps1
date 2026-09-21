@@ -34,7 +34,7 @@ param(
 )
 
 # Install-Module Pansies -Force -AllowClobber
-Install-module -Name 'ugit', 'pansies', 'GitServe', 'classexplorer' -Force -AllowClobber
+Install-module -Name 'ugit', 'pansies', 'classexplorer' -Force -AllowClobber
 
 'Done! 🐒' | Write-Host
 return

@@ -10,11 +10,13 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 # Copy docker-build scripts into the container FIRST
 COPY docker-build /docker-build
+COPY pwsh-modules /pwsh-modules
 
 ENV InstallModule="ugit,pansies"
 
 # Now run the build script with mounts for your source code
 RUN --mount=type=bind,src=./app-front,target=/app-front \
+    --mount=type=bind,src=./pwsh-modules,target=/pwsh-modules \
     /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
 
 # disable
@@ -29,7 +31,6 @@ WORKDIR $APPDIR
 
 # Copy the actual code into the image
 COPY app-front /app-front
-COPY pwsh-modules /pwsh-modules
 # COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
 
