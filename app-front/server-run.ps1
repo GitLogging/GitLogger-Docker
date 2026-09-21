@@ -47,8 +47,6 @@ Get-ChildItem env:\
 $ServerEndTime = [Datetime]::Now - $ServerStartTime
 "{$LogName}: Import and start! $( '{0:n2} secs' -f $ServerEndTime.TotalSeconds )" | Write-Host
 
-pushd 'C:\data\myGit\GitServed'
-. /app-gitserve/Build/Build.Module.ps1
 ipmo /app-gitserve/GitServe.psd1 -PassThru -Verbose:$false
 GitServe.Start -PSHost -Port $PortNumber;
 
