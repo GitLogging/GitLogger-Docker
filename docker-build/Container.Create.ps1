@@ -37,6 +37,17 @@ param(
 Install-module -Name 'ugit', 'pansies', 'classexplorer' -Force -AllowClobber
 
 'Done! 🐒' | Write-Host
+
+# clone example git repo
+
+#region clone example git repos to /cloned-repos/
+New-Item -ItemType Directory -Path '/cloned-repos' -ea ignore -force
+New-Item -ItemType Directory -Path '/cloned-repos/sharkdp' -ea ignore -force
+pushd '/cloned-repos/sharkdp'
+/usr/bin/git clone https://github.com/sharkdp/fd
+popd
+#endregion clone example git repos
+
 return
 
 # Copy all container-related scripts to the root of the container.
