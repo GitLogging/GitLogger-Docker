@@ -30,9 +30,17 @@ param(
     [string] $ImageName = 'gitlogger-docker',
 
     # runs: docker -it
-    [switch] $InteractiveMode
+    [switch] $InteractiveMode,
+
+    # re-download pwsh modules
+    [switch] $ForceSavePwshModules
 )
 $script:ImageName = $ImageName
+
+if ( $ForceSavePwshModules ) {
+    $dest_pwshModules = Join-Path $PSScriptRoot '../pwsh-modules'
+    Save-module GitServe -Path $dest_pwshModules
+}
 
 "Stopping all running containers..." | Write-Host -fg 'green'
 if( docker ps -q ) {

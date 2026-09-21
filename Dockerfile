@@ -29,6 +29,7 @@ WORKDIR $APPDIR
 
 # Copy the actual code into the image
 COPY app-front /app-front
+COPY pwsh-modules /pwsh-modules
 # COPY GitServed /app-gitserve
 # COPY app-gitserve /app-gitserve
 

@@ -47,7 +47,12 @@ Get-ChildItem env:\
 $ServerEndTime = [Datetime]::Now - $ServerStartTime
 "{$LogName}: Import and start! $( '{0:n2} secs' -f $ServerEndTime.TotalSeconds )" | Write-Host
 
-ipmo /app-gitserve/GitServe.psd1 -PassThru -Verbose:$false
+# was: ipmo /app-gitserve/GitServe.psd1 -PassThru -Verbose:$false
+
+$Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
+
+# Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
+Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
 GitServe.Start -PSHost -Port $PortNumber;
 
 
