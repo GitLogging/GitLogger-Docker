@@ -12,6 +12,8 @@ $ImageName = 'gitlogger-docker'; docker build -t $ImageName .
 
 # run
 docker run --interactive --tty --publish 127.0.0.1:3001:3001 $ImageName
+# or
+docker run -d -p 3001:3001 $ImageName
 ```
 
 ## How to Run
