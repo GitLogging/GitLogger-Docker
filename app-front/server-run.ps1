@@ -58,17 +58,19 @@ $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 $nextHostName = '0.0.0.0'
 $nextPort     = $ENV:PORT ?? 3003
 
-$nextProc = Start-Process -FilePath 'pnpm' `
-    -ArgumentList 'run', 'start', '--', '-H', $nextHostName, '-p', $nextPort `
-    -WorkingDirectory '/app-front' `
-    -NoNewWindow -PassThru `
-    -RedirectStandardOutput 'pnpm-stdout.log' `
-    -RedirectStandardError 'pnpm-stderr.log'
+pnpm run start '-H' '0.0.0.0' '-P' 3003
+
+# $nextProc = Start-Process -FilePath 'pnpm' `
+#     -ArgumentList 'run', 'start', '--', '-H', $nextHostName, '-p', $nextPort `
+#     -WorkingDirectory '/app-front' `
+#     -NoNewWindow -PassThru `
+#     -RedirectStandardOutput 'pnpm-stdout.log' `
+#     -RedirectStandardError 'pnpm-stderr.log'
 
 # if this is the only thing keeping the container alive:
 if( $true ) {
     'waiting for process to end...' | write-host
-    Wait-Process -Id $nextProc.Id
+    # Wait-Process -Id $nextProc.Id
 }
 
 if( $false ) {
