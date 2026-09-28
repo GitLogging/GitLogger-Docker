@@ -60,7 +60,7 @@ $nextPort     = $ENV:PORT ?? 3003
 
 # good command: pnpm run start -H 0.0.0.0 -p 3003
 # pnpm run start -H 0.0.0.0 -p 3003
-pnpm run start -H '0.0.0.0' -p 3003
+pnpm run start -H '0.0.0.0' -p 3003 &
 
 # $nextProc = Start-Process -FilePath 'pnpm' `
 #     -ArgumentList 'run', 'start', '--', '-H', $nextHostName, '-p', $nextPort `
