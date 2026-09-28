@@ -20,8 +20,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
-# RUN npm install -g pnpm
+# install node / npm runtime
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Copy docker-build scripts into the container FIRST
 COPY docker-build /docker-build
@@ -42,9 +42,8 @@ RUN --mount=type=bind,src=./app-front,target=/app-front \
 # Set environment variables
 ENV PWSH_HOST=*
 ENV PWSH_PORT=3001
-ENV APPDIR=/app-front
 
-WORKDIR $APPDIR
+WORKDIR /app-front
 
 # Copy the actual code into the image
 COPY app-front /app-front
@@ -52,8 +51,14 @@ COPY app-front /app-front
 # COPY app-gitserve /app-gitserve
 
 # RUN pnpm run
-
 EXPOSE 3001
 
 # Entrypoint runs when the container starts
 ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
+
+# Install dependencies
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile
+
+# Build the app
+RUN pnpm run build
