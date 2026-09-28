@@ -51,8 +51,10 @@ COPY app-front /app-front
 # COPY app-gitserve /app-gitserve
 
 # RUN pnpm run
+#    next.js uses env:PORT
+ENV PORT=3000
 EXPOSE 3001
-
+EXPOSE 3000
 # Entrypoint runs when the container starts
 ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
 
@@ -62,3 +64,4 @@ RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
 
 # Build the app
 RUN pnpm run build
+

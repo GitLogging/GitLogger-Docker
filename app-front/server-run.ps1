@@ -51,6 +51,17 @@ $ServerEndTime = [Datetime]::Now - $ServerStartTime
 
 $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 
+# somewhere in server-run.ps1, or a dedicated script
+$nextProc = Start-Process -FilePath 'pnpm' `
+    -ArgumentList 'start' `
+    -WorkingDirectory '/app-front' `
+    -NoNewWindow -PassThru `
+    -RedirectStandardOutput 'pnpm-stdout.log' `
+    -RedirectStandardError 'pnpm-stderr.log'
+
+# if this is the only thing keeping the container alive:
+Wait-Process -Id $nextProc.Id
+
 # Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
 Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
 # GitServe.Start -PSHost -Port $PortNumber
