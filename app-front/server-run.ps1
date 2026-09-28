@@ -54,25 +54,30 @@ $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 # somewhere in server-run.ps1, or a dedicated script
 # next start defaults to binding 127.0.0.1 only, which Docker's published ports
 # cannot reach from outside the container. Force it to listen on all interfaces.
-$nextHostName = $ENV:HOSTNAME ?? '0.0.0.0'
+# $nextHostName = $ENV:HOSTNAME ?? '0.0.0.0'
+$nextHostName = '0.0.0.0'
 $nextPort     = $ENV:PORT ?? 3003
 
 $nextProc = Start-Process -FilePath 'pnpm' `
-    -ArgumentList 'start', '--', '-H', $nextHostName, '-p', $nextPort `
+    -ArgumentList 'run', 'start', '--', '-H', $nextHostName, '-p', $nextPort `
     -WorkingDirectory '/app-front' `
     -NoNewWindow -PassThru `
     -RedirectStandardOutput 'pnpm-stdout.log' `
     -RedirectStandardError 'pnpm-stderr.log'
 
 # if this is the only thing keeping the container alive:
-if( $false ) {
+if( $true ) {
+    'waiting for process to end...' | write-host
     Wait-Process -Id $nextProc.Id
 }
 
-# Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
-Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
-# GitServe.Start -PSHost -Port $PortNumber
-GitServe.Start -PSHost -HostName $ENV:PWSH_HOST -Port $ENV:PWSH_PORT
+if( $false ) {
+    'skipping gitserve' | write-host
+    # Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
+    Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
+    # GitServe.Start -PSHost -Port $PortNumber
+    GitServe.Start -PSHost -HostName $ENV:PWSH_HOST -Port $ENV:PWSH_PORT
+}
 
 
 # $toDot = Get-Item -ea stop ( Join-Path $PSScriptRoot 'server-routing.ps1' )
