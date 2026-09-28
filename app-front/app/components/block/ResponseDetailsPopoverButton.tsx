@@ -17,7 +17,7 @@ export function ResponseDetailsPopoverButton({
      */
     const urlObj = new URL(RequestUrl)
     const abbrPathWithQuery = urlObj.pathname + urlObj.search
-    function keysAsDefinitionList(Url) {
+    function keysAsDefinitionList(Url: string) {
         const url = new URL(Url)
         const items = Array.from(url.searchParams.entries()).map(([key, value]) => (
             <ListGroupItem key={key}>
