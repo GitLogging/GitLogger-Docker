@@ -82,7 +82,9 @@ export function TransformedMetricData(
 
     // Normalize inputs to arrays
     const urlsArray = Array.isArray(requestUrls) ? requestUrls : [requestUrls]
-    const responsesArray = Array.isArray(apiResponses[0]) ? apiResponses : [apiResponses]
+    const responsesArray: CommitMetricItem[][] = Array.isArray(apiResponses[0])
+        ? apiResponses as CommitMetricItem[][]
+        : [apiResponses as CommitMetricItem[]]
 
     // First pass: collect all unique date keys from all datasets
     const allDateKeys = new Set<string>()
