@@ -52,9 +52,9 @@ COPY app-front /app-front
 
 # RUN pnpm run
 #    next.js uses env:PORT
-ENV PORT=3000
-EXPOSE 3001
-EXPOSE 3000
+ENV PORT=3003
+EXPOSE 3003
+# EXPOSE 3000
 # Entrypoint runs when the container starts
 ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
 
