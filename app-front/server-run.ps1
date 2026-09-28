@@ -60,7 +60,9 @@ $nextProc = Start-Process -FilePath 'pnpm' `
     -RedirectStandardError 'pnpm-stderr.log'
 
 # if this is the only thing keeping the container alive:
-Wait-Process -Id $nextProc.Id
+if( $false ) {
+    Wait-Process -Id $nextProc.Id
+}
 
 # Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
 Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
