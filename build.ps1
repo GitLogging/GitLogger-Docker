@@ -4,7 +4,8 @@
 #>
 param(
 
-    [switch] $BuildOnly
+    [switch] $BuildOnly,
+    [int] $Port = 3001
 )
 $Global:ImageName = 'gitlogger-docker'
 
@@ -17,4 +18,5 @@ if( $BuildOnly ) {
     docker build -t $ImageName .
     return
 }
-docker build -t $ImageName . && docker run -it -p 3001:3001 $ImageName
+"using: ${Port}:${Port}" | Write-Host
+docker build -t $ImageName . && docker run -it -p "${Port}:${Port}" $ImageName
