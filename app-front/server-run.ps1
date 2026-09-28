@@ -58,7 +58,9 @@ $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 $nextHostName = '0.0.0.0'
 $nextPort     = $ENV:PORT ?? 3003
 
-pnpm run start '-H' '0.0.0.0' '-P' 3003
+# good command: pnpm run start -H 0.0.0.0 -p 3003
+# pnpm run start -H 0.0.0.0 -p 3003
+pnpm run start -H '0.0.0.0' -p 3003
 
 # $nextProc = Start-Process -FilePath 'pnpm' `
 #     -ArgumentList 'run', 'start', '--', '-H', $nextHostName, '-p', $nextPort `
@@ -73,7 +75,7 @@ if( $true ) {
     # Wait-Process -Id $nextProc.Id
 }
 
-if( $false ) {
+if( $true ) {
     'skipping gitserve' | write-host
     # Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
     Import-Module GitServe -force -Passthru -DisableNameChecking -ea 'stop'
