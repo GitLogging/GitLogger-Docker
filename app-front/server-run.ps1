@@ -52,8 +52,13 @@ $ServerEndTime = [Datetime]::Now - $ServerStartTime
 $Env:PSModulePath = $Env:PSModulePath += ':/pwsh-modules'
 
 # somewhere in server-run.ps1, or a dedicated script
+# next start defaults to binding 127.0.0.1 only, which Docker's published ports
+# cannot reach from outside the container. Force it to listen on all interfaces.
+$nextHostName = $ENV:HOSTNAME ?? '0.0.0.0'
+$nextPort     = $ENV:PORT ?? 3003
+
 $nextProc = Start-Process -FilePath 'pnpm' `
-    -ArgumentList 'start' `
+    -ArgumentList 'start', '--', '-H', $nextHostName, '-p', $nextPort `
     -WorkingDirectory '/app-front' `
     -NoNewWindow -PassThru `
     -RedirectStandardOutput 'pnpm-stdout.log' `
