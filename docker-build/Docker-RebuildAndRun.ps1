@@ -81,6 +81,7 @@ docker build -t $ImageName . &&
         @( if( $InteractiveMode ) {
             docker run --interactive --tty `
                 --publish 127.0.0.1:3001:3001 `
+                --publish 127.0.0.1:3003:3003 `
                 -v cloned-repos:c:\GitLoggerApp\ClonedRepos `
                 -w /app --mount "type=bind,src=.,target=/app" `
                 $ImageName
@@ -90,6 +91,7 @@ docker build -t $ImageName . &&
         } else {
             docker run --tty --rm `
                 --publish 127.0.0.1:3001:3001 `
+                --publish 127.0.0.1:3003:3003 `
                 -w /app --mount "type=bind,src=.,target=/app" `
                 -v cloned-repos:c:\GitLoggerApp\ClonedRepos `
                 $ImageName
