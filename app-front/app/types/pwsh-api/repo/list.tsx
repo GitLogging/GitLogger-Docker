@@ -13,7 +13,7 @@ export interface RepoSummaryItem {
 // for endpoint: /repo/list
 // export type RepoListApiResponse = RepoSummaryItem[]
 
-export async function fetchRepoList(): Promise<RepoSummaryItem[]> {
+export async function fetchRepoList(repoPattern?: string): Promise<RepoSummaryItem[]> {
     /**
      * @summary fetch metadata from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
      */
@@ -22,7 +22,15 @@ export async function fetchRepoList(): Promise<RepoSummaryItem[]> {
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }
     const repoSummaryList: RepoSummaryItem[] = await response.json()
+
+    if (!repoPattern) {
+        return repoSummaryList
+    }
+
+    const repoRegex = new RegExp(repoPattern, "i")
+
     return repoSummaryList
+        .filter((repo) => repoRegex.test(repo.OwnerRepoPair))
 }
 export async function fetchRepoListNames(repoPattern?: string): Promise<string[]> {
     /**
