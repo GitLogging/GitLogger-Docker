@@ -20,24 +20,15 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# install node / npm runtime
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# Copy docker-build scripts into the container FIRST
-COPY docker-build /docker-build
-COPY pwsh-modules /pwsh-modules
-
-# COPY --from=dependencies /app/node_modules ./node_modules
+# install node / npm runtime (pinned so the layer stays cached)
+RUN corepack enable && corepack prepare pnpm@9 --activate
+# was: RUN corepack enable && corepack prepare pnpm@latest --activate
 
 ENV InstallModule="ugit,pansies"
 
-# Now run the build script with mounts for your source code
-RUN --mount=type=bind,src=./app-front,target=/app-front \
-    --mount=type=bind,src=./pwsh-modules,target=/pwsh-modules \
-    /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
-
-# disable
-    # --mount=type=bind,src=./app-gitserve,target=/app-gitserve \
+# Slow, stable setup: only re-runs when this script changes
+COPY docker-build/Container.Create.ps1 /docker-build/Container.Create.ps1
+RUN /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
 
 # Set environment variables
 ENV PWSH_HOST=*
@@ -45,23 +36,21 @@ ENV PWSH_PORT=3001
 
 WORKDIR /app-front
 
-# Copy the actual code into the image
-COPY app-front /app-front
-# COPY GitServed /app-gitserve
-# COPY app-gitserve /app-gitserve
-
-# RUN pnpm run
-#    next.js uses env:PORT
-ENV PORT=3003
-EXPOSE 3003
-# EXPOSE 3000
-# Entrypoint runs when the container starts
-ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
-
-# Install dependencies
+# Install dependencies (only re-runs when package.json / lockfile change)
+COPY app-front/package.json app-front/pnpm-lock.yaml ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
+# was: RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Build the app
+# Copy the actual code and build
+COPY app-front /app-front
 RUN pnpm run build
 
+# Most volatile: PowerShell modules (profile adds /pwsh-modules to PSModulePath at runtime)
+COPY pwsh-modules /pwsh-modules
+
+# next.js uses env:PORT
+ENV PORT=3003
+EXPOSE 3003
+# Entrypoint runs when the container starts
+ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
