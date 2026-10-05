@@ -10,28 +10,34 @@ export interface RepoSummaryItem {
     Path: string
     Remote: string
 }
+// for endpoint: /repo/list
+// export type RepoListApiResponse = RepoSummaryItem[]
 
-export interface RepoListResponse {
+export async function fetchRepoList(): Promise<RepoSummaryItem[]> {
     /**
-     * @summary array of records from the api endpoint: http://127.0.0.1:3001/repo/list
+     * @summary fetch metadata from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
      */
-    RepoList?: RepoSummaryItem[]
+    const response = await fetch("http://127.0.0.1:3001/repo/list")
+    if (!response.ok) {
+        throw new Error(`Failed to fetch repo list: ${response.status}`)
+    }
+    const repoSummaryList: RepoSummaryItem[] = await response.json()
+    return repoSummaryList
 }
-
-export type RepoListApiResponse = RepoSummaryItem[] | RepoListResponse
-
-export async function fetchRepoList(repoPattern: string): Promise<string[]> {
+export async function fetchRepoListNames(repoPattern?: string): Promise<string[]> {
+    /**
+     * @summary fetch names from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
+     */
     const response = await fetch("http://127.0.0.1:3001/repo/list")
     if (!response.ok) {
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }
 
-    const clonedRepos: RepoListApiResponse = await response.json()
-    const repoSummaryList = Array.isArray(clonedRepos)
-        ? clonedRepos
-        : Array.isArray(clonedRepos.RepoList)
-            ? clonedRepos.RepoList
-            : []
+    const repoSummaryList: RepoSummaryItem[] = await response.json()
+
+    if (!repoPattern) {
+        return repoSummaryList.map((repo) => repo.OwnerRepoPair)
+    }
 
     const repoRegex = new RegExp(repoPattern, "i")
     return repoSummaryList

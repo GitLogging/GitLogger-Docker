@@ -12,7 +12,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 import Link from "next/link"
 
-import { RepoListApiResponse, RepoListResponse, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
+import { fetchRepoList, fetchRepoListNames, RepoListApiResponse, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
 
 export function RepoSummaryTable() {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
@@ -27,19 +27,8 @@ export function RepoSummaryTable() {
                 setIsLoading(true)
                 setErrorMessage(null)
 
-                const data = await fetch("http://127.0.0.1:3001/repo/list")
-                if (!data.ok) {
-                    throw new Error(`Request failed with status ${data.status}`)
-                }
-
-                const clonedRepos: RepoListApiResponse = await data.json()
+                const repoSummaryList: RepoSummaryItem[] = await fetchRepoList()
                 if (isMounted) {
-                    const repoSummaryList = Array.isArray(clonedRepos)
-                        ? clonedRepos
-                        : Array.isArray(clonedRepos.RepoList)
-                            ? clonedRepos.RepoList
-                            : []
-
                     console.log(`<RepoSummaryTable> found ${repoSummaryList.length} items:`, repoSummaryList)
                     setRepoList(repoSummaryList)
                 }
