@@ -70,10 +70,10 @@ pnpm run start -H '0.0.0.0' -p 3003 &
 #     -RedirectStandardError 'pnpm-stderr.log'
 
 # if this is the only thing keeping the container alive:
-if( $true ) {
-    'waiting for process to end...' | write-host
-    # Wait-Process -Id $nextProc.Id
-}
+# if( $true ) {
+#     'waiting for process to end...' | write-host
+#     # Wait-Process -Id $nextProc.Id
+# }
 
 if( $true ) {
     'skipping gitserve' | write-host

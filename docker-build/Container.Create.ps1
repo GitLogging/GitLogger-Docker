@@ -48,6 +48,23 @@ pushd '/cloned-repos/sharkdp'
 popd
 #endregion clone example git repos
 
+#region create default profile
+New-Item -Path $Profile -ItemType File -Force | Out-Null
+@(
+@'
+$env:PSModulePath = $env:PSModulePath + ':/pwsh-modules'
+
+Get-ChildItem /cloned-repos -name
+    | Join-String -op 'cloned repos: ' -sep ', '
+    | Write-Verbose -Verbose
+
+Import-Module 'GitServe' -Passthru -DisableNameChecking
+    | ft Version, Name
+'@
+) | Join-String -sep "`n" | Add-Content -Path $PROFILE
+
+#endregion create default profile
+
 return
 
 # Copy all container-related scripts to the root of the container.
