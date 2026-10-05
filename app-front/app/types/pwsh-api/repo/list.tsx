@@ -13,6 +13,17 @@ export interface RepoSummaryItem {
 // for endpoint: /repo/list
 // export type RepoListApiResponse = RepoSummaryItem[]
 
+async function fetchAsArray<T>(response: Response): Promise<T[]> {
+    /**
+     * @summary ensure an endpoint returns an array of that type, even if it's a single value
+     */
+    const data: T | T[] | null = await response.json()
+    if (Array.isArray(data)) {
+        return data
+    }
+    return data ? [data] : []
+}
+
 export async function fetchRepoList(repoPattern?: string): Promise<RepoSummaryItem[]> {
     /**
      * @summary fetch metadata from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
@@ -21,7 +32,7 @@ export async function fetchRepoList(repoPattern?: string): Promise<RepoSummaryIt
     if (!response.ok) {
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }
-    const repoSummaryList: RepoSummaryItem[] = await response.json()
+    const repoSummaryList: RepoSummaryItem[] = await fetchAsArray<RepoSummaryItem>(response)
 
     if (!repoPattern) {
         return repoSummaryList
@@ -41,7 +52,7 @@ export async function fetchRepoListNames(repoPattern?: string): Promise<string[]
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }
 
-    const repoSummaryList: RepoSummaryItem[] = await response.json()
+    const repoSummaryList = await fetchAsArray<RepoSummaryItem>(response)
 
     if (!repoPattern) {
         return repoSummaryList.map((repo) => repo.OwnerRepoPair)
