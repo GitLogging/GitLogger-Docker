@@ -36,7 +36,7 @@ param(
 # Install-Module Pansies -Force -AllowClobber
 Install-module -Name 'ugit', 'pansies', 'classexplorer' -Force -AllowClobber
 
-'Done! 🐒' | Write-Host
+'Container.Create.ps1: Done! 🐒' | Write-Host
 
 # clone example git repo
 
