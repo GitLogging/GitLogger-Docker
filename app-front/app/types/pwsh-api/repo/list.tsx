@@ -28,7 +28,13 @@ export async function fetchRepoList(repoPattern?: string): Promise<RepoSummaryIt
     /**
      * @summary fetch metadata from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
      */
-    const response = await fetch("http://127.0.0.1:3001/repo/list")
+    console.info(`Fetching repo list with pattern: ${repoPattern ?? 'none'}`)
+    const cacheClearResponse = await fetch("http://127.0.0.1:3001/cache/clear")
+    if (!cacheClearResponse.ok) {
+        throw new Error(`Failed to clear repository cache: ${cacheClearResponse.status}`)
+    }
+
+    const response = await fetch("http://127.0.0.1:3001/repo/list", { cache: "no-store" })
     if (!response.ok) {
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }

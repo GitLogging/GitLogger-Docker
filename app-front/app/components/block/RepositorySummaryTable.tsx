@@ -14,7 +14,7 @@ import Link from "next/link"
 
 import { fetchRepoList, fetchRepoListNames, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
 
-export function RepoSummaryTable() {
+export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -49,7 +49,7 @@ export function RepoSummaryTable() {
         return () => {
             isMounted = false
         }
-    }, [])
+    }, [refreshKey])
 
     if (isLoading) {
         return (<><h1>Loading repositories...</h1></>)
