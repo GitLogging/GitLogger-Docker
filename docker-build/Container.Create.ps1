@@ -46,6 +46,12 @@ New-Item -ItemType Directory -Path '/cloned-repos/sharkdp' -ea ignore -force
 pushd '/cloned-repos/sharkdp'
 /usr/bin/git clone https://github.com/sharkdp/fd
 popd
+
+New-Item -ItemType Directory -Path '/cloned-repos/microsoft' -ea ignore -force
+pushd '/cloned-repos/microsoft'
+/usr/bin/git clone https://github.com/microsoft/vscode-tmdl
+popd
+
 #endregion clone example git repos
 
 #region create default profile
