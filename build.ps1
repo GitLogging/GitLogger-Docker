@@ -4,8 +4,9 @@
 #>
 param(
     [switch] $BuildOnly,
-    [switch] $CopyGitServeDev
-    # [int] $Port = 3001
+    [switch] $CopyGitServeDev,
+    [int] $HTTPPort=3003,
+    [int] $PwshPort=3001
 )
 $Global:ImageName = 'gitlogger-docker'
 
@@ -31,10 +32,14 @@ if( $BuildOnly ) {
     docker build -t $ImageName .
     return
 }
-"using: ports 3001, 3003" | Write-Host
+"using ports => Http: ${HttpPort}, Pwsh: ${PwshPort}" | Write-Host
+
+Pansies\New-Hyperlink -Uri "http://127.0.0.1:${PwshPort}:${PwshPort}" -Obj 'Pwsh'
+Pansies\New-Hyperlink -Uri "http://127.0.0.1:${HttpPort}:${HttpPort}" -Obj 'Http'
+
 docker build -t $ImageName . && docker run -it `
-    --publish 127.0.0.1:3001:3001 `
-    --publish 127.0.0.1:3003:3003 `
+    --publish "127.0.0.1:${PwshPort}:${PwshPort}" `
+    --publish "127.0.0.1:${HTTPPort}:${HTTPPort}" `
     $ImageName
 
 # was:

@@ -33,6 +33,7 @@ RUN /bin/pwsh -nologo -command /docker-build/Container.Create.ps1
 # Set environment variables
 ENV PWSH_HOST=*
 ENV PWSH_PORT=3001
+ENV HTTP_PORT=3003
 
 WORKDIR /app-front
 
@@ -50,7 +51,7 @@ RUN pnpm run build
 COPY pwsh-modules /pwsh-modules
 
 # next.js uses env:PORT
-ENV PORT=3003
-EXPOSE 3003
+ENV PORT=$HTTP_PORT
+EXPOSE $HTTP_PORT
 # Entrypoint runs when the container starts
 ENTRYPOINT ["/bin/pwsh", "-noexit", "-file", "/app-front/server-run.ps1"]
