@@ -3,10 +3,23 @@
     Build GitLogger-Docker, and run it
 #>
 param(
+    # include 'docker build', without 'docker run'
     [switch] $BuildOnly,
-    [switch] $CopyGitServeDev,
+
+    # skip 'docker build', just run it
+    # [switch] $RunOnly,
+
+    # copy current build of GitServe from the cloned repo
+    [switch] $CopyGitServeDev = $true,
+
+    # user facing webpage
     [int] $HTTPPort=3003,
-    [int] $PwshPort=3001
+
+    # optional user facing GitServe REST instance
+    [int] $PwshPort=3001,
+
+    # path to the locally cloned GitServe repo
+    [string] $SourceGitServePath = 'C:/data/myGit/GitServed/BuildOutput'
 )
 $Global:ImageName = 'gitlogger-docker'
 
@@ -22,13 +35,13 @@ if( $CopyGitServeDev ) {
     $GitServeModuleDest = Join-Path $PSScriptRoot './pwsh-modules/GitServe'
     Remove-Item -force -Recurse -ea 'ignore' $GitServeModuleDest
 
-    $GitServeDevSrc = Get-Item 'C:/data/myGit/GitServed/BuildOutput'
+    $GitServeDevSrc = Get-Item $SourceGitServePath
     copy-item $GitServeDevSrc $GitServeModuleDest -Recurse
     'Copied latest version of gitserve' | Write-Host -fore green
 }
 #endregion CopyGitServe Dev Build
 
-if( $BuildOnly ) {
+if( $BuildOnly  ) {
     docker build -t $ImageName .
     return
 }
@@ -37,7 +50,8 @@ if( $BuildOnly ) {
 Pansies\New-Hyperlink -Uri "http://127.0.0.1:${PwshPort}:${PwshPort}" -Obj 'Pwsh'
 Pansies\New-Hyperlink -Uri "http://127.0.0.1:${HttpPort}:${HttpPort}" -Obj 'Http'
 
-docker build -t $ImageName . && docker run -it `
+# -it `
+docker build -t $ImageName . && docker run -id `
     --publish "127.0.0.1:${PwshPort}:${PwshPort}" `
     --publish "127.0.0.1:${HTTPPort}:${HTTPPort}" `
     $ImageName
