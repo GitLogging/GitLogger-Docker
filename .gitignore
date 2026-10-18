@@ -3,11 +3,12 @@ node_modules/
 .next/
 
 # cloned pwsh module
-app-gitserve/
+# app-gitserve/
 
 # this is already ignored, but listed to as explicit
 app-front/node_modules
 app-front/.next
+pwsh-modules/
 
 # always exclude filetypes
 *.log

@@ -151,7 +151,7 @@ export default function Page() {
      * */
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     <h1>Testing single component: input_repo_list</h1>

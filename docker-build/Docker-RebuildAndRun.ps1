@@ -30,23 +30,33 @@ param(
     [string] $ImageName = 'gitlogger-docker',
 
     # runs: docker -it
-    [switch] $InteractiveMode
+    [switch] $InteractiveMode,
+
+    # re-download pwsh modules
+    [switch] $ForceSavePwshModules
 )
 $script:ImageName = $ImageName
+
+if ( $ForceSavePwshModules ) {
+    $dest_pwshModules = Join-Path $PSScriptRoot '../pwsh-modules'
+    Save-module GitServe -Path $dest_pwshModules
+}
 
 "Stopping all running containers..." | Write-Host -fg 'green'
 if( docker ps -q ) {
     docker stop $( docker ps -q )
 }
 
-# clone repo to a subdir
-$gitServeModule = Join-Path $PSScriptRoot './../app-gitserve'
-if( -not (Test-Path $gitServeModule  )) {
-    git clone https://github.com/ninmonkey/GitServed.git 'app-gitserve'
-}
-if( Test-Path $gitServeModule ) {
-    git -C $gitServeModule pull
-}
+<#
+    moved to install container script: clone repo to a subdir
+    $gitServeModule = Join-Path $PSScriptRoot './../app-gitserve'
+    if( -not (Test-Path $gitServeModule  )) {
+        git clone https://github.com/ninmonkey/GitServed.git 'app-gitserve'
+    }
+    if( Test-Path $gitServeModule ) {
+        git -C $gitServeModule pull
+    }
+#>
 # only launch if build has no errors.
 # --tty allows caller to ctrl+c to kill it.
 # note: the extra '@()' is intentional, it allows the '&& operators' to chain a nested expression
@@ -71,6 +81,7 @@ docker build -t $ImageName . &&
         @( if( $InteractiveMode ) {
             docker run --interactive --tty `
                 --publish 127.0.0.1:3001:3001 `
+                --publish 127.0.0.1:3003:3003 `
                 -v cloned-repos:c:\GitLoggerApp\ClonedRepos `
                 -w /app --mount "type=bind,src=.,target=/app" `
                 $ImageName
@@ -80,6 +91,7 @@ docker build -t $ImageName . &&
         } else {
             docker run --tty --rm `
                 --publish 127.0.0.1:3001:3001 `
+                --publish 127.0.0.1:3003:3003 `
                 -w /app --mount "type=bind,src=.,target=/app" `
                 -v cloned-repos:c:\GitLoggerApp\ClonedRepos `
                 $ImageName

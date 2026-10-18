@@ -30,7 +30,7 @@ export default function PageContent() {
      * */
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     <MyButton />

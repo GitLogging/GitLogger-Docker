@@ -1,0 +1,36 @@
+/* global view transition  */
+@view-transition {
+    navigation: auto;
+}
+
+:root {
+    view-transition-name: root;
+}
+
+@keyframes slide-out-to-left {
+    to {
+        translate: -100vw 0;
+    }
+}
+
+@keyframes slide-in-from-right {
+    from {
+        translate: 100vw 0;
+    }
+}
+
+@keyframes flip-out {
+    to {
+        rotate: x 90deg;
+    }
+}
+
+@keyframes flip-in {
+    from {
+        rotate: x -90deg;
+    }
+}
+
+::view-transition-group(*) {
+    animation-duration: 0.6s;
+}

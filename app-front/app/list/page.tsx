@@ -82,18 +82,22 @@ function PageSummary() {
 
 
 export default function ListPage() {
+    const [repoListRefreshKey, setRepoListRefreshKey] = useState(0)
+
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
 
             <article>
                 <section>
                     <h2>Clone Repository</h2>
-                    <CloneRepositoryUrlPicker />
+                    <CloneRepositoryUrlPicker
+                        onCloneSettled={() => setRepoListRefreshKey((key) => key + 1)}
+                    />
                 </section>
 
                 <section>
-                    <RepoSummaryTable />
+                    <RepoSummaryTable refreshKey={repoListRefreshKey} />
                 </section>
 
             </article>

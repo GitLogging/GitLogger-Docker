@@ -35,64 +35,98 @@ param(
 
 # Install-Module Pansies -Force -AllowClobber
 Install-module -Name 'ugit', 'pansies', 'classexplorer' -Force -AllowClobber
+# Install-Module 'GitServe' -Force
+'Container.Create.ps1: Done! 🐒' | Write-Host
 
-'Done! 🐒' | Write-Host
+# clone example git repo
+
+#region clone example git repos to /cloned-repos/
+New-Item -ItemType Directory -Path '/cloned-repos' -ea ignore -force
+New-Item -ItemType Directory -Path '/cloned-repos/sharkdp' -ea ignore -force
+pushd '/cloned-repos/sharkdp'
+/usr/bin/git clone https://github.com/sharkdp/fd
+popd
+
+New-Item -ItemType Directory -Path '/cloned-repos/microsoft' -ea ignore -force
+pushd '/cloned-repos/microsoft'
+/usr/bin/git clone https://github.com/microsoft/vscode-tmdl
+popd
+
+#endregion clone example git repos
+
+#region create default profile
+New-Item -Path $Profile -ItemType File -Force | Out-Null
+@(
+@'
+$env:PSModulePath = $env:PSModulePath + ':/pwsh-modules'
+
+Get-ChildItem /cloned-repos -name
+    | Join-String -op 'cloned repos: ' -sep ', '
+    | Write-Verbose -Verbose
+
+Import-Module 'GitServe' -Passthru -DisableNameChecking
+    | ft Version, Name
+'@
+) | Join-String -sep "`n" | Add-Content -Path $PROFILE
+
+#endregion create default profile
+
 return
 
-# Copy all container-related scripts to the root of the container.
-Get-ChildItem -Path $PSScriptRoot |
-    Where-Object Name -Match '^Container\..+?\.ps1$' |
-    Copy-Item -Destination /
+# # Copy all container-related scripts to the root of the container.
+# Get-ChildItem -Path $PSScriptRoot |
+#     Where-Object Name -Match '^Container\..+?\.ps1$' |
+#     Copy-Item -Destination /
 
-# Create a profile
-New-Item -Path $Profile -ItemType File -Force | Out-Null
+# # Create a profile
+# New-Item -Path $Profile -ItemType File -Force | Out-Null
 
-if ($ModuleName) {
-    # Get the root module directory
-    $rootModuleDirectory = @($env:PSModulePath -split '[;:]')[0]
-
-    # Determine the path to the module destination.
-    $moduleDestination = "$rootModuleDirectory/$ModuleName"
-    # Copy the module to the destination
-    # (this is being used instead of the COPY statement in Docker, to avoid additional layers).
-    Copy-Item -Path "$psScriptRoot" -Destination $moduleDestination -Recurse -Force
-
-    # and import this module in the profile
-    Add-Content -Path $profile -Value "Import-Module $ModuleName" -Force
-}
-
-# If we have modules to install
-if ($InstallModule) {
-    # Install the modules
-    Install-Module -Name $InstallModule -Force -AcceptLicense -Scope CurrentUser
-    # and import them in the profile
-    Add-Content -Path $Profile -Value "Import-Module '$($InstallModule -join "','")'" -Force
-}
-
-# If we have packages to install
-if ($InstallAptGet) {
-    # install the packages
-    apt-get update &&
-        apt-get install -y @InstallAptGet '--no-install-recommends' &&
-            apt-get clean |
-                Out-Host
-}
 # if ($ModuleName) {
-#     # In our profile, push into the module's directory
-#     Add-Content -Path $Profile -Value "Get-Module $ModuleName | Split-Path | Push-Location" -Force
+#     # Get the root module directory
+#     $rootModuleDirectory = @($env:PSModulePath -split '[;:]')[0]
+
+#     # Determine the path to the module destination.
+#     $moduleDestination = "$rootModuleDirectory/$ModuleName"
+#     # Copy the module to the destination
+#     # (this is being used instead of the COPY statement in Docker, to avoid additional layers).
+#     Copy-Item -Path "$psScriptRoot" -Destination $moduleDestination -Recurse -Force
+
+#     # and import this module in the profile
+#     Add-Content -Path $profile -Value "Import-Module $ModuleName" -Force
 # }
 
-# if (-not $KeepGit) {
-#     # Remove the .git directories from any modules
-#     Get-ChildItem -Path $rootModuleDirectory -Directory -Force -Recurse |
-#         Where-Object Name -eq '.git' |
-#         Remove-Item -Recurse -Force
+# # If we have modules to install
+# if ($InstallModule) {
+#     # Install the modules
+#     Install-Module -Name $InstallModule -Force -AcceptLicense -Scope CurrentUser
+#     # and import them in the profile
+#     Add-Content -Path $Profile -Value "Import-Module '$($InstallModule -join "','")'" -Force
 # }
 
-# Congratulations! You have successfully initialized the container image.
-# This script should work in about any module, with minor adjustments.
-# If you have any adjustments, please put them below here, in the `#region Custom`
+# # If we have packages to install
+# if ($InstallAptGet) {
+#     # install the packages
+#     apt-get update &&
+#         apt-get install -y @InstallAptGet '--no-install-recommends' &&
+#             apt-get clean |
+#                 Out-Host
+# }
+# # if ($ModuleName) {
+# #     # In our profile, push into the module's directory
+# #     Add-Content -Path $Profile -Value "Get-Module $ModuleName | Split-Path | Push-Location" -Force
+# # }
 
-#region Custom
+# # if (-not $KeepGit) {
+# #     # Remove the .git directories from any modules
+# #     Get-ChildItem -Path $rootModuleDirectory -Directory -Force -Recurse |
+# #         Where-Object Name -eq '.git' |
+# #         Remove-Item -Recurse -Force
+# # }
 
-#endregion Custom
+# # Congratulations! You have successfully initialized the container image.
+# # This script should work in about any module, with minor adjustments.
+# # If you have any adjustments, please put them below here, in the `#region Custom`
+
+# #region Custom
+
+# #endregion Custom

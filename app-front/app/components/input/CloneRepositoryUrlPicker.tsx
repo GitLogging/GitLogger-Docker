@@ -47,9 +47,11 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
 function CloneRepoForm({
     isSubmitting,
     setIsSubmitting,
+    onCloneSettled,
 }: {
     isSubmitting: boolean
     setIsSubmitting: (value: boolean) => void
+    onCloneSettled?: () => void
 }) {
     /**
      * @summary (internal) Builds the input form elements for listing and cloning repo urls
@@ -90,6 +92,7 @@ function CloneRepoForm({
             console.error(`<CloneRepoButton>.onSubmit: promise threw when cloning repo:`, error)
         }
         finally {
+            onCloneSettled?.()
             setIsSubmitting(false)
         }
 
@@ -159,7 +162,11 @@ function CloneRepoForm({
 /**
  * @summary Select a repository from the list of known cloned repos. Entry point for this component
  */
-export function CloneRepositoryUrlPicker() {
+export function CloneRepositoryUrlPicker({
+    onCloneSettled,
+}: {
+    onCloneSettled?: () => void
+}) {
     /**
      * @summary Git urls to clone. Autocomplete urls, but also allow freeform entry for new ones
      * @description If no list is provided, fallback to example repo urls.
@@ -171,6 +178,7 @@ export function CloneRepositoryUrlPicker() {
         <CloneRepoForm
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            onCloneSettled={onCloneSettled}
         />
     </>
     )

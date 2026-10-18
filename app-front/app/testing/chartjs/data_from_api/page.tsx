@@ -151,7 +151,7 @@ export default function Page() {
     const since = `1.months`
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     <h2>Import Chart.JS</h2>

@@ -7,7 +7,7 @@ import { BarMetric } from "@/app/components/charts/BarMetric"
 import { CustomBarMetric } from "@/app/components/charts/CustomBarMetric"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
-import { fetchRepoList } from "@/app/types/pwsh-api/repo/list"
+import { fetchRepoList, RepoSummaryItem, fetchRepoListNames } from "@/app/types/pwsh-api/repo/list"
 import { DefaultDeserializer } from "v8"
 import { Line } from "react-chartjs-2"
 
@@ -241,7 +241,7 @@ function ShowTopLine() {
 
         async function loadRepoList() {
             try {
-                const filteredRepos = await fetchRepoList("startautomating|gitlogger")
+                const filteredRepos: string[] = await fetchRepoListNames("startautomating|gitlogger")
                 if (isMounted) {
                     setAutomatingRepoList(filteredRepos)
                 }

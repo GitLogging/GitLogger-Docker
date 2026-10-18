@@ -10,28 +10,59 @@ export interface RepoSummaryItem {
     Path: string
     Remote: string
 }
+// for endpoint: /repo/list
+// export type RepoListApiResponse = RepoSummaryItem[]
 
-export interface RepoListResponse {
+async function fetchAsArray<T>(response: Response): Promise<T[]> {
     /**
-     * @summary array of records from the api endpoint: http://127.0.0.1:3001/repo/list
+     * @summary ensure an endpoint returns an array of that type, even if it's a single value
      */
-    RepoList?: RepoSummaryItem[]
+    const data: T | T[] | null = await response.json()
+    if (Array.isArray(data)) {
+        return data
+    }
+    return data ? [data] : []
 }
 
-export type RepoListApiResponse = RepoSummaryItem[] | RepoListResponse
+export async function fetchRepoList(repoPattern?: string): Promise<RepoSummaryItem[]> {
+    /**
+     * @summary fetch metadata from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
+     */
+    console.info(`Fetching repo list with pattern: ${repoPattern ?? 'none'}`)
+    const cacheClearResponse = await fetch("http://127.0.0.1:3001/cache/clear")
+    if (!cacheClearResponse.ok) {
+        throw new Error(`Failed to clear repository cache: ${cacheClearResponse.status}`)
+    }
 
-export async function fetchRepoList(repoPattern: string): Promise<string[]> {
+    const response = await fetch("http://127.0.0.1:3001/repo/list", { cache: "no-store" })
+    if (!response.ok) {
+        throw new Error(`Failed to fetch repo list: ${response.status}`)
+    }
+    const repoSummaryList: RepoSummaryItem[] = await fetchAsArray<RepoSummaryItem>(response)
+
+    if (!repoPattern) {
+        return repoSummaryList
+    }
+
+    const repoRegex = new RegExp(repoPattern, "i")
+
+    return repoSummaryList
+        .filter((repo) => repoRegex.test(repo.OwnerRepoPair))
+}
+export async function fetchRepoListNames(repoPattern?: string): Promise<string[]> {
+    /**
+     * @summary fetch names from `/repo/list` optionally filtering by OwnerRepoPair with the regex `repoPattern`
+     */
     const response = await fetch("http://127.0.0.1:3001/repo/list")
     if (!response.ok) {
         throw new Error(`Failed to fetch repo list: ${response.status}`)
     }
 
-    const clonedRepos: RepoListApiResponse = await response.json()
-    const repoSummaryList = Array.isArray(clonedRepos)
-        ? clonedRepos
-        : Array.isArray(clonedRepos.RepoList)
-            ? clonedRepos.RepoList
-            : []
+    const repoSummaryList = await fetchAsArray<RepoSummaryItem>(response)
+
+    if (!repoPattern) {
+        return repoSummaryList.map((repo) => repo.OwnerRepoPair)
+    }
 
     const repoRegex = new RegExp(repoPattern, "i")
     return repoSummaryList

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 // import "./globals.css"
+import "./global-view-transitions.css"
 import 'bootstrap/dist/css/bootstrap.min.css' // Add this line
 import "./gitlogger-base.css"
 import "./gitlogger-4bitcss-iceberg-dark.css"
