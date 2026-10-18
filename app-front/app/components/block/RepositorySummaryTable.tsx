@@ -13,6 +13,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import Link from "next/link"
 
 import { fetchRepoList, fetchRepoListNames, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
+import { Spinner } from "react-bootstrap"
 
 export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
@@ -52,7 +53,11 @@ export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
     }, [refreshKey])
 
     if (isLoading) {
-        return (<><h1>Loading repositories...</h1></>)
+        return (
+            <>
+                <Spinner animation="border" size="sm" variant="primary" /> Loading Repositories...
+            </>
+        )
     }
 
     if (errorMessage) {
@@ -115,6 +120,7 @@ export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
     }
 
     return (
+        <>
         <Table striped bordered hover>
             <thead>
                 <tr>
@@ -165,6 +171,7 @@ export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
                 ))}
             </tbody>
         </Table>
+        </>
     )
 }
 
