@@ -13,7 +13,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import Link from "next/link"
 
 import { fetchRepoList, fetchRepoListNames, RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
-import { Spinner } from "react-bootstrap"
+import Spinner from "react-bootstrap/Spinner"
 
 export function RepoSummaryTable({ refreshKey = 0 }: { refreshKey?: number }) {
     const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])

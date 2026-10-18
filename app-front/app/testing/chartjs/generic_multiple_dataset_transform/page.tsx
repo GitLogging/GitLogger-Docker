@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
 import { ListGroup, ListGroupItem } from "react-bootstrap"
+import Spinner from "react-bootstrap/esm/Spinner"
 
 
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
@@ -317,7 +318,7 @@ export function DemoFlatBarChart({
     }, [RequestUrl])
 
     if (isLoading) {
-        return (<><h1>Loading Metric...</h1></>)
+        return (<><Spinner animation="border" size="sm" variant="primary" /> Loading Metric...</>)
     }
 
     if (errorMessage) {

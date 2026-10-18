@@ -3,6 +3,7 @@ import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { useState, useEffect } from "react"
+import Spinner from "react-bootstrap/esm/Spinner"
 import { Pie } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -127,7 +128,7 @@ export function ShowChartFromRequest({
     }, [])
 
     if (isLoading) {
-        return (<><h1>Loading Metric...</h1></>)
+        return (<><Spinner animation="border" size="sm" variant="primary" /> Loading Metric...</>)
     }
 
     if (errorMessage) {

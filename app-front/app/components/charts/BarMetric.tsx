@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Bar, Line } from "react-chartjs-2"
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale, BarElement, ChartData, ChartOptions } from 'chart.js'
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
+import Spinner from "react-bootstrap/esm/Spinner"
 
 // import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 
@@ -266,7 +267,7 @@ export function BarMetric({
     }, [RequestUrl])
 
     if (isLoading) {
-        return (<><h3>Loading Metric...</h3></>)
+        return (<><Spinner animation="border" size="sm" variant="primary" /> Loading Metric...</>)
     }
 
     if (errorMessage) {

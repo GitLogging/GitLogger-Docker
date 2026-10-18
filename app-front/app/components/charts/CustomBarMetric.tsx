@@ -19,6 +19,7 @@ import { Bar } from "react-chartjs-2";
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton";
 import type { CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit";
 import "chartjs-adapter-date-fns";
+import Spinner from "react-bootstrap/esm/Spinner"
 
 // import { Chart, TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -463,7 +464,7 @@ export const CustomBarMetric = memo(function CustomBarMetric({
   if (isLoading) {
     return (
       <>
-        <h3>Loading Metric...</h3>
+            <Spinner animation="border" size="sm" variant="primary" /> Loading Metric...
       </>
     );
   }

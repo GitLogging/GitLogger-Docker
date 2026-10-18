@@ -17,6 +17,7 @@ import { Line } from "react-chartjs-2";
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton";
 import type { CommitMetricItem } from "@/app/types/pwsh-api/repo/metric/commit";
 import "chartjs-adapter-date-fns";
+import Spinner from "react-bootstrap/esm/Spinner"
 
 /**
  * @summary CustomLineMetric supports per-dataset configuration for flexible axis mapping
@@ -377,7 +378,7 @@ export const CustomLineMetric = memo(function CustomLineMetric({
   if (isLoading) {
     return (
       <>
-        <h3>Loading Metric...</h3>
+            <Spinner animation="border" size="sm" variant="primary" /> Loading Metric...
       </>
     );
   }

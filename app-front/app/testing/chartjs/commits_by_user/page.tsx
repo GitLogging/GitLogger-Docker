@@ -128,7 +128,7 @@ export function FlatBarChart({
 
     if (isLoading) {
         return null
-        // return (<><h1>Loading Metric...</h1></>)
+        // return (<><Spinner animation="border" size="sm" variant="primary" /> Loading Metric...</>)
     }
 
     if (errorMessage) {
