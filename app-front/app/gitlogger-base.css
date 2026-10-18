@@ -15,6 +15,11 @@
     --surface: var(--black);
 }
 
+/* prevent window shuffle if scrollbar is not yet present */
+html {
+    scrollbar-gutter: stable;
+}
+
 *,
 *::before,
 *::after {
