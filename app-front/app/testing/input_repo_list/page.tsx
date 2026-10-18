@@ -109,7 +109,7 @@ export default function Page() {
      * */
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     <h1>refactored import: app-front/app/components/input/RepositoryNamePicker.tsx</h1>

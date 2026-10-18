@@ -86,7 +86,7 @@ export default function ListPage() {
 
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
 
             <article>
                 <section>

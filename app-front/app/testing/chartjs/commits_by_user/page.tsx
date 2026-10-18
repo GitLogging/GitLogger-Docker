@@ -173,7 +173,7 @@ export default function Page() {
 
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     {chartList}

@@ -10,13 +10,13 @@ export function OriginalGitloggerSite() {
     // return (
 
     //     <article>
-    //         {PageHeaderContent()}
+    //         <PageHeaderContent />
     //     </article>
     // )
 
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section className="callout">
                     <div className="callout-img">

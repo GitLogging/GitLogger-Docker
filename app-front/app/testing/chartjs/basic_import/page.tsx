@@ -39,7 +39,7 @@ export default function Page() {
      * */
     return (
         <>
-            {PageHeaderContent()}
+            <PageHeaderContent />
             <article>
                 <section>
                     <h2>Import Chart.JS</h2>
