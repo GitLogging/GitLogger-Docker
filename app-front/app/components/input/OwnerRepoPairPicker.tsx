@@ -58,9 +58,11 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
 function RepoOwnerOnlyPicker({
     dataListId,
     inputElementId,
+    onOwnerChange,
 }: {
     dataListId: string
     inputElementId: string
+    onOwnerChange?: (owner: string) => void
 }) {
     /**
      * @summary Select from short OwnerName Only names to choose cloned repos
@@ -71,6 +73,7 @@ function RepoOwnerOnlyPicker({
             list={dataListId}
             id={inputElementId}
             name={inputElementId}
+            onChange={(e) => onOwnerChange?.(e.target.value.trim())}
             placeholder="Owner Name"
             aria-label="Git Owner Name"
             aria-describedby="git-pair-picker-button" // fix(aria): ensure implemented
@@ -123,6 +126,7 @@ function RepoPairPickerInput({
     const formId = `repo-pair-picker-form`
     const [ownerOnlyDataList, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
     const [nameOnlyDataList, setNameOnlyDataList] = useState<NameOnlyDataListItem[]>([])
+    const [selectedOwner, setSelectedOwner] = useState('')
 
     useEffect(() => {
         let cancelled = false
@@ -154,8 +158,11 @@ function RepoPairPickerInput({
             <option key={name} value={name} label={String(repoCount)} />
         ))
         : undefined
-    const repoOnlyOptions = nameOnlyDataList.length > 0
-        ? nameOnlyDataList.map(({ name, url }) => (
+    const filteredNameOnlyDataList = selectedOwner
+        ? nameOnlyDataList.filter(({ url }) => url.includes(`/${selectedOwner}/`))
+        : []
+    const repoOnlyOptions = filteredNameOnlyDataList.length > 0
+        ? filteredNameOnlyDataList.map(({ name, url }) => (
             <option key={url} value={name} label={url} />
         ))
         : undefined
@@ -185,6 +192,7 @@ function RepoPairPickerInput({
                 <RepoOwnerOnlyPicker
                     dataListId={dataListOwnerOnlyId}
                     inputElementId={inputOwnerOnlyElementId}
+                    onOwnerChange={setSelectedOwner}
                 />
                 <RepoNameOnlyPicker
                     dataListId={dataListRepoOnlyId}
