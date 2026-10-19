@@ -16,7 +16,8 @@ import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 // import { Line } from "react-chartjs-2"
 
 export interface DatePeriodChoice {
-    unit: "day" | "week" | "month" | "year"
+    // unit: "day" | "week" | "month" | "year"
+    unit: "day" | "month" | "year"
 }
 
 const defaultRepoPair = `startautomating/pssvg`

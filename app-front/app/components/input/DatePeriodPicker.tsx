@@ -26,7 +26,7 @@ function DatePeriodPickerInput({
         <>
             <Form.Select size="sm" onChange={(e) => onPeriodChange?.(e.target.value)}>
                 <option>day</option>
-                <option>week</option>
+                {/* <option>week</option> */}
                 <option>month</option>
                 <option>year</option>
             </Form.Select>
