@@ -11,6 +11,21 @@ import { InputGroup, Form } from "react-bootstrap"
 // import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
 // import { InputGroup, Form } from "react-bootstrap"
 
+interface OwnerOnlyDataListItem {
+    /**
+     * @summary properties used to create a datalist for `<RepoOwnerOnlyPicker>`
+     */
+    name: string
+    repoCount: number
+}
+interface NameOnlyDataListItem {
+    /**
+     * @summary properties used to create a datalist for `<RepoNameOnlyPicker>`
+     */
+    name: string
+    url: number
+}
+
 function buildDataList({ dataListId, children }: { dataListId?: string; children?: React.ReactNode }) {
     /**
      * @summary Build a datalist element with the provided list of <options>, or fallback to defaults if no options are provided
@@ -101,11 +116,13 @@ function RepoPairPickerInput({
      * @summary (internal) Builds the input form elements for picking short cloned repo names
      */
     // should these by dynamic?
-    const dataListId = `repo-name-picker-source-list`
+    const dataListOwnerOnlyId = `repo-owner-only-picker-source-list`
+    const dataListRepoOnlyId = `repo-name-only-picker-source-list`
+
     const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
-    const formId = `clone-repo-form`
-    const [ownerCounts, setOwnerCounts] = useState<[string, number][]>([])
+    const formId = `repo-pair-picker-form`
+    const [ownerCounts, setOwnerCounts] = useState<OwnerOnlyDataListItem[]>([])
 
     useEffect(() => {
         let cancelled = false
@@ -117,7 +134,7 @@ function RepoPairPickerInput({
                     const owner = item.OwnerRepoPair.split('/')[0]
                     counts.set(owner, (counts.get(owner) ?? 0) + 1)
                 }
-                setOwnerCounts([...counts.entries()])
+                setOwnerCounts([...counts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -128,8 +145,8 @@ function RepoPairPickerInput({
     }, [])
 
     const repoOptions = ownerCounts.length > 0
-        ? ownerCounts.map(([owner, count]) => (
-            <option key={owner} value={owner} label={String(count)} />
+        ? ownerCounts.map(({ name, repoCount }) => (
+            <option key={name} value={name} label={String(repoCount)} />
         ))
         : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
@@ -156,11 +173,11 @@ function RepoPairPickerInput({
         >
             <InputGroup className="mb-3">
                 <RepoOwnerOnlyPicker
-                    dataListId={dataListId}
+                    dataListId={dataListOwnerOnlyId}
                     inputElementId={inputOwnerOnlyElementId}
                 />
                 <RepoNameOnlyPicker
-                    dataListId={dataListId}
+                    dataListId={dataListRepoOnlyId}
                     inputElementId={inputNameOnlyElementId}
                 />
                 {/* {cloneButton} */}
@@ -177,7 +194,7 @@ function RepoPairPickerInput({
             </form>
             {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
             {buildDataList({
-                dataListId: dataListId,
+                dataListId: dataListOwnerOnlyId,
                 children: repoOptions,
 
             })}
