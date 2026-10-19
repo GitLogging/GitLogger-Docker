@@ -121,19 +121,20 @@ function RepoPairPickerInput({
     const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const formId = `repo-pair-picker-form`
-    const [ownerCounts, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
+    const [ownerOnlyDataList, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
+    const [nameOnlyDataList, setNameOnlyDataList] = useState<NameOnlyDataListItem[]>([])
 
     useEffect(() => {
         let cancelled = false
         fetchRepoList()
             .then((items) => {
                 if (cancelled) return
-                const counts = new Map<string, number>()
+                const ownerOnlyCounts = new Map<string, number>()
                 for (const item of items) {
                     const owner = item.OwnerRepoPair.split('/')[0]
-                    counts.set(owner, (counts.get(owner) ?? 0) + 1)
+                    ownerOnlyCounts.set(owner, (ownerOnlyCounts.get(owner) ?? 0) + 1)
                 }
-                setOwnerOnlyDataList([...counts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
+                setOwnerOnlyDataList([...ownerOnlyCounts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -143,12 +144,16 @@ function RepoPairPickerInput({
         }
     }, [])
 
-    const ownerOnlyOptions = ownerCounts.length > 0
-        ? ownerCounts.map(({ name, repoCount }) => (
+    const ownerOnlyOptions = ownerOnlyDataList.length > 0
+        ? ownerOnlyDataList.map(({ name, repoCount }) => (
             <option key={name} value={name} label={String(repoCount)} />
         ))
         : undefined
-    const repoOnlyOptions = ownerOnlyOptions
+    const repoOnlyOptions = nameOnlyDataList.length > 0
+        ? nameOnlyDataList.map(({ name, repoCount }) => (
+            <option key={name} value={name} label={String(repoCount)} />
+        ))
+        : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
 
     async function handleSubmitPairPickerForm(e: React.FormEvent<HTMLFormElement>) {
