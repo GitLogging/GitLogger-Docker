@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { fetchRepoList, type RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { InputGroup, Form } from "react-bootstrap"
@@ -56,6 +57,27 @@ function PairPickerForm({
     const dataListId = `repo-name-picker-source-list`
     const inputElementId = `repo-name-picker-choice`
     const formId = `clone-repo-form`
+    const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
+
+    useEffect(() => {
+        let cancelled = false
+        fetchRepoList()
+            .then((items) => {
+                if (!cancelled) setRepoList(items)
+            })
+            .catch((error) => {
+                console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
+            })
+        return () => {
+            cancelled = true
+        }
+    }, [])
+
+    const repoOptions = repoList.length > 0
+        ? repoList.map((repo) => (
+            <option key={repo.OwnerRepoPair} value={repo.OwnerRepoPair.split('/')[0]} label={repo.Remote} />
+        ))
+        : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
 
     async function handleSubmitCloneRepo(e: React.FormEvent<HTMLFormElement>) {
@@ -146,7 +168,7 @@ function PairPickerForm({
             {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
             {buildDataList({
                 dataListId: dataListId,
-                // children: [],
+                children: repoOptions,
 
             })}
 
