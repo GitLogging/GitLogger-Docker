@@ -1,9 +1,10 @@
 "use client"
 import { useMemo, Suspense, useState, useEffect } from "react"
-import type { DateFnOption } from "@/app/types/pwsh-api/repo/list"
+// import type { DateFnOption } from "@/app/types/pwsh-api/repo/list"
 import type { ChartOptions } from "chart.js"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import OwnerRepoPairPicker from "@/app/components/input/OwnerRepoPairPicker"
+import DatePeriodPicker from "@/app/components/input/DatePeriodPicker"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 
 // import type { ChartOptions } from "chart.js"
@@ -48,6 +49,11 @@ function LineMetricWithPicker() {
             <h2>Latest</h2>
             <OwnerRepoPairPicker
                 onPairChange={setRepoPairName}
+            />
+            <DatePeriodPicker
+                onPeriodChange={(period) => {
+                    console.log(`Selected period: ${period}`)
+                }}
             />
             <CustomLineMetric
                 ChartTitle={`pulse: ${repoPairName} | totalCommits | Monthly`}
