@@ -1,5 +1,6 @@
 "use client"
 import { useMemo, Suspense, useState, useEffect } from "react"
+import type { DateFnOption } from "@/app/types/pwsh-api/repo/list"
 import type { ChartOptions } from "chart.js"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import OwnerRepoPairPicker from "@/app/components/input/OwnerRepoPairPicker"
@@ -15,6 +16,7 @@ import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 
 
 function LineMetricWithPicker() {
+    const [repoPairName, setRepoPairName] = useState(`startautomating/pssvg`)
     /**
      * @summary creates a `<CustomLineMetric>` with the picker `<OwnerRepoPairPicker>`
      */
@@ -47,14 +49,14 @@ function LineMetricWithPicker() {
             {/* <CustomLineMetric
                 DatasetConfig={configTotalNin1}
                 ChartTitle="recent: Nin | totalCommits"
-             ChartConfig={axisPerWeek}
+             ChartConfig={axisPerMonth}
             /> */}
 
             <h3>Pulse for StartAutomating</h3>
             <CustomLineMetric
                 ChartTitle="pulse: PsSVG | totalCommits | Monthly"
                 DatasetConfig={{
-                    RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${`startautomating/pssvg`}&period=${`month`}`,
+                    RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repoPairName}&period=${`month`}`,
 
                     XAxisKey: `XAxisKey`,
                     YAxisKey: `TotalCommits`,
