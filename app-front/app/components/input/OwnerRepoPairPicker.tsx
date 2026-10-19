@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { fetchRepoList } from "@/app/types/pwsh-api/repo/list"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
-import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { InputGroup, Form } from "react-bootstrap"
 
 // import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
@@ -35,7 +34,7 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     }
     if (!children) {
         // console.error(`<RepositoryUrlPicker> -> buildDataList: missing required children`)
-        children = BuildInputOptionsFrom(defaultRepoUrlList, { label: 'label', value: 'url' })
+        children = BuildInputOptionsFrom([], { label: 'label', value: 'url' })
     }
     /*
     example output:
@@ -122,7 +121,7 @@ function RepoPairPickerInput({
     const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const formId = `repo-pair-picker-form`
-    const [ownerCounts, setOwnerCounts] = useState<OwnerOnlyDataListItem[]>([])
+    const [ownerCounts, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
 
     useEffect(() => {
         let cancelled = false
@@ -134,7 +133,7 @@ function RepoPairPickerInput({
                     const owner = item.OwnerRepoPair.split('/')[0]
                     counts.set(owner, (counts.get(owner) ?? 0) + 1)
                 }
-                setOwnerCounts([...counts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
+                setOwnerOnlyDataList([...counts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -144,11 +143,12 @@ function RepoPairPickerInput({
         }
     }, [])
 
-    const repoOptions = ownerCounts.length > 0
+    const ownerOnlyOptions = ownerCounts.length > 0
         ? ownerCounts.map(({ name, repoCount }) => (
             <option key={name} value={name} label={String(repoCount)} />
         ))
         : undefined
+    const repoOnlyOptions = ownerOnlyOptions
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
 
     async function handleSubmitPairPickerForm(e: React.FormEvent<HTMLFormElement>) {
@@ -195,8 +195,11 @@ function RepoPairPickerInput({
             {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
             {buildDataList({
                 dataListId: dataListOwnerOnlyId,
-                children: repoOptions,
-
+                children: ownerOnlyOptions,
+            })}
+            {buildDataList({
+                dataListId: dataListRepoOnlyId,
+                children: repoOnlyOptions,
             })}
 
             {/* end of: div#mainFormContent */}
