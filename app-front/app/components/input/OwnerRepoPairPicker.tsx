@@ -279,7 +279,6 @@ export default function OwnerRepoPairPicker({
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (<>
-        <h1>Owner/Repo pair picker here</h1>
         <RepoPairPickerInput
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}

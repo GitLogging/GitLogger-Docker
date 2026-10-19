@@ -12,6 +12,7 @@ export function PageHeaderContent() {
                 <div className="nav-inner">
                     <ul className="nav-menu">
                         <li><a href="/list">Repos</a></li>
+                        <li><a href="/latest">Latest</a></li>
                         <li><a href="/home">Home</a></li>
                         <li><a href="/">About GitLogger</a></li>
                         <li><a href="/testing">Test Page</a></li>
