@@ -65,13 +65,21 @@ function LineMetricWithPicker() {
             <OwnerRepoPairPicker
                 pair={repoPairName}
                 onPairChange={setRepoPairName}
+                children={
+                    <DatePeriodPicker
+                        onPeriodChange={(period) => {
+                            console.log(`Selected period: ${period}`)
+                            setPeriod(period)
+                        }}
+                    />
+                }
             />
-            <DatePeriodPicker
+            {/* <DatePeriodPicker
                 onPeriodChange={(period) => {
                     console.log(`Selected period: ${period}`)
                     setPeriod(period)
                 }}
-            />
+            /> */}
             <CustomLineMetric
                 ChartTitle={`pulse: ${repoPairName ?? defaultRepoPair} | totalCommits | Monthly`}
                 DatasetConfig={{
