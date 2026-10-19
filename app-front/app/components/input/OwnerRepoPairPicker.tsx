@@ -41,28 +41,54 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     )
 }
 
-function ShortRepoOwnerNamePicker({
+function RepoOwnerOnlyPicker({
     dataListId,
     inputElementId,
 }: {
     dataListId: string
     inputElementId: string
 }) {
+    /**
+     * @summary Select from short OwnerName Only names to choose cloned repos
+     */
     return (
         <Form.Control
             type="search"
             list={dataListId}
             id={inputElementId}
             name={inputElementId}
-            placeholder="Select a Git Owner Name"
+            placeholder="Owner Name"
             aria-label="Git Owner Name"
-            aria-describedby="git-pair-picker-button"
+            aria-describedby="git-pair-picker-button" // fix(aria): ensure implemented
+            required={false}
+        />
+    )
+}
+function RepoNameOnlyPicker({
+    dataListId,
+    inputElementId,
+}: {
+    dataListId: string
+    inputElementId: string
+}) {
+    /**
+     * @summary Select from short RepoName Only names to choose cloned repos
+     */
+    return (
+        <Form.Control
+            type="search"
+            list={dataListId}
+            id={inputElementId}
+            name={inputElementId}
+            placeholder="Repo Name"
+            aria-label="Git Repo Name"
+            aria-describedby="git-pair-picker-button" // fix(aria): ensure implemented
             required={false}
         />
     )
 }
 
-function PairPickerForm({
+function RepoPairPickerInput({
     isSubmitting,
     setIsSubmitting,
     onCloneSettled,
@@ -76,7 +102,8 @@ function PairPickerForm({
      */
     // should these by dynamic?
     const dataListId = `repo-name-picker-source-list`
-    const inputElementId = `repo-name-picker-choice`
+    const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
+    const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const formId = `clone-repo-form`
     const [ownerCounts, setOwnerCounts] = useState<[string, number][]>([])
 
@@ -128,36 +155,16 @@ function PairPickerForm({
             }}
         >
             <InputGroup className="mb-3">
-                <ShortRepoOwnerNamePicker
+                <RepoOwnerOnlyPicker
                     dataListId={dataListId}
-                    inputElementId={inputElementId}
+                    inputElementId={inputOwnerOnlyElementId}
                 />
-                <Form.Control
-                    type="search"
-                    list={dataListId}
-                    id={inputElementId}
-                    name={inputElementId}
-                    placeholder="Select a Git Repository Name"
-                    aria-label="Git Repo Name"
-                    aria-describedby="git-pair-picker-button"
-                    required={false}
-                >
-
-                </Form.Control>
+                <RepoNameOnlyPicker
+                    dataListId={dataListId}
+                    inputElementId={inputNameOnlyElementId}
+                />
                 {/* {cloneButton} */}
             </InputGroup>
-            {/* <input
-                style={{
-                    flexGrow: 2,
-                }}
-                type="search"
-                list={dataListId}
-                id={inputElementId}
-                name={inputElementId}
-                defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
-                placeholder="Enter a git repository url"
-                required={false}
-            /> */}
 
         </div>
     )
@@ -197,7 +204,7 @@ export default function OwnerRepoPairPicker({
 
     return (<>
         <h1>Owner/Repo pair picker here</h1>
-        <PairPickerForm
+        <RepoPairPickerInput
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
             onCloneSettled={onCloneSettled}
