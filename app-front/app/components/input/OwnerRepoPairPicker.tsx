@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { fetchRepoList } from "@/app/types/pwsh-api/repo/list"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { InputGroup, Form } from "react-bootstrap"
@@ -132,13 +132,14 @@ function RepoPairPickerInput({
     /**
      * @summary (internal) Builds the input form elements for picking short cloned repo names
      */
-    // should these by dynamic?
-    const dataListOwnerOnlyId = `repo-owner-only-picker-source-list`
-    const dataListRepoOnlyId = `repo-name-only-picker-source-list`
-    const selectedRepoUrlElementId = `repo-remote-url-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
-    const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
-    const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
-    const formId = `repo-pair-picker-form`
+    // useId is unique per component instance; it contains ":" which is valid in ids
+    const instanceId = useId()
+    const dataListOwnerOnlyId = `${instanceId}-repo-owner-only-picker-source-list`
+    const dataListRepoOnlyId = `${instanceId}-repo-name-only-picker-source-list`
+    const selectedRepoUrlElementId = `${instanceId}-repo-remote-url-choice`
+    const inputOwnerOnlyElementId = `${instanceId}-repo-owner-picker-choice`
+    const inputNameOnlyElementId = `${instanceId}-repo-name-picker-choice`
+    const formId = `${instanceId}-repo-pair-picker-form`
     const [ownerOnlyDataList, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
     const [nameOnlyDataList, setNameOnlyDataList] = useState<NameOnlyDataListItem[]>([])
     const [selectedOwner, setSelectedOwner] = useState('')
