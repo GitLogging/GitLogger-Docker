@@ -1,5 +1,5 @@
 "use client"
-import { useMemo, Suspense, useState, useEffect } from "react"
+import { useMemo, Suspense, useState, useEffect, useCallback } from "react"
 // import type { DateFnOption } from "@/app/types/pwsh-api/repo/list"
 import type { ChartOptions } from "chart.js"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
@@ -19,8 +19,17 @@ export interface DatePeriodChoice {
     unit: "day" | "week" | "month" | "year"
 }
 
+const defaultRepoPair = `startautomating/pssvg`
+const buildTotalCommitUrl = (pair: string, period: string) =>
+    `http://127.0.0.1:3001/repo/metric/totalcommit?name=${pair}&period=${period}`
+
 function LineMetricWithPicker() {
-    const [repoPairName, setRepoPairName] = useState(`startautomating/pssvg`)
+    // undefined until read back from the chart's initial RequestUrl
+    const [repoPairName, setRepoPairName] = useState<string | undefined>(undefined)
+    const syncPairFromChart = useCallback((urls: string[]) => {
+        const name = new URL(urls[0]).searchParams.get(`name`)
+        if (name) setRepoPairName((current) => current ?? name)
+    }, [])
     const [period, setPeriod] = useState<DatePeriodChoice["unit"]>(`month`)
 
     /**
@@ -53,6 +62,7 @@ function LineMetricWithPicker() {
 
             <h2>Latest</h2>
             <OwnerRepoPairPicker
+                pair={repoPairName}
                 onPairChange={setRepoPairName}
             />
             <DatePeriodPicker
@@ -62,15 +72,16 @@ function LineMetricWithPicker() {
                 }}
             />
             <CustomLineMetric
-                ChartTitle={`pulse: ${repoPairName} | totalCommits | Monthly`}
+                ChartTitle={`pulse: ${repoPairName ?? defaultRepoPair} | totalCommits | Monthly`}
                 DatasetConfig={{
-                    RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repoPairName}&period=${period}`,
+                    RequestUrl: buildTotalCommitUrl(repoPairName ?? defaultRepoPair, period),
 
                     XAxisKey: `XAxisKey`,
                     YAxisKey: `TotalCommits`,
                     DatasetLabel: `PsSvg`
                 }}
                 ChartConfig={axisPerMonth}
+                onRequestUrlsChange={syncPairFromChart}
             />
         </>
     )

@@ -59,11 +59,13 @@ function RepoOwnerOnlyPicker({
     dataListId,
     inputElementId,
     onOwnerChange,
+    value,
     isInvalid,
 }: {
     dataListId: string
     inputElementId: string
     onOwnerChange?: (owner: string) => void
+    value?: string
     isInvalid?: boolean
 }) {
     /**
@@ -76,6 +78,7 @@ function RepoOwnerOnlyPicker({
             id={inputElementId}
             name={inputElementId}
             onChange={(e) => onOwnerChange?.(e.target.value.trim())}
+            value={value}
             isInvalid={isInvalid}
             placeholder="Owner Name"
             aria-label="Git Owner Name"
@@ -123,7 +126,9 @@ function RepoPairPickerInput({
     setIsSubmitting,
     onCloneSettled,
     onPairChange,
+    pair,
 }: {
+    pair?: string
     isSubmitting: boolean
     setIsSubmitting: (value: boolean) => void
     onCloneSettled?: () => void
@@ -169,6 +174,14 @@ function RepoPairPickerInput({
             cancelled = true
         }
     }, [])
+
+    // sync the inputs when the parent supplies a pair (e.g. read from the chart)
+    useEffect(() => {
+        if (!pair) return
+        const [owner, name = ''] = pair.split('/')
+        setSelectedOwner(owner)
+        setSelectedName(name)
+    }, [pair])
 
     useEffect(() => {
         // only report selections that match a known cloned repo
@@ -223,6 +236,7 @@ function RepoPairPickerInput({
                         setSelectedOwner(owner)
                         setSelectedName('')
                     }}
+                    value={selectedOwner}
                     isInvalid={!selectedOwner}
                 />
                 <RepoNameOnlyPicker
@@ -282,7 +296,9 @@ function RepoPairPickerInput({
 export default function OwnerRepoPairPicker({
     onCloneSettled,
     onPairChange,
+    pair,
 }: {
+    pair?: string
     onCloneSettled?: () => void
     onPairChange?: (ownerRepoPair: string) => void
 }) {
@@ -299,6 +315,7 @@ export default function OwnerRepoPairPicker({
             setIsSubmitting={setIsSubmitting}
             onCloneSettled={onCloneSettled}
             onPairChange={onPairChange}
+            pair={pair}
         />
     </>
     )

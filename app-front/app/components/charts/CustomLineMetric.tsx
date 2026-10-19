@@ -244,11 +244,13 @@ export const CustomLineMetric = memo(function CustomLineMetric({
   ChartConfig,
   ChartTitle,
   Options,
+  onRequestUrlsChange,
 }: {
   DatasetConfig: DatasetConfig | DatasetConfig[];
   ChartConfig?: ChartOptions<"line">;
   ChartTitle?: string;
   Options?: any; // is object
+  onRequestUrlsChange?: (urls: string[]) => void;
 }) {
   /**
    * @summary A customizable line chart component that supports per-dataset configuration
@@ -268,6 +270,10 @@ export const CustomLineMetric = memo(function CustomLineMetric({
     DatasetConfig[] | null
   >(null);
   const [apiResponses, setApiResponses] = useState<CommitMetricItem[][]>([]);
+
+  useEffect(() => {
+    if (requestUrls.length > 0) onRequestUrlsChange?.(requestUrls);
+  }, [requestUrls, onRequestUrlsChange]);
 
   useEffect(() => {
     let isMounted = true;
