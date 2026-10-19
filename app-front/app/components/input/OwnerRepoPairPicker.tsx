@@ -59,10 +59,12 @@ function RepoOwnerOnlyPicker({
     dataListId,
     inputElementId,
     onOwnerChange,
+    isInvalid,
 }: {
     dataListId: string
     inputElementId: string
     onOwnerChange?: (owner: string) => void
+    isInvalid?: boolean
 }) {
     /**
      * @summary Select from short OwnerName Only names to choose cloned repos
@@ -74,6 +76,7 @@ function RepoOwnerOnlyPicker({
             id={inputElementId}
             name={inputElementId}
             onChange={(e) => onOwnerChange?.(e.target.value.trim())}
+            isInvalid={isInvalid}
             placeholder="Owner Name"
             aria-label="Git Owner Name"
             aria-describedby="git-pair-picker-button" // fix(aria): ensure implemented
@@ -84,9 +87,13 @@ function RepoOwnerOnlyPicker({
 function RepoNameOnlyPicker({
     dataListId,
     inputElementId,
+    onNameChange,
+    isInvalid,
 }: {
     dataListId: string
     inputElementId: string
+    onNameChange?: (name: string) => void
+    isInvalid?: boolean
 }) {
     /**
      * @summary Select from short RepoName Only names to choose cloned repos
@@ -97,6 +104,8 @@ function RepoNameOnlyPicker({
             list={dataListId}
             id={inputElementId}
             name={inputElementId}
+            onChange={(e) => onNameChange?.(e.target.value.trim())}
+            isInvalid={isInvalid}
             placeholder="Repo Name"
             aria-label="Git Repo Name"
             aria-describedby="git-pair-picker-button" // fix(aria): ensure implemented
@@ -127,6 +136,7 @@ function RepoPairPickerInput({
     const [ownerOnlyDataList, setOwnerOnlyDataList] = useState<OwnerOnlyDataListItem[]>([])
     const [nameOnlyDataList, setNameOnlyDataList] = useState<NameOnlyDataListItem[]>([])
     const [selectedOwner, setSelectedOwner] = useState('')
+    const [selectedName, setSelectedName] = useState('')
 
     useEffect(() => {
         let cancelled = false
@@ -193,10 +203,13 @@ function RepoPairPickerInput({
                     dataListId={dataListOwnerOnlyId}
                     inputElementId={inputOwnerOnlyElementId}
                     onOwnerChange={setSelectedOwner}
+                    isInvalid={!selectedOwner}
                 />
                 <RepoNameOnlyPicker
                     dataListId={dataListRepoOnlyId}
                     inputElementId={inputNameOnlyElementId}
+                    onNameChange={setSelectedName}
+                    isInvalid={!selectedName}
                 />
                 {/* {cloneButton} */}
             </InputGroup>
