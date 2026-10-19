@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { fetchRepoList, type RepoSummaryItem } from "@/app/types/pwsh-api/repo/list"
+import { fetchRepoList } from "@/app/types/pwsh-api/repo/list"
 import { BuildInputOptionsFrom } from "@/app/components/input/InputObjectsFrom"
 import { defaultRepoUrlList } from "@/app/default-data/repository-urls"
 import { InputGroup, Form } from "react-bootstrap"
@@ -78,19 +78,19 @@ function PairPickerForm({
     const dataListId = `repo-name-picker-source-list`
     const inputElementId = `repo-name-picker-choice`
     const formId = `clone-repo-form`
-    const [repoList, setRepoList] = useState<RepoSummaryItem[]>([])
+    const [ownerCounts, setOwnerCounts] = useState<[string, number][]>([])
 
     useEffect(() => {
         let cancelled = false
         fetchRepoList()
             .then((items) => {
                 if (cancelled) return
-                const byOwner = new Map<string, RepoSummaryItem>()
+                const counts = new Map<string, number>()
                 for (const item of items) {
                     const owner = item.OwnerRepoPair.split('/')[0]
-                    if (!byOwner.has(owner)) byOwner.set(owner, item)
+                    counts.set(owner, (counts.get(owner) ?? 0) + 1)
                 }
-                setRepoList([...byOwner.values()])
+                setOwnerCounts([...counts.entries()])
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -100,9 +100,9 @@ function PairPickerForm({
         }
     }, [])
 
-    const repoOptions = repoList.length > 0
-        ? repoList.map((repo) => (
-            <option key={repo.OwnerRepoPair.split('/')[0]} value={repo.OwnerRepoPair.split('/')[0]} label={repo.Remote} />
+    const repoOptions = ownerCounts.length > 0
+        ? ownerCounts.map(([owner, count]) => (
+            <option key={owner} value={owner} label={String(count)} />
         ))
         : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
