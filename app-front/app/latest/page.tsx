@@ -1,11 +1,12 @@
 "use client"
-import { useMemo, Suspense, useState, useEffect, useCallback } from "react"
+import { useMemo, Suspense, useState, useEffect, useCallback, useRef } from "react"
 // import type { DateFnOption } from "@/app/types/pwsh-api/repo/list"
 import type { ChartOptions } from "chart.js"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import OwnerRepoPairPicker from "@/app/components/input/OwnerRepoPairPicker"
 import DatePeriodPicker from "@/app/components/input/DatePeriodPicker"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
+import Button from 'react-bootstrap/Button'
 
 // import type { ChartOptions } from "chart.js"
 // import { ButtonGroup, Dropdown, DropdownButton } from "react-bootstrap"
@@ -96,16 +97,30 @@ function LineMetricWithPicker() {
     )
 }
 export default function CreatePage() {
+    // each entry is a stable key for one chart; the length drives how many render
+    const [chartKeys, setChartKeys] = useState<number[]>([0, 1])
+    const nextKey = useRef(2)
+
+    function addChart() {
+        setChartKeys((keys) => [...keys, nextKey.current++])
+    }
+
+    function removeLastChart() {
+        setChartKeys((keys) => keys.slice(0, -1))
+    }
+
     return (
         <>
             <PageHeaderContent />
 
             <article>
-                <section>
-                    <LineMetricWithPicker />
-                    <LineMetricWithPicker />
-
+                <section id="latest-charts">
+                    {chartKeys.map((key) => (
+                        <LineMetricWithPicker key={key} />
+                    ))}
                 </section>
+                <Button variant="success" onClick={addChart} >Add Chart</Button>
+                <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove Chart</Button>
             </article>
         </>
     )
