@@ -107,6 +107,7 @@ function RepoNameOnlyPicker({
             id={inputElementId}
             name={inputElementId}
             onChange={(e) => onNameChange?.(e.target.value)}
+            onClick={() => onNameChange?.('')} // todo(ux): clear does not update the datalist until second click
             value={value}
             isInvalid={isInvalid}
             placeholder="Repo Name"
