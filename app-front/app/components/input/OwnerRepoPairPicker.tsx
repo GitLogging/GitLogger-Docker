@@ -88,11 +88,13 @@ function RepoNameOnlyPicker({
     dataListId,
     inputElementId,
     onNameChange,
+    value,
     isInvalid,
 }: {
     dataListId: string
     inputElementId: string
     onNameChange?: (name: string) => void
+    value?: string
     isInvalid?: boolean
 }) {
     /**
@@ -104,7 +106,8 @@ function RepoNameOnlyPicker({
             list={dataListId}
             id={inputElementId}
             name={inputElementId}
-            onChange={(e) => onNameChange?.(e.target.value.trim())}
+            onChange={(e) => onNameChange?.(e.target.value)}
+            value={value}
             isInvalid={isInvalid}
             placeholder="Repo Name"
             aria-label="Git Repo Name"
@@ -202,14 +205,18 @@ function RepoPairPickerInput({
                 <RepoOwnerOnlyPicker
                     dataListId={dataListOwnerOnlyId}
                     inputElementId={inputOwnerOnlyElementId}
-                    onOwnerChange={setSelectedOwner}
+                    onOwnerChange={(owner) => {
+                        setSelectedOwner(owner)
+                        setSelectedName('')
+                    }}
                     isInvalid={!selectedOwner}
                 />
                 <RepoNameOnlyPicker
                     dataListId={dataListRepoOnlyId}
                     inputElementId={inputNameOnlyElementId}
                     onNameChange={setSelectedName}
-                    isInvalid={!selectedName}
+                    value={selectedName}
+                    isInvalid={!selectedName.trim()}
                 />
                 {/* {cloneButton} */}
             </InputGroup>
