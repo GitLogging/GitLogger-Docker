@@ -127,8 +127,10 @@ function RepoPairPickerInput({
     onCloneSettled,
     onPairChange,
     pair,
+    children,
 }: {
     pair?: string
+    children?: React.ReactNode
     isSubmitting: boolean
     setIsSubmitting: (value: boolean) => void
     onCloneSettled?: () => void
@@ -246,6 +248,7 @@ function RepoPairPickerInput({
                     value={selectedName}
                     isInvalid={!selectedName.trim()}
                 />
+                {children}
             </InputGroup>
             <InputGroup className="mb-3">
                 <Form.Control
@@ -297,8 +300,10 @@ export default function OwnerRepoPairPicker({
     onCloneSettled,
     onPairChange,
     pair,
+    children,
 }: {
     pair?: string
+    children?: React.ReactNode
     onCloneSettled?: () => void
     onPairChange?: (ownerRepoPair: string) => void
 }) {
@@ -316,7 +321,9 @@ export default function OwnerRepoPairPicker({
             onCloneSettled={onCloneSettled}
             onPairChange={onPairChange}
             pair={pair}
-        />
+        >
+            {children}
+        </RepoPairPickerInput>
     </>
     )
 }
