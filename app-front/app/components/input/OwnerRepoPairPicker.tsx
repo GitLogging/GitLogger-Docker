@@ -63,7 +63,13 @@ function PairPickerForm({
         let cancelled = false
         fetchRepoList()
             .then((items) => {
-                if (!cancelled) setRepoList(items)
+                if (cancelled) return
+                const byOwner = new Map<string, RepoSummaryItem>()
+                for (const item of items) {
+                    const owner = item.OwnerRepoPair.split('/')[0]
+                    if (!byOwner.has(owner)) byOwner.set(owner, item)
+                }
+                setRepoList([...byOwner.values()])
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -75,7 +81,7 @@ function PairPickerForm({
 
     const repoOptions = repoList.length > 0
         ? repoList.map((repo) => (
-            <option key={repo.OwnerRepoPair} value={repo.OwnerRepoPair.split('/')[0]} label={repo.Remote} />
+            <option key={repo.OwnerRepoPair.split('/')[0]} value={repo.OwnerRepoPair.split('/')[0]} label={repo.Remote} />
         ))
         : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
