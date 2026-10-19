@@ -132,7 +132,7 @@ function RepoPairPickerInput({
     // should these by dynamic?
     const dataListOwnerOnlyId = `repo-owner-only-picker-source-list`
     const dataListRepoOnlyId = `repo-name-only-picker-source-list`
-
+    const selectedRepoUrlElementId = `repo-remote-url-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const inputOwnerOnlyElementId = `repo-owner-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const inputNameOnlyElementId = `repo-name-picker-choice` // # fix(elementId): ensure unique for multiple instances using dynamic id
     const formId = `repo-pair-picker-form`
@@ -218,7 +218,24 @@ function RepoPairPickerInput({
                     value={selectedName}
                     isInvalid={!selectedName.trim()}
                 />
-                {/* {cloneButton} */}
+            </InputGroup>
+            <InputGroup className="mb-3">
+                <Form.Control
+
+                    id={selectedRepoUrlElementId}
+                    type="text"
+                    placeholder="Repo Url"
+                    readOnly
+                    value={
+                        selectedOwner && selectedName ?
+                            nameOnlyDataList
+                                .filter((item) => item.name == selectedName)
+                                .flatMap((item) => item.url) :
+                            ''
+
+
+                    }
+                />
             </InputGroup>
 
         </div>
