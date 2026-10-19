@@ -22,7 +22,7 @@ interface NameOnlyDataListItem {
      * @summary properties used to create a datalist for `<RepoNameOnlyPicker>`
      */
     name: string
-    url: number
+    url: string
 }
 
 function buildDataList({ dataListId, children }: { dataListId?: string; children?: React.ReactNode }) {
@@ -135,6 +135,11 @@ function RepoPairPickerInput({
                     ownerOnlyCounts.set(owner, (ownerOnlyCounts.get(owner) ?? 0) + 1)
                 }
                 setOwnerOnlyDataList([...ownerOnlyCounts.entries()].map(([name, repoCount]) => ({ name, repoCount })))
+
+                setNameOnlyDataList(items.map(item => {
+                    const name = item.OwnerRepoPair.split('/')[1]
+                    return { name, url: item.Remote }
+                }))
             })
             .catch((error) => {
                 console.error(`<OwnerRepoPairPicker>: fetchRepoList failed:`, error)
@@ -150,8 +155,8 @@ function RepoPairPickerInput({
         ))
         : undefined
     const repoOnlyOptions = nameOnlyDataList.length > 0
-        ? nameOnlyDataList.map(({ name, repoCount }) => (
-            <option key={name} value={name} label={String(repoCount)} />
+        ? nameOnlyDataList.map(({ name, url }) => (
+            <option key={url} value={name} label={url} />
         ))
         : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
