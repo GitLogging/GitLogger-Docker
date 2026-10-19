@@ -41,6 +41,27 @@ function buildDataList({ dataListId, children }: { dataListId?: string; children
     )
 }
 
+function ShortRepoOwnerNamePicker({
+    dataListId,
+    inputElementId,
+}: {
+    dataListId: string
+    inputElementId: string
+}) {
+    return (
+        <Form.Control
+            type="search"
+            list={dataListId}
+            id={inputElementId}
+            name={inputElementId}
+            placeholder="Select a Git Owner Name"
+            aria-label="Git Owner Name"
+            aria-describedby="git-pair-picker-button"
+            required={false}
+        />
+    )
+}
+
 function PairPickerForm({
     isSubmitting,
     setIsSubmitting,
@@ -107,19 +128,10 @@ function PairPickerForm({
             }}
         >
             <InputGroup className="mb-3">
-                <Form.Control
-                    type="search"
-                    list={dataListId}
-                    id={inputElementId}
-                    name={inputElementId}
-                    placeholder="Select a Git Owner Name"
-                    aria-label="Git Owner Name"
-                    aria-describedby="git-pair-picker-button"
-                    required={false}
-                // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
-                >
-
-                </Form.Control>
+                <ShortRepoOwnerNamePicker
+                    dataListId={dataListId}
+                    inputElementId={inputElementId}
+                />
                 <Form.Control
                     type="search"
                     list={dataListId}
@@ -129,7 +141,6 @@ function PairPickerForm({
                     aria-label="Git Repo Name"
                     aria-describedby="git-pair-picker-button"
                     required={false}
-                // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 >
 
                 </Form.Control>
