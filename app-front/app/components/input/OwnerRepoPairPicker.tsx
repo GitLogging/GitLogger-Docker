@@ -122,10 +122,12 @@ function RepoPairPickerInput({
     isSubmitting,
     setIsSubmitting,
     onCloneSettled,
+    onPairChange,
 }: {
     isSubmitting: boolean
     setIsSubmitting: (value: boolean) => void
     onCloneSettled?: () => void
+    onPairChange?: (ownerRepoPair: string) => void
 }) {
     /**
      * @summary (internal) Builds the input form elements for picking short cloned repo names
@@ -166,6 +168,16 @@ function RepoPairPickerInput({
             cancelled = true
         }
     }, [])
+
+    useEffect(() => {
+        // only report selections that match a known cloned repo
+        const isKnownPair = nameOnlyDataList.some(
+            ({ name, url }) => name === selectedName && url.includes(`/${selectedOwner}/`),
+        )
+        if (selectedOwner && selectedName && isKnownPair) {
+            onPairChange?.(`${selectedOwner}/${selectedName}`)
+        }
+    }, [selectedOwner, selectedName, nameOnlyDataList, onPairChange])
 
     const ownerOnlyOptions = ownerOnlyDataList.length > 0
         ? ownerOnlyDataList.map(({ name, repoCount }) => (
@@ -268,8 +280,10 @@ function RepoPairPickerInput({
  */
 export default function OwnerRepoPairPicker({
     onCloneSettled,
+    onPairChange,
 }: {
     onCloneSettled?: () => void
+    onPairChange?: (ownerRepoPair: string) => void
 }) {
     /**
      * @summary Git urls to clone. Autocomplete urls, but also allow freeform entry for new ones
@@ -283,6 +297,7 @@ export default function OwnerRepoPairPicker({
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
             onCloneSettled={onCloneSettled}
+            onPairChange={onPairChange}
         />
     </>
     )

@@ -44,17 +44,13 @@ function LineMetricWithPicker() {
 
     return (
         <>
-            <OwnerRepoPairPicker
-            />
-            {/* <CustomLineMetric
-                DatasetConfig={configTotalNin1}
-                ChartTitle="recent: Nin | totalCommits"
-             ChartConfig={axisPerMonth}
-            /> */}
 
-            <h3>Pulse for StartAutomating</h3>
+            <h2>Latest</h2>
+            <OwnerRepoPairPicker
+                onPairChange={setRepoPairName}
+            />
             <CustomLineMetric
-                ChartTitle="pulse: PsSVG | totalCommits | Monthly"
+                ChartTitle={`pulse: ${repoPairName} | totalCommits | Monthly`}
                 DatasetConfig={{
                     RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repoPairName}&period=${`month`}`,
 
@@ -74,6 +70,7 @@ export default function CreatePage() {
 
             <article>
                 <section>
+                    <LineMetricWithPicker />
                     <LineMetricWithPicker />
 
                 </section>
