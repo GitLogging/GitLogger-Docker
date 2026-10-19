@@ -71,19 +71,18 @@
         */
         // "chat.autopilot.advanced.enabled": false,
         "chat.tools.terminal.autoApprove": {
-            /* #region terminal allow list */
             "/^Set-Location .*$/": {
-                /* warning: this only ensures this command is the first in an expression. Not whether the rest is safe, or, even executions this command */
                 "approve": true,
                 "matchCommandLine": true
             },
-            /* #regionend terminal allow list */
-            /* #region terminal deny list */
             "/^(rm|rmdir|del|kill|curl|wget|eval|chmod|chown|Remove-Item)\\s+/": {
                 "approve": false,
                 "matchCommandLine": true
             },
-            /* #regionend terminal deny list */
+            "/^cd app-front; npx tsc --noEmit 2>&1 \\| Select-Object -First 10$/": {
+                "approve": true,
+                "matchCommandLine": true
+            }
         },
         "cSpell.words": [
             "chartjs"
