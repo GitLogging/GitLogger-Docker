@@ -51,7 +51,7 @@ function PairPickerForm({
     onCloneSettled?: () => void
 }) {
     /**
-     * @summary (internal) Builds the input form elements for listing and cloning repo urls
+     * @summary (internal) Builds the input form elements for picking short cloned repo names
      */
     // should these by dynamic?
     const dataListId = `repo-name-picker-source-list`
@@ -86,7 +86,7 @@ function PairPickerForm({
         : undefined
     // const cloneButton = <OwnerRepoPairPicker isLoading={isSubmitting} />
 
-    async function handleSubmitCloneRepo(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmitPairPickerForm(e: React.FormEvent<HTMLFormElement>) {
         /**
          * @summary calls `GitServe`'s /repo/clone endpoint
          */
@@ -94,34 +94,7 @@ function PairPickerForm({
         if (isSubmitting) {
             return
         }
-
-        console.log('Clone url: ', { eventObj: e })
-        const formData = new FormData(e.currentTarget)
-        const port = 3001
-        const cloneUrlValue = formData.get(inputElementId)
-        const cloneUrl = typeof cloneUrlValue === 'string' ? cloneUrlValue : ''
-        const requestUrl = `http://127.0.0.1:${port}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
-        // `http://127.0.0.1:${hostPort}/repo/clone?url=${encodeURIComponent(cloneUrl)}`
-
-        setIsSubmitting(true)
-        try {
-            const response = await fetch(requestUrl)
-            if (!response.ok) {
-                throw new Error(`Clone request failed with status ${response.status}`)
-            }
-            const data = await response.json()
-            console.log(`<OwnerRepoPairPicker>.onSubmit: response:`, data)
-        }
-        catch (error) {
-            console.error(`<OwnerRepoPairPicker>.onSubmit: promise threw when cloning repo:`, error)
-        }
-        finally {
-            onCloneSettled?.()
-            setIsSubmitting(false)
-        }
-
-        console.log(`<OwnerRepoPairPicker>.onSubmit(Sync): request`, { port: port, eventObj: e })
-
+        console.log(`<OwnerRepoPairPicker>.onSubmit: NYI`)
     }
 
     const formContents = (
@@ -139,9 +112,22 @@ function PairPickerForm({
                     list={dataListId}
                     id={inputElementId}
                     name={inputElementId}
-                    placeholder="Enter a git repository url"
-                    aria-label="Git Repository URL"
-                    aria-describedby="git-repo-clone-button"
+                    placeholder="Select a Git Owner Name"
+                    aria-label="Git Owner Name"
+                    aria-describedby="git-pair-picker-button"
+                    required={false}
+                // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
+                >
+
+                </Form.Control>
+                <Form.Control
+                    type="search"
+                    list={dataListId}
+                    id={inputElementId}
+                    name={inputElementId}
+                    placeholder="Select a Git Repository Name"
+                    aria-label="Git Repo Name"
+                    aria-describedby="git-pair-picker-button"
                     required={false}
                 // defaultValue={true ? `` : `https://github.com/microsoft/vscode-powerquery`}
                 >
@@ -168,7 +154,7 @@ function PairPickerForm({
 
     return (
         <>
-            <form id={formId} onSubmit={handleSubmitCloneRepo}>
+            <form id={formId} onSubmit={handleSubmitPairPickerForm}>
                 {formContents}
             </form>
             {/* <input name="graphtype" id="graphTypeChoice0" value="bar" checked="true" type="checkbox"> */}
@@ -200,11 +186,6 @@ export default function OwnerRepoPairPicker({
 
     return (<>
         <h1>Owner/Repo pair picker here</h1>
-        {/* <CloneRepoForm
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            onCloneSettled={onCloneSettled}
-        /> */}
         <PairPickerForm
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
