@@ -10,7 +10,13 @@ import { InputGroup, Form } from "react-bootstrap"
 // import { CloneRepoButton } from "@/app/components/input/CloneRepoButton"
 // import { InputGroup, Form } from "react-bootstrap"
 
-function DatePeriodPickerInput() {
+
+
+function DatePeriodPickerInput({
+    onPeriodChange,
+}: {
+    onPeriodChange?: (period: string) => void
+}) {
     /**
      * @summary (internal) Builds the input form elements for picking short cloned repo names
      */
@@ -18,7 +24,7 @@ function DatePeriodPickerInput() {
 
     const formContents = (
         <>
-            <Form.Select size="sm">
+            <Form.Select size="sm" onChange={(e) => onPeriodChange?.(e.target.value)}>
                 <option>day</option>
                 <option>week</option>
                 <option>month</option>
@@ -46,11 +52,12 @@ export default function DatePeriodPicker({
      * @description If no list is provided, fallback to example repo urls.
      */
 
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    // const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (<>
         {/* <div>Date Period</div> */}
         <DatePeriodPickerInput
+            onPeriodChange={onPeriodChange}
         />
         {/* <RepoPairPickerInput
             isSubmitting={isSubmitting}

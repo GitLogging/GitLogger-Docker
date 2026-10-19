@@ -15,9 +15,14 @@ import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 // import { DefaultDeserializer } from "v8"
 // import { Line } from "react-chartjs-2"
 
+export interface DatePeriodChoice {
+    unit: "day" | "week" | "month" | "year"
+}
 
 function LineMetricWithPicker() {
     const [repoPairName, setRepoPairName] = useState(`startautomating/pssvg`)
+    const [period, setPeriod] = useState<DatePeriodChoice["unit"]>(`month`)
+
     /**
      * @summary creates a `<CustomLineMetric>` with the picker `<OwnerRepoPairPicker>`
      */
@@ -34,7 +39,7 @@ function LineMetricWithPicker() {
                 type: "time",
                 time: {
                     parser: "yyyy-MM-dd",
-                    unit: `month`,
+                    unit: period, //#`month`,
                     displayFormats: {
                         day: "yyyy-MM-dd",
                     },
@@ -53,12 +58,13 @@ function LineMetricWithPicker() {
             <DatePeriodPicker
                 onPeriodChange={(period) => {
                     console.log(`Selected period: ${period}`)
+                    setPeriod(period)
                 }}
             />
             <CustomLineMetric
                 ChartTitle={`pulse: ${repoPairName} | totalCommits | Monthly`}
                 DatasetConfig={{
-                    RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repoPairName}&period=${`month`}`,
+                    RequestUrl: `http://127.0.0.1:3001/repo/metric/totalcommit?name=${repoPairName}&period=${period}`,
 
                     XAxisKey: `XAxisKey`,
                     YAxisKey: `TotalCommits`,
