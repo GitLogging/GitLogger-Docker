@@ -32,8 +32,8 @@ function PopoverButton({
      * @see: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
      */
 
-    const popoverButtonId = useId()
-    const popoverTargetId = useId()
+    const popoverButtonId = useId() // button that triggers popover
+    const popoverTargetId = useId() // target element to show
     return (
         <>
             <Button variant="outline-primary" popoverTarget={popoverTargetId}
@@ -50,6 +50,22 @@ function PopoverButton({
     )
 }
 
+function ShowResponseDetailsPopover() {
+    /**
+     * @summary show response details as a popover. This includes syntax highlighting for json content.
+     */
+
+    return (
+        <>
+            <h3>Request: </h3>
+            <h4>query</h4>
+            <div>keys here....</div>
+            <h4>response</h4>
+            <pre>{JSON.stringify({ "desc": "json response here" }, null, 2)}</pre>
+        </>
+    )
+}
+
 export default function Page() {
     /**
      * @summary this page is for testing individual components
@@ -61,27 +77,36 @@ export default function Page() {
             <PageHeaderContent />
             <article id="popover-test">
                 <h1>popover</h1>
+
                 <section>
                     <h2>type: auto</h2>
-                    <PopoverButton
-                        Label="ⓘ"
-                    />
                     <PopoverButton
                         Label="ⓘ"
                     >
                         <span>Inner content for auto popover</span>
                     </PopoverButton>
 
-
                     <PopoverButton
+                        Label="using children param"
                         children={<span>Custom content</span>}
                     />
-                </section >
+                    <PopoverButton
+                        Label="using children param"
+                    >
+                        <ShowResponseDetailsPopover />
+                    </PopoverButton>
+                </section>
+
                 <section>
                     <h2>type: shared id: NYI</h2>
                     {/* <PopoverButton Label="Shared Popover" /> */}
                 </section >
-            </article >
+
+                <section>
+                    <h2>raw json syntax highlight (tooltip preview)</h2>
+                    <ShowResponseDetailsPopover />
+                </section>
+            </article>
         </>
     )
 }
