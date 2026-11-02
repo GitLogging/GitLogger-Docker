@@ -44,7 +44,10 @@ function PopoverButton({
             >{Label}</Button>
 
             {/* <p>id: {popoverButtonId}</p> */}
-            <div id={popoverTargetId} popover="auto">
+            {/*
+            if no anchor set, include class 'popover--nosource' to center the middle of the page */
+            }
+            <div id={popoverTargetId} popover="auto" className="popover--nosource">
                 {children}
             </div>
         </>
@@ -65,15 +68,13 @@ export function ShowResponseDetailsSummary({
         <>
             <section className="popover-tooltip--show-json">
 
-
-
                 <h3>Request: </h3>
                 <h4>query</h4>
                 <div>keys here....</div>
 
 
                 <h4>response</h4>
-                <pre>{JSON.stringify({ "desc": "json response here" }, null, 2)}</pre>
+                <pre>{DisplayJson}</pre>
 
             </section>
         </>
@@ -95,6 +96,14 @@ export default function Page() {
                 <section>
                     <h2>type: auto</h2>
                     <PopoverButton
+                        Label="using children param"
+                    >
+                        <ShowResponseDetailsSummary
+                            RequestUrl={`http://127.0.0.1:3001/repo/metric/totalcommit?name=startautomating/pssvg&period=month`}
+                            DisplayJson={JSON.stringify({ user: "bob" }, null, 2)}
+                        />
+                    </PopoverButton>
+                    <PopoverButton
                         Label="ⓘ"
                     >
                         <span>Inner content for auto popover</span>
@@ -104,14 +113,6 @@ export default function Page() {
                         Label="using children param"
                         children={<span>Custom content</span>}
                     />
-                    <PopoverButton
-                        Label="using children param"
-                    >
-                        <ShowResponseDetailsSummary
-                            RequestUrl={`http://127.0.0.1:3001/repo/metric/totalcommit?name=startautomating/pssvg&period=month`}
-                            DisplayJson={JSON.stringify({ user: "bob" }, null, 2)}
-                        />
-                    </PopoverButton>
                 </section>
 
                 <section>

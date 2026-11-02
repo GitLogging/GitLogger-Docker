@@ -23,3 +23,14 @@ article#popover-test {
     --bs-popover-max-width: 80vw;
     overflow-y: auto;
 }
+
+[popover] {
+    /* position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-inline; */
+    margin: initial;
+    max-width: 20em;
+}
+
+.popover--nosource {
+    margin: auto;
+}
