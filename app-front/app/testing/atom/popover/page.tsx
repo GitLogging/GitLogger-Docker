@@ -1,12 +1,14 @@
 "use client"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
+
 import Form from "react-bootstrap/Form"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 
-import './popover.css'
+import './popover-test-page.css'
 import Button from "react-bootstrap/esm/Button"
 import { useId } from "react"
+import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
 
 function PopoverTooltip({ children }: { children?: React.ReactNode }) {
     return (
@@ -41,27 +43,39 @@ function PopoverButton({
                 size="sm"
             >{Label}</Button>
 
-            <p>id: {popoverButtonId}</p>
+            {/* <p>id: {popoverButtonId}</p> */}
             <div id={popoverTargetId} popover="auto">
                 {children}
             </div>
-
         </>
     )
 }
 
-function ShowResponseDetailsPopover() {
+export function ShowResponseDetailsSummary({
+    RequestUrl, DisplayJson
+}: {
+    RequestUrl: string,
+    DisplayJson: string,
+}) {
     /**
      * @summary show response details as a popover. This includes syntax highlighting for json content.
      */
 
     return (
         <>
-            <h3>Request: </h3>
-            <h4>query</h4>
-            <div>keys here....</div>
-            <h4>response</h4>
-            <pre>{JSON.stringify({ "desc": "json response here" }, null, 2)}</pre>
+            <section className="popover-tooltip--show-json">
+
+
+
+                <h3>Request: </h3>
+                <h4>query</h4>
+                <div>keys here....</div>
+
+
+                <h4>response</h4>
+                <pre>{JSON.stringify({ "desc": "json response here" }, null, 2)}</pre>
+
+            </section>
         </>
     )
 }
@@ -75,7 +89,7 @@ export default function Page() {
     return (
         <>
             <PageHeaderContent />
-            <article id="popover-test">
+            <article id="popover-test-page">
                 <h1>popover</h1>
 
                 <section>
@@ -93,7 +107,10 @@ export default function Page() {
                     <PopoverButton
                         Label="using children param"
                     >
-                        <ShowResponseDetailsPopover />
+                        <ShowResponseDetailsSummary
+                            RequestUrl={`http://127.0.0.1:3001/repo/metric/totalcommit?name=startautomating/pssvg&period=month`}
+                            DisplayJson={JSON.stringify({ user: "bob" }, null, 2)}
+                        />
                     </PopoverButton>
                 </section>
 
@@ -104,7 +121,24 @@ export default function Page() {
 
                 <section>
                     <h2>raw json syntax highlight (tooltip preview)</h2>
-                    <ShowResponseDetailsPopover />
+                    <ShowResponseDetailsSummary
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/totalcommit?name=startautomating/pssvg&period=month`}
+                        DisplayJson={JSON.stringify({ user: "bob" }, null, 2)}
+                    />
+                </section>
+                <section>
+                    <h2>raw json syntax highlight (tooltip preview)</h2>
+                    {/* <ShowResponseDetailsSummary > */}
+                    {/* <ResponseDetailsPopoverButton /> */}
+                    <ResponseDetailsPopoverButton
+                        ButtonLabel={`see source`}
+                        key={`url-12345`}
+                        // key={`${url}-${index}`}
+                        RequestUrl={`http://127.0.0.1:3001/repo/metric/totalcommit?name=startautomating/pssvg&period=month`}
+                        DisplayJson={JSON.stringify({ user: "bob" }, null, 2)}
+                    />
+
+                    {/* </ShowResponseDetailsSummary> */}
                 </section>
             </article>
         </>
