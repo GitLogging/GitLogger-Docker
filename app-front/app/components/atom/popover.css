@@ -52,45 +52,30 @@ article#popover-test {
     max-width: 80vw; */
     padding: 1rem;
 
+    /* Appearance lives on the base rule so it persists during the exit transition. */
+    --_outline-color: #4c4f5c93;
+    --_border-color: #1f2231;
+    outline: 2px solid var(--_outline-color);
+    border-width: 2px;
+    border-color: var(--_border-color);
+    border-radius: 10px;
+
+    /* End styles for the closing transition. */
+    transform: translateY(-3rem);
+    opacity: 0;
 
     /*  Opened styles  */
     &:popover-open {
-        --_outline-color: #4c4f5c93;
-        --_border-color: #1f2231;
-
-        /* transform: translateY(0) scale(1); */
-        transform: scale(1);
+        transform: translateY(0);
         opacity: 1;
-
-        /* var(--bs-primary-); */
-        /*  This will only affect open popovers. */
         display: grid;
-        /* outline: 2px solid magenta; */
-        /* outline: 2px solid #4c4f5c; */
-        outline-width: 2px;
-        border-radius: 10px;
-        border-width: 2px;
 
-        outline: 2px solid var(--_outline-color);
-        border-color: var(--_border-color);
-
-        /*  Start styles for the opening transition.
-        Added to :popover-open, but after the opened styles.
-    */
+        /*  Start styles for the opening transition. */
         @starting-style {
-            height: 0;
-            /* transform: scale(0);
-            transform: translateY(30px) scale(0); */
+            transform: translateY(3rem);
             opacity: 0;
         }
     }
-
-    /* End styles for the closing transition. */
-    /* transform: translateY(-2000px); */
-    /* transform: scale(1%);
-    transform: scale(0); */
-    transform: translateY(-50%);
-    opacity: 0;
 
     /*  Enumerate transitioning properties, including display and overlay. */
     transition: transform,
