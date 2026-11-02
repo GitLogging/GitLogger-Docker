@@ -40,25 +40,70 @@ article#popover-test {
     padding: 1rem;
 }
 
-[popover]:popover-open {
-    --_outline-color: #4c4f5c93;
-    --_border-color: #1f2231;
-    /* var(--bs-primary-); */
-    /*  This will only affect open popovers. */
-    display: grid;
-    /* outline: 2px solid magenta; */
-    /* outline: 2px solid #4c4f5c; */
-    outline-width: 2px;
-    border-radius: 10px;
-    border-width: 2px;
 
-    outline: 2px solid var(--_outline-color);
-    border-color: var(--_border-color);
-}
 
 .popover--nosource {
     margin: auto;
 }
+
+[popover] {
+    /* margin: initial;
+    max-width: inherit;
+    max-width: 80vw; */
+    padding: 1rem;
+
+
+    /*  Opened styles  */
+    &:popover-open {
+        --_outline-color: #4c4f5c93;
+        --_border-color: #1f2231;
+
+        /* transform: translateY(0) scale(1); */
+        transform: scale(1);
+        opacity: 1;
+
+        /* var(--bs-primary-); */
+        /*  This will only affect open popovers. */
+        display: grid;
+        /* outline: 2px solid magenta; */
+        /* outline: 2px solid #4c4f5c; */
+        outline-width: 2px;
+        border-radius: 10px;
+        border-width: 2px;
+
+        outline: 2px solid var(--_outline-color);
+        border-color: var(--_border-color);
+
+        /*  Start styles for the opening transition.
+        Added to :popover-open, but after the opened styles.
+    */
+        @starting-style {
+            height: 0;
+            /* transform: scale(0);
+            transform: translateY(30px) scale(0); */
+            opacity: 0;
+        }
+    }
+
+    /* End styles for the closing transition. */
+    /* transform: translateY(-2000px); */
+    /* transform: scale(1%);
+    transform: scale(0); */
+    transform: translateY(-50%);
+    opacity: 0;
+
+    /*  Enumerate transitioning properties, including display and overlay. */
+    transition: transform,
+    opacity,
+    display allow-discrete,
+    overlay allow-discrete;
+    transition-duration: 0.8s;
+
+    /* position-area: end; */
+    /* margin: initial; */
+    transform-origin: top left;
+}
+
 
 /* fade {
     transition: opacity .15s linear
