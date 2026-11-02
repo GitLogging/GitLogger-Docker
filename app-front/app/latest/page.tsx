@@ -103,16 +103,36 @@ export default function CreatePage() {
         setChartKeys((keys) => keys.slice(0, -1))
     }
 
+    const hasZeroCharts = chartKeys.length === 0
     return (
         <>
             <PageHeaderContent />
             <article>
-                <section id="page-latest--command-bar" className="sticky-top">
+                <section id="page-latest--command-bar" className="sticky-top" style={{
+                    margin: '0px',
+                    padding: '0px',
+                    marginBottom: '1rem',
+                }}>
+                    <Button
+                        variant="success"
+                        onClick={addChart}
+                    >Add</Button>
 
-                    <Button variant="success" onClick={addChart} >Add</Button>
-                    <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove</Button>
-                    <Button variant="primary">Save</Button>
-                    <Button variant="primary">Load</Button>
+                    <Button
+                        variant="danger"
+                        onClick={removeLastChart}
+                        disabled={hasZeroCharts}
+                    >Remove</Button>
+
+                    <Button
+                        variant="primary"
+                        disabled={hasZeroCharts}
+                    >Save</Button>
+
+                    <Button
+                        variant="primary"
+                    >Load</Button>
+
                 </section>
                 <section id="latest-charts" >
                     {chartKeys.map((key, index) => (
