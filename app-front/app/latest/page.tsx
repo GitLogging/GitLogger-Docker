@@ -68,6 +68,7 @@ function LineMetricWithPicker() {
                 onPairChange={setRepoPairName}
                 children={
                     <DatePeriodPicker
+                        period={period}
                         onPeriodChange={(period) => {
                             console.log(`Selected period: ${period}`)
                             setPeriod(period)
@@ -82,13 +83,13 @@ function LineMetricWithPicker() {
                 }}
             /> */}
             <CustomLineMetric
-                ChartTitle={`pulse: ${repoPairName ?? defaultRepoPair} | totalCommits | Monthly`}
+                ChartTitle={`pulse: ${repoPairName ?? defaultRepoPair} | totalCommits | ${period}`}
                 DatasetConfig={{
                     RequestUrl: buildTotalCommitUrl(repoPairName ?? defaultRepoPair, period),
 
                     XAxisKey: `XAxisKey`,
                     YAxisKey: `TotalCommits`,
-                    DatasetLabel: `PsSvg`
+                    DatasetLabel: repoPairName,
                 }}
                 ChartConfig={axisPerMonth}
                 onRequestUrlsChange={syncPairFromChart}

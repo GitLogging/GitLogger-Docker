@@ -12,10 +12,14 @@ import { InputGroup, Form } from "react-bootstrap"
 
 
 
+export type DatePeriodUnit = "day" | "month" | "year"
+
 function DatePeriodPickerInput({
+    period,
     onPeriodChange,
 }: {
-    onPeriodChange?: (period: string) => void
+    period?: DatePeriodUnit
+    onPeriodChange?: (period: DatePeriodUnit) => void
 }) {
     /**
      * @summary (internal) Builds the input form elements for picking short cloned repo names
@@ -24,7 +28,7 @@ function DatePeriodPickerInput({
 
     const formContents = (
         <>
-            <Form.Select size="sm" onChange={(e) => onPeriodChange?.(e.target.value)}>
+            <Form.Select size="sm" value={period} onChange={(e) => onPeriodChange?.(e.target.value as DatePeriodUnit)}>
                 <option>day</option>
                 {/* <option>week</option> */}
                 <option>month</option>
@@ -43,9 +47,11 @@ function DatePeriodPickerInput({
  * @summary Select a repository from the list of known cloned "Owner/Repo" pairs. Entry point for this component
  */
 export default function DatePeriodPicker({
+    period,
     onPeriodChange,
 }: {
-    onPeriodChange?: (period: string) => void
+    period?: DatePeriodUnit
+    onPeriodChange?: (period: DatePeriodUnit) => void
 }) {
     /**
      * @summary Git urls to clone. Autocomplete urls, but also allow freeform entry for new ones
@@ -57,6 +63,7 @@ export default function DatePeriodPicker({
     return (<>
         {/* <div>Date Period</div> */}
         <DatePeriodPickerInput
+            period={period}
             onPeriodChange={onPeriodChange}
         />
         {/* <RepoPairPickerInput
