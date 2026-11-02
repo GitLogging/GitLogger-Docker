@@ -34,3 +34,17 @@ article#popover-test {
 .popover--nosource {
     margin: auto;
 }
+
+fade {
+    transition: opacity .15s linear
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .fade {
+        transition: none
+    }
+}
+
+.fade:not(.show) {
+    opacity: 0
+}
