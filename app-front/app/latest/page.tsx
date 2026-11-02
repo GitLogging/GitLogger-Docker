@@ -107,15 +107,17 @@ export default function CreatePage() {
         <>
             <PageHeaderContent />
             <article>
+                <section id="page-latest--command-bar" className="sticky-top">
+
+                    <Button variant="success" onClick={addChart} >Add</Button>
+                    <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove</Button>
+                    <Button variant="primary">Save</Button>
+                    <Button variant="primary">Load</Button>
+                </section>
                 <section id="latest-charts" >
                     {chartKeys.map((key, index) => (
                         <LineMetricWithPicker key={index} />
                     ))}
-                </section>
-                <section id="page-latest--command-bar">
-
-                    <Button variant="success" onClick={addChart} >Add Chart</Button>
-                    <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove Chart</Button>
                 </section>
             </article>
         </>
