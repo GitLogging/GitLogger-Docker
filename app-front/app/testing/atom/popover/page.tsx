@@ -54,7 +54,7 @@ function PopoverButton({
     )
 }
 
-export function ShowResponseDetailsSummary({
+function ShowResponseDetailsSummary({
     RequestUrl, DisplayJson
 }: {
     RequestUrl: string,

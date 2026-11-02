@@ -1,3 +1,8 @@
+:root {
+    --popover-header--bg: #e9ecef;
+}
+
+
 article#popover-test {
     section {
         --_bg-1: var(--bs-primary-bg-subtle, magenta);
@@ -24,11 +29,30 @@ article#popover-test {
     overflow-y: auto;
 }
 
+
 [popover] {
     /* position-area: block-end span-inline-end;
     position-try-fallbacks: flip-inline; */
+    /* max-width: 20em; */
     margin: initial;
-    max-width: 20em;
+    max-width: inherit;
+    padding: 1rem;
+}
+
+[popover]:popover-open {
+    --_outline-color: #4c4f5c93;
+    --_border-color: #1f2231;
+    /* var(--bs-primary-); */
+    /*  This will only affect open popovers. */
+    display: grid;
+    /* outline: 2px solid magenta; */
+    /* outline: 2px solid #4c4f5c; */
+    outline-width: 2px;
+    border-radius: 10px;
+    border-width: 2px;
+
+    outline: 2px solid var(--_outline-color);
+    border-color: var(--_border-color);
 }
 
 .popover--nosource {
