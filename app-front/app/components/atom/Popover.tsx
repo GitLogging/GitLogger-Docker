@@ -5,6 +5,8 @@ import './popover.css'
 import Button from "react-bootstrap/esm/Button"
 import { useId } from "react"
 import { ResponseDetailsPopoverButton } from "@/app/components/block/ResponseDetailsPopoverButton"
+import ListGroupItem from 'react-bootstrap/esm/ListGroupItem'
+import ListGroup from 'react-bootstrap/esm/ListGroup'
 
 export function PopoverHint({ children }: { children?: React.ReactNode }) {
     /**
@@ -63,18 +65,40 @@ export function ShowResponseDetailsSummary({
      * @summary show response details as a popover. This includes syntax highlighting for json content.
      */
 
+    const urlObj = new URL(RequestUrl)
+    const abbrPathWithQuery = urlObj.pathname + urlObj.search
+
+    function keysAsDefinitionList(Url: string) {
+        const url = new URL(Url)
+        const items = Array.from(url.searchParams.entries()).map(([key, value]) => (
+            <ListGroupItem key={key}>
+                <strong>{key}</strong>: {value}
+            </ListGroupItem>
+        ))
+        return (
+            <>
+                <ListGroup>
+                    {items}
+                </ListGroup>
+            </>
+        )
+    }
+
     return (
         <>
             <section className="popover-tooltip--show-json">
 
-                <h3 className="popover-header">Request: {RequestUrl}</h3>
+                <h3 className="popover-header">Request:
+                    <a href={RequestUrl} target="_blank" rel="noopener noreferrer">{abbrPathWithQuery}</a>
+                </h3>
+                <hr />
                 <div className="popover-body">
 
-                    <h4>query</h4>
-                    <div>keys here....</div>
+                    <h3 className="popover-subheader">Query</h3>
+                    {keysAsDefinitionList(RequestUrl)}
 
 
-                    <h4>response</h4>
+                    <h3 className="popover-subheader">Response</h3>
                     <pre>{DisplayJson}</pre>
                 </div>
             </section>

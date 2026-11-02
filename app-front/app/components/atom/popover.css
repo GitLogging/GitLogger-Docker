@@ -36,6 +36,7 @@ article#popover-test {
     /* max-width: 20em; */
     margin: initial;
     max-width: inherit;
+    max-width: 80vw;
     padding: 1rem;
 }
 
