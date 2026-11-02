@@ -4,7 +4,7 @@ import { useMemo, Suspense, useState, useEffect, useCallback, useRef } from "rea
 import type { ChartOptions } from "chart.js"
 import { PageHeaderContent } from "@/app/components/PageHeaderContent"
 import OwnerRepoPairPicker from "@/app/components/input/OwnerRepoPairPicker"
-import DatePeriodPicker from "@/app/components/input/DatePeriodPicker"
+import DatePeriodPicker, { type DatePeriodUnit } from "@/app/components/input/DatePeriodPicker"
 import { CustomLineMetric } from "@/app/components/charts/CustomLineMetric"
 import Button from 'react-bootstrap/Button'
 
@@ -15,11 +15,6 @@ import Button from 'react-bootstrap/Button'
 // import { fetchRepoList, RepoSummaryItem, fetchRepoListNames } from "@/app/types/pwsh-api/repo/list"
 // import { DefaultDeserializer } from "v8"
 // import { Line } from "react-chartjs-2"
-
-export interface DatePeriodChoice {
-    // unit: "day" | "week" | "month" | "year"
-    unit: "day" | "month" | "year"
-}
 
 const defaultRepoPair = `startautomating/pssvg`
 const buildTotalCommitUrl = (pair: string, period: string) =>
@@ -32,7 +27,7 @@ function LineMetricWithPicker() {
         const name = new URL(urls[0]).searchParams.get(`name`)
         if (name) setRepoPairName((current) => current ?? name)
     }, [])
-    const [period, setPeriod] = useState<DatePeriodChoice["unit"]>(`month`)
+    const [period, setPeriod] = useState<DatePeriodUnit>(`month`)
 
     /**
      * @summary creates a `<CustomLineMetric>` with the picker `<OwnerRepoPairPicker>`
