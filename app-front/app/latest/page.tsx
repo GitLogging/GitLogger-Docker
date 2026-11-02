@@ -56,8 +56,6 @@ function LineMetricWithPicker() {
 
     return (
         <>
-
-            <h2>Latest</h2>
             <OwnerRepoPairPicker
                 pair={repoPairName}
                 onPairChange={setRepoPairName}
@@ -108,15 +106,17 @@ export default function CreatePage() {
     return (
         <>
             <PageHeaderContent />
-
             <article>
-                <section id="latest-charts">
-                    {chartKeys.map((key) => (
-                        <LineMetricWithPicker key={key} />
+                <section id="latest-charts" >
+                    {chartKeys.map((key, index) => (
+                        <LineMetricWithPicker key={index} />
                     ))}
                 </section>
-                <Button variant="success" onClick={addChart} >Add Chart</Button>
-                <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove Chart</Button>
+                <section id="page-latest--command-bar">
+
+                    <Button variant="success" onClick={addChart} >Add Chart</Button>
+                    <Button variant="danger" onClick={removeLastChart} disabled={chartKeys.length === 0}    >Remove Chart</Button>
+                </section>
             </article>
         </>
     )
