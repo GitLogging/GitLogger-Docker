@@ -35,7 +35,7 @@ article#popover-test {
     margin: auto;
 }
 
-fade {
+/* fade {
     transition: opacity .15s linear
 }
 
@@ -47,4 +47,4 @@ fade {
 
 .fade:not(.show) {
     opacity: 0
-}
+} */

@@ -66,7 +66,7 @@ export function ShowResponseDetailsSummary({
 
     return (
         <>
-            <section className="popover-tooltip--show-json fade">
+            <section className="popover-tooltip--show-json">
 
                 <h3 className="popover-header">Request: {RequestUrl}</h3>
                 <div className="popover-body">
